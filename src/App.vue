@@ -1,12 +1,17 @@
 <template>
   <div id="app">
+    <IHeader></IHeader>
     <router-view/>
   </div>
 </template>
 
 <script>
+import IHeader from '@/views/public/I-Header.vue'
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    IHeader
+  }
 }
 </script>
 

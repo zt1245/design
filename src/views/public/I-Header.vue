@@ -20,6 +20,11 @@ export default {}
 </script>
 
 <style lang="scss" scoped>
+.i_nav {
+	position: fixed;
+	width: 100%;
+  z-index: 1000;
+}
 .nav_content {
 	display: flex;
 	justify-content: space-between;

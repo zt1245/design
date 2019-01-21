@@ -1,21 +1,23 @@
 <template>
   <div class="i_title">
-    <h2>新品上市</h2>
-    <p>New products listed</p>
+    <h2>{{ title }}</h2>
+    <p>{{ detail }}</p>
     <span></span>
     <i class="el-icon-star-on"></i>
-    <p>理应追逐最新的，向更好、更高处进发</p>
+    <p>{{ sum }}</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'ITitle'
+  name: 'ITitle',
+  props: ['title', 'detail', 'sum']
 }
 </script>
 
 <style lang="scss" scoped>
 .i_title {
+  position: relative;
   h2 {
     padding-top: 50px;
     font-size: 30px;
@@ -28,12 +30,15 @@ export default {
     display: block;
     width: 330px;
     height: 2px;
-    background: #7aadb1;
+    background: #cf4248;
     margin: 0 auto;
   }
   .el-icon-star-on {
-    color: #7aadb1;
-    margin-top: -10px;
+    color: #cf4248;
+    position: absolute;
+    top: 108px;
+    left: 50%;
+    margin-left: -8px;
   }
 }
 </style>

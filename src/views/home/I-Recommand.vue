@@ -80,6 +80,7 @@ export default {
 .recommand {
   ul {
     overflow: hidden;
+    margin-top: 30px;
     li {
       overflow: hidden;
       padding-bottom: 50px;
@@ -139,10 +140,12 @@ export default {
             span:nth-child(1) {
               background: #f1edea;
               margin-right: 10px;
+              cursor: pointer;
             }
             span:nth-child(2) {
               background: #cf4248;
               color: #ffffff;
+              cursor: pointer;
             }
           }
         }
@@ -176,6 +179,9 @@ export default {
       .right {
         float: left;
         margin-left: 120px;
+        .car_info {
+          text-align: right;
+        }
       }
     }
     li:nth-child(2n) {

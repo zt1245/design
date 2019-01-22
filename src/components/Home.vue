@@ -4,6 +4,7 @@
     <IProduct></IProduct>
     <IRecommand></IRecommand>
     <IMore></IMore>
+    <IDessert></IDessert>
   </div>
 </template>
 
@@ -12,6 +13,7 @@ import IBanner from '@/views/home/I-Banner.vue'
 import IProduct from '@/views/home/I-Product.vue'
 import IRecommand from '@/views/home/I-Recommand.vue'
 import IMore from '@/views/home/I-More.vue'
+import IDessert from '@/views/home/I-Dessert.vue'
 export default {
   name: 'Home',
   data () {
@@ -22,7 +24,8 @@ export default {
     IBanner,
     IProduct,
     IRecommand,
-    IMore
+    IMore,
+    IDessert
   }
 }
 </script>

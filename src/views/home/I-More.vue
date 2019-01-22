@@ -1,6 +1,21 @@
 <template>
   <div class="more">
-    <ul>
+    <ul class="container">
+      <li>
+        <i class="iconfont icon-guozhigaojiaobei"></i>
+        <p>果汁</p>
+        <span>查看更多</span>
+      </li>
+      <li>
+        <i class="iconfont icon-guozhigaojiaobei"></i>
+        <p>果汁</p>
+        <span>查看更多</span>
+      </li>
+      <li>
+        <i class="iconfont icon-guozhigaojiaobei"></i>
+        <p>果汁</p>
+        <span>查看更多</span>
+      </li>
       <li>
         <i class="iconfont icon-guozhigaojiaobei"></i>
         <p>果汁</p>
@@ -11,32 +26,48 @@
 </template>
 
 <script>
+import ITitle from '@/views/home/I-Title.vue'
 export default {
-  name: 'IMore'
+  name: 'IMore',
+  components: {
+    ITitle
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .more {
-  background: url(../../../static/images/banner03.png);
   width: 100%;
-  padding: 20px;
   ul {
+    display: flex;
+    justify-content: space-around;
+    padding: 60px 0;
     li {
       font-size: 16px;
-      color: #ffffff;
+      color: rgba($color: #000000, $alpha: 0.6);
       i {
-        font-size: 70px;
+        font-size: 100px;
         display: block;
       }
       p {
         margin: 20px 0;
       }
       span {
+        display: inline-block;
         padding: 10px 20px;
-        border: 1px solid #ffffff;
+        border: 1px solid rgba($color: #000000, $alpha: 0.6);
         border-radius: 2px;
       }
+      span:hover {
+        border: 1px solid #cf4248;
+        background: #cf4248;
+        color: #ffffff;
+      }
+    }
+    li:hover i {
+      color: #cf4248;
+      transition: .5s;
+      transform: rotateY(360deg);
     }
   }
 }

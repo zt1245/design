@@ -1,5 +1,5 @@
 <template>
-  <el-carousel :interval="5000" arrow="always" height="700px">
+  <el-carousel :interval="5000" arrow="always" height="490px">
     <el-carousel-item>
       <img src="../../../static/images/banner01.png" alt="">
     </el-carousel-item>

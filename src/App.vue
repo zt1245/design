@@ -2,15 +2,18 @@
   <div id="app">
     <IHeader></IHeader>
     <router-view/>
+    <IFooter></IFooter>
   </div>
 </template>
 
 <script>
 import IHeader from '@/views/public/I-Header.vue'
+import IFooter from '@/views/public/I-Footer.vue'
 export default {
   name: 'App',
   components: {
-    IHeader
+    IHeader,
+    IFooter
   }
 }
 </script>

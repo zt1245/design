@@ -46,7 +46,7 @@ export default {
     ul {
       display: flex;
       justify-content: space-around;
-      padding-top: 50px;
+      padding: 50px 0;
       li {
         i {
           font-size: 40px;

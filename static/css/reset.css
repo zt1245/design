@@ -47,3 +47,6 @@ table {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+img {
+	display: block;
+}

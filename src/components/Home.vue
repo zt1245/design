@@ -5,6 +5,7 @@
     <IRecommand></IRecommand>
     <IMore></IMore>
     <IDessert></IDessert>
+    <IConnect></IConnect>
   </div>
 </template>
 
@@ -14,6 +15,7 @@ import IProduct from '@/views/home/I-Product.vue'
 import IRecommand from '@/views/home/I-Recommand.vue'
 import IMore from '@/views/home/I-More.vue'
 import IDessert from '@/views/home/I-Dessert.vue'
+import IConnect from '@/views/home/I-Connect.vue'
 export default {
   name: 'Home',
   data () {
@@ -25,7 +27,8 @@ export default {
     IProduct,
     IRecommand,
     IMore,
-    IDessert
+    IDessert,
+    IConnect
   }
 }
 </script>

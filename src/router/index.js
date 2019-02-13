@@ -17,5 +17,8 @@ export default new Router({
       name: 'Category',
       component: Category
     }
-  ]
+  ],
+  scrollBehavior: function (to, from, savedPosition) {
+    return savedPosition || { x: 0, y: 0 }
+  }
 })

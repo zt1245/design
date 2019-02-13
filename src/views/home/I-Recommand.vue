@@ -1,61 +1,63 @@
 <template>
-  <div class="recommand container">
-    <ITitle :title="title" :detail="detail" :sum="sum"></ITitle>
-    <ul>
-      <li>
-        <div class="left">
-          <i></i>
-          <i></i>
-          <img src="../../../static/images/recommand.jpg" alt="">
-        </div>
-        <div class="right">
-          <h3>Ice Cream Cake with Longan 桂圆冰淇淋</h3>
-          <p class="describe">
-            /樱桃酒味从巧克力卷的缝隙飘出/
-            <br/>
+  <div class="recommad-bg">
+    <div class="recommand container">
+      <ITitle :title="title" :detail="detail" :sum="sum"></ITitle>
+      <ul>
+        <li>
+          <div class="left">
+            <i></i>
+            <i></i>
+            <img src="../../../static/images/recommand.jpg" alt="">
+          </div>
+          <div class="right">
+            <h3>Ice Cream Cake with Longan 桂圆冰淇淋</h3>
+            <p class="describe">
+              /樱桃酒味从巧克力卷的缝隙飘出/
+              <br/>
 
-            /向往极北的黑森林，纷飞的雪花里有精灵的歌咏/
-            <br/>
-          </p>
-          <p class="info">Thick dark chocolate and rich fruity Kirsch (cherry spirit) are locked in a Pandora’s Box of plump cake layers and chocolate. Don’t take a bite or you’ll free the passion!</p>
-          <div class="car_info">
-            <p class="pay">￥198.00/2.0磅</p>
-            <p>尺寸：13*13cm</p>
-            <p>适合3-4人食用</p>
-            <div class="sel">
-              <span>立即购买</span>
-              <span>加入购物车</span>
+              /向往极北的黑森林，纷飞的雪花里有精灵的歌咏/
+              <br/>
+            </p>
+            <p class="info">Thick dark chocolate and rich fruity Kirsch (cherry spirit) are locked in a Pandora’s Box of plump cake layers and chocolate. Don’t take a bite or you’ll free the passion!</p>
+            <div class="car_info">
+              <p class="pay">￥198.00/2.0磅</p>
+              <p>尺寸：13*13cm</p>
+              <p>适合3-4人食用</p>
+              <div class="sel">
+                <span>立即购买</span>
+                <span>加入购物车</span>
+              </div>
             </div>
           </div>
-        </div>
-      </li>
-      <li>
-        <div class="left">
-          <i></i>
-          <i></i>
-          <img src="../../../static/images/recommand.jpg" alt="">
-        </div>
-        <div class="right">
-          <h3>Ice Cream Cake with Longan 桂圆冰淇淋</h3>
-          <p class="describe">
-            /樱桃酒味从巧克力卷的缝隙飘出/
-            <br/>
-            /向往极北的黑森林，纷飞的雪花里有精灵的歌咏/
-            <br/>
-          </p>
-          <p class="info">Thick dark chocolate and rich fruity Kirsch (cherry spirit) are locked in a Pandora’s Box of plump cake layers and chocolate. Don’t take a bite or you’ll free the passion!</p>
-          <div class="car_info">
-            <p class="pay">￥198.00/2.0磅</p>
-            <p>尺寸：13*13cm</p>
-            <p>适合3-4人食用</p>
-            <div class="sel">
-              <span>立即购买</span>
-              <span>加入购物车</span>
+        </li>
+        <li>
+          <div class="left">
+            <i></i>
+            <i></i>
+            <img src="../../../static/images/recommand.jpg" alt="">
+          </div>
+          <div class="right">
+            <h3>Ice Cream Cake with Longan 桂圆冰淇淋</h3>
+            <p class="describe">
+              /樱桃酒味从巧克力卷的缝隙飘出/
+              <br/>
+              /向往极北的黑森林，纷飞的雪花里有精灵的歌咏/
+              <br/>
+            </p>
+            <p class="info">Thick dark chocolate and rich fruity Kirsch (cherry spirit) are locked in a Pandora’s Box of plump cake layers and chocolate. Don’t take a bite or you’ll free the passion!</p>
+            <div class="car_info">
+              <p class="pay">￥198.00/2.0磅</p>
+              <p>尺寸：13*13cm</p>
+              <p>适合3-4人食用</p>
+              <div class="sel">
+                <span>立即购买</span>
+                <span>加入购物车</span>
+              </div>
             </div>
           </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -77,6 +79,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.recommad-bg {
+  background: url(../../../static/images/rebg.jpg);
+}
 .recommand {
   ul {
     overflow: hidden;

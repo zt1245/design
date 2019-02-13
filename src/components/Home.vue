@@ -37,7 +37,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.content {
-  background: url(../../static/images/bg.jpg);
-}
 </style>

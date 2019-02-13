@@ -38,6 +38,6 @@ export default {
 
 <style lang="scss" scoped>
 .content {
-  background: #f8f8f8;
+  background: url(../../static/images/bg.jpg);
 }
 </style>

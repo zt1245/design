@@ -37,5 +37,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.content {
+  background: #f8f8f8;
+}
 </style>

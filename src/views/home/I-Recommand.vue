@@ -81,6 +81,7 @@ export default {
   ul {
     overflow: hidden;
     margin-top: 30px;
+    padding-bottom: 50px;
     li {
       overflow: hidden;
       padding-bottom: 50px;
@@ -92,7 +93,7 @@ export default {
         text-align: left;
         position: relative;
         h3 {
-          margin-top: 130px;
+          margin-top: 90px;
           font-family: MicrosoftYaHei;
           font-size: 20px;
           line-height: 24px;
@@ -152,25 +153,26 @@ export default {
       }
     }
     li:nth-child(2n+1) {
+      padding-left: 70px;
       .left {
         float: left;
         i:nth-child(1) {
           display: block;
-          width: 400px;
-          height: 500px;
+          width: 300px;
+          height: 400px;
           background: #d4bea6;
         }
         i:nth-child(2) {
-          width: 400px;
-          height: 500px;
+          width: 300px;
+          height: 400px;
           border: 1px solid #000000;
           position: absolute;
           top: 20px;
           left: 20px;
         }
         img {
-          width: 400px;
-          height: 500px;
+          width: 300px;
+          height: 400px;
           position: absolute;
           top: 40px;
           left: 40px;
@@ -178,32 +180,33 @@ export default {
       }
       .right {
         float: left;
-        margin-left: 120px;
+        margin-left: 158px;
         .car_info {
           text-align: right;
         }
       }
     }
     li:nth-child(2n) {
+      padding-right: 70px;
       .left {
         float: right;
         i:nth-child(1) {
           display: block;
-          width: 400px;
-          height: 500px;
+          width: 300px;
+          height: 400px;
           background: #d4bea6;
         }
         i:nth-child(2) {
-          width: 400px;
-          height: 500px;
+          width: 300px;
+          height: 400px;
           border: 1px solid #000000;
           position: absolute;
           top: 20px;
           right: 20px;
         }
         img {
-          width: 400px;
-          height: 500px;
+          width: 300px;
+          height: 400px;
           position: absolute;
           top: 40px;
           right: 40px;
@@ -211,7 +214,7 @@ export default {
       }
       .right {
         float: right;
-        margin-right: 60px;
+        margin-right: 108px;
       }
     }
   }

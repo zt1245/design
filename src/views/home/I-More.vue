@@ -38,13 +38,15 @@ export default {
 <style lang="scss" scoped>
 .more {
   width: 100%;
+  background: url(../../../static/images/banner06.jpg) center;
+  padding: 50px 0;
   ul {
     display: flex;
     justify-content: space-around;
     padding: 60px 0;
     li {
       font-size: 16px;
-      color: rgba($color: #000000, $alpha: 0.6);
+      color: rgba($color: #ffffff, $alpha: 0.8);
       i {
         font-size: 100px;
         display: block;
@@ -55,7 +57,7 @@ export default {
       span {
         display: inline-block;
         padding: 10px 20px;
-        border: 1px solid rgba($color: #000000, $alpha: 0.6);
+        border: 1px solid rgba($color: #ffffff, $alpha: 0.8);
         border-radius: 2px;
       }
       span:hover {

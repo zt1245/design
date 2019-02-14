@@ -1,5 +1,6 @@
 <template>
   <div class="category">
+    <img src="../../static/images/banner04.png" class="ban">
     <div class="type container">
       <dl class="cat-list">
         <dt>分类：</dt>
@@ -58,7 +59,9 @@ export default {
 
 <style lang="scss" scoped>
 .category {
-  padding-top: 100px;
+  .ban {
+    width: 100%;
+  }
   .car {
     font-size: 14px;
     line-height: 18px;
@@ -73,6 +76,7 @@ export default {
     color: #cf4248;
   }
   .type {
+    margin-top: 20px;
     font-size: 13px;
     margin-bottom: 35px;
     border-top: #f2f2f2 solid 1px;

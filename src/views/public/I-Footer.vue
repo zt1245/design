@@ -7,12 +7,8 @@
           dessert
         </p>
         <ul>
-          <li>首页</li>
-          <li>首页</li>
-          <li>首页</li>
-          <li>首页</li>
-          <li>首页</li>
-          <li>首页</li>
+          <li v-for="(item,index) in footList"
+            :key="index">{{ item }}</li>
         </ul>
         <p>订购专线：xxx xxx xxxx（服务时间 08:00–22:00）</p>
         <p>客服电话：xxx-xxxxxxxx（全国） | kefu@idessert.com（邮箱）</p>
@@ -27,6 +23,11 @@
 
 <script>
 export default {
+  data () {
+    return {
+      footList: ['首页', '蛋糕', '果汁', '冰淇淋', '甜甜圈', '新闻资讯', '关于我们', '联系我们']
+    }
+  }
 }
 </script>
 
@@ -65,7 +66,7 @@ export default {
       padding-bottom: 20px;
       li {
         border-right: 1px solid #ffffff;
-        padding-right: 60px;
+        padding-right: 32px;
       }
       li:last-child {
         border: none;

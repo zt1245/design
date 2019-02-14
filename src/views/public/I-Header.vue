@@ -26,7 +26,7 @@
 export default {
   data () {
     return {
-      navList: ['首页', '蛋糕', '果汁', '冰淇淋', '甜甜圈', '关于我们', '联系我们'],
+      navList: ['首页', '蛋糕', '果汁', '冰淇淋', '甜甜圈', '新闻资讯', '关于我们', '联系我们'],
       aindex: 0,
       isActive: false
     }
@@ -35,6 +35,8 @@ export default {
     window.addEventListener('scroll', this.handleScroll)
     if (this.$route.name === 'Category') {
       this.aindex = 1
+    } else if (this.$route.name === 'NewsMenu' || this.$route.name === 'ShowNews') {
+      this.aindex = 5
     }
   },
   methods: {
@@ -54,6 +56,10 @@ export default {
       } else if (index === 1) {
         this.$router.push({
           path: '/category'
+        })
+      } else if (index === 5) {
+        this.$router.push({
+          path: '/news'
         })
       }
     }

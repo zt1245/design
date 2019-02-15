@@ -1,6 +1,6 @@
 <template>
   <div class="category">
-    <img src="../../static/images/banner04.png" class="ban">
+    <img src="../../static/images/newban.png" class="ban">
     <div class="type container">
       <dl class="cat-list">
         <dt>分类：</dt>

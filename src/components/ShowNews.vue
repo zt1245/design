@@ -16,8 +16,6 @@
 export default {
   data () {
     return {
-      sideBar: ['新闻资讯', '行业资讯', '公司资讯'],
-      sideActive: 0,
       prev: '',
       next: '',
       num: null,
@@ -62,9 +60,9 @@ export default {
   },
   mounted () {
     this.num = parseInt(this.$route.params.id)
-    console.log(this.num)
     if (this.num === 0) {
       this.prev = '没有了'
+      this.next = this.newList[this.num + 1].title
     } else if (this.num === this.newList.length - 1) {
       this.next = '没有了'
       this.prev = this.newList[this.num - 1].title
@@ -75,29 +73,43 @@ export default {
   },
   methods: {
     prevto () {
-      this.prevnum = this.num--
-      if (this.num !== 0 && this.num > 0) {
+      if (this.num > 0) {
+        this.num = this.num - 1
+        this.prevnum = this.num - 1
+        this.nextnum = this.num + 1
         this.$router.push({
-          path: `/news/showNews/${this.prevnum}`
+          path: `/news/showNews/${this.num}`
         })
-      }
-      if (this.prevnum === 0) {
+        if (this.num === 0) {
+          this.prev = '没有了'
+          this.next = this.newList[this.nextnum].title
+        } else {
+          this.prev = this.newList[this.prevnum].title
+          this.next = this.newList[this.nextnum].title
+        }
+      } else {
         this.prev = '没有了'
-      } else if (this.num > 0 && this.num < this.newList.length - 1) {
-        this.prev = this.newList[this.prevnum].title
+        this.next = this.newList[this.nextnum].title
       }
     },
     nextto () {
-      this.nextnum = this.num++
-      if (parseInt(this.$route.params.id) !== this.newList.length - 1) {
+      if (this.num < this.newList.length - 1) {
+        this.num = this.num + 1
+        this.nextnum = this.num + 1
+        this.prevnum = this.num - 1
         this.$router.push({
-          path: `/news/showNews/${this.nextnum}`
+          path: `/news/showNews/${this.num}`
         })
-      }
-      if (this.nextnum === 0) {
+        if (this.num === this.newList.length - 1) {
+          this.next = '没有了'
+          this.prev = this.newList[this.prevnum].title
+        } else {
+          this.next = this.newList[this.nextnum].title
+          this.prev = this.newList[this.prevnum].title
+        }
+      } else {
         this.next = '没有了'
-      } else if (this.num > 0 && this.num < this.newList.length - 1) {
-        this.next = this.newList[this.nextnum].title
+        this.prev = this.newList[this.prevnum].title
       }
     }
   }

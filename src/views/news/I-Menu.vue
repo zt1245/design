@@ -5,7 +5,7 @@
         <li v-for="(item,index) in sideBar"
           :key="index"
           :class="{ active: sideActive === index, shover: index !== 0, sideSel: sideNum === index}"
-          @click="change(index)">{{ item }}</li>
+          @click="change(index), information(index)">{{ item }}</li>
       </ul>
       <div class="sideBar-newList">
         <h3>为你推荐</h3>
@@ -13,7 +13,7 @@
           <li v-for="(item,index) in newList"
             :key="index"
             :class="{ newBarActive: newBarNum === index }"
-            @click="BarChange(index)">{{ item.title }}</li>
+            @click="BarChange(index), goNew(index)">{{ item.title }}</li>
         </ul>
       </div>
     </div>
@@ -75,6 +75,18 @@ export default {
     goto (index) {
       this.$router.push({
         path: `/showNews/${index}`
+      })
+    },
+    information (index) {
+      if (index === 1) {
+        this.$router.push({
+          path: '/news'
+        })
+      }
+    },
+    goNew (index) {
+      this.$router.push({
+        path: `/news/showNews/${index}`
       })
     }
   }

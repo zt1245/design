@@ -4,6 +4,8 @@ import Home from '@/components/Home'
 import Category from '@/components/Category'
 import News from '@/components/News'
 import ShowNews from '@/components/ShowNews'
+import About from '@/components/About'
+import AboutContent from '@/views/about/AboutContent'
 import NewsMenu from '@/views/news/NewsMenu'
 
 Vue.use(Router)
@@ -34,6 +36,22 @@ export default new Router({
         name: 'ShowNews',
         component: ShowNews
       }]
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: About,
+      children: [{
+        path: '/aboutContent',
+        name: 'AboutContent',
+        component: AboutContent
+      }],
+      redirect: '/about/aboutContent'
+    },
+    {
+      path: '',
+      name: 'Home',
+      component: Home
     }
   ],
   scrollBehavior: function (to, from, savedPosition) {

@@ -37,6 +37,8 @@ export default {
       this.aindex = 1
     } else if (this.$route.name === 'NewsMenu' || this.$route.name === 'ShowNews') {
       this.aindex = 5
+    } else if (this.$route.name === 'About') {
+      this.aindex = 6
     }
   },
   methods: {
@@ -60,6 +62,10 @@ export default {
       } else if (index === 5) {
         this.$router.push({
           path: '/news'
+        })
+      } else if (index === 6) {
+        this.$router.push({
+          path: '/about'
         })
       }
     }

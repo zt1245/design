@@ -6,6 +6,9 @@ import News from '@/components/News'
 import ShowNews from '@/components/ShowNews'
 import About from '@/components/About'
 import AboutContent from '@/views/about/AboutContent'
+import Aboutcompany from '@/views/about/Aboutcompany'
+import Aboutculture from '@/views/about/Aboutculture'
+import Aboutgoodness from '@/views/about/Aboutgoodness'
 import NewsMenu from '@/views/news/NewsMenu'
 
 Vue.use(Router)
@@ -42,11 +45,25 @@ export default new Router({
       name: 'About',
       component: About,
       children: [{
-        path: '/aboutContent',
+        path: '',
         name: 'AboutContent',
         component: AboutContent
-      }],
-      redirect: '/about/aboutContent'
+      },
+      {
+        path: 'aboutcompany',
+        name: '/Aboutcompany',
+        component: Aboutcompany
+      },
+      {
+        path: 'aboutculture',
+        name: 'Aboutculture',
+        component: Aboutculture
+      },
+      {
+        path: 'aboutgoodness',
+        name: 'Aboutgoodness',
+        component: Aboutgoodness
+      }]
     },
     {
       path: '',

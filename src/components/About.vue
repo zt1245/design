@@ -24,6 +24,23 @@ export default {
   methods: {
     aboutChange (index) {
       this.aboutAct = index
+      if (index === 0) {
+        this.$router.push({
+          path: '/about'
+        })
+      } else if (index === 1) {
+        this.$router.push({
+          path: '/about/aboutcompany'
+        })
+      } else if (index === 2) {
+        this.$router.push({
+          path: '/about/aboutculture'
+        })
+      } else if (index === 3) {
+        this.$router.push({
+          path: '/about/aboutgoodness'
+        })
+      }
     }
   }
 }

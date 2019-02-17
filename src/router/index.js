@@ -5,6 +5,8 @@ import Category from '@/components/Category'
 import News from '@/components/News'
 import ShowNews from '@/components/ShowNews'
 import About from '@/components/About'
+import Login from '@/components/Login'
+import Register from '@/components/Register'
 import AboutContent from '@/views/about/AboutContent'
 import Aboutcompany from '@/views/about/Aboutcompany'
 import Aboutculture from '@/views/about/Aboutculture'
@@ -64,6 +66,16 @@ export default new Router({
         name: 'Aboutgoodness',
         component: Aboutgoodness
       }]
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
     },
     {
       path: '',

@@ -13,8 +13,8 @@
 			</ul>
 			<div class="nav_fun">
 				<p>
-					<span>登录 </span>/
-					<span>注册</span>
+					<span @click="login()">登录 </span>/
+					<span @click="register()">注册</span>
 				</p>
 				<i class="iconfont icon-gouwuchekong"></i>
 			</div>
@@ -26,7 +26,7 @@
 export default {
   data () {
     return {
-      navList: ['首页', '蛋糕', '果汁', '冰淇淋', '甜甜圈', '新闻资讯', '关于我们', '联系我们'],
+      navList: ['首页', '蛋糕', '果汁', '冰淇淋', '甜甜圈', '新闻资讯', '关于我们'],
       aindex: 0,
       isActive: false
     }
@@ -48,6 +48,17 @@ export default {
       } else {
         this.isActive = false
       }
+    },
+    login () {
+      this.aindex = null
+      this.$router.push({
+        path: '/login'
+      })
+    },
+    register () {
+      this.$router.push({
+        path: '/register'
+      })
     },
     linkto (index) {
       this.aindex = index
@@ -94,6 +105,12 @@ export default {
 			display: block;
 			font-size: 22px;
 		}
+    span:hover {
+      color: #cf4248;
+    }
+    span {
+      cursor: pointer;
+    }
 	}
 }
 .nav_content {

@@ -1,7 +1,8 @@
 <template>
-  <div class="aboutcompany">
+  <div class="aboutcompany container">
     <p v-for="(item,index) in companyList"
       :key="index">{{ item }}</p>
+    <img src="../../../static/images/about.jpg">
   </div>
 </template>
 
@@ -16,5 +17,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.aboutcompany {
+  line-height: 1.8;
+  font-size: 16px;
+  text-align: left;
+  color: #2a333c;
+  p {
+    margin-bottom: 10px;
+  }
+  img {
+    margin: 20px auto 50px;
+  }
+}
 </style>

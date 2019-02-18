@@ -2,43 +2,15 @@
   <div class="product container">
     <ITitle :title="title" :detail="detail" :sum="sum"></ITitle>
     <ul>
-      <li>
-        <img src="../../../static/images/cake.jpg" alt="">
-        <h6>草莓奶油蛋糕</h6>
-        <p>甜润奶油，与草莓的自然甜度搭配</p>
+      <li v-for="(item,index) in NewPro"
+        :key="index"
+        @click="toDetail(item.id)">
+        <img :src="item.imgSrc" alt="">
+        <h6>{{ item.title }}</h6>
+        <p>{{ item.detail }}</p>
         <i></i>
         <div class="info">
-          <span class="spec">￥198.00/2.0磅</span>
-          <span class="car">加入购物车</span>
-        </div>
-      </li>
-      <li>
-        <img src="../../../static/images/cake.jpg" alt="">
-        <h6>草莓奶油蛋糕</h6>
-        <p>甜润奶油，与草莓的自然甜度搭配</p>
-        <i></i>
-        <div class="info">
-          <span class="spec">￥198.00/2.0磅</span>
-          <span class="car">加入购物车</span>
-        </div>
-      </li>
-      <li>
-        <img src="../../../static/images/cake.jpg" alt="">
-        <h6>草莓奶油蛋糕</h6>
-        <p>甜润奶油，与草莓的自然甜度搭配</p>
-        <i></i>
-        <div class="info">
-          <span class="spec">￥198.00/2.0磅</span>
-          <span class="car">加入购物车</span>
-        </div>
-      </li>
-      <li>
-        <img src="../../../static/images/cake.jpg" alt="">
-        <h6>草莓奶油蛋糕</h6>
-        <p>甜润奶油，与草莓的自然甜度搭配</p>
-        <i></i>
-        <div class="info">
-          <span class="spec">￥198.00/2.0磅</span>
+          <span class="spec">￥{{ item.price }}.00/{{ item.spec }}磅</span>
           <span class="car">加入购物车</span>
         </div>
       </li>
@@ -57,7 +29,46 @@ export default {
     return {
       title: '新品上市',
       detail: 'New products listed',
-      sum: '理应追逐最新的，向更好、更高处进发'
+      sum: '理应追逐最新的，向更好、更高处进发',
+      NewPro: [{
+        id: '001',
+        imgSrc: '../../../static/images/cake.jpg',
+        title: '草莓奶油蛋糕',
+        detial: '甜润奶油，与草莓的自然甜度搭配',
+        price: '198',
+        spec: '2.0'
+      },
+      {
+        id: '002',
+        imgSrc: '../../../static/images/cake.jpg',
+        title: '草莓奶油蛋糕',
+        detial: '甜润奶油，与草莓的自然甜度搭配',
+        price: '198',
+        spec: '2.0'
+      },
+      {
+        id: '003',
+        imgSrc: '../../../static/images/cake.jpg',
+        title: '草莓奶油蛋糕',
+        detial: '甜润奶油，与草莓的自然甜度搭配',
+        price: '198',
+        spec: '2.0'
+      },
+      {
+        id: '004',
+        imgSrc: '../../../static/images/cake.jpg',
+        title: '草莓奶油蛋糕',
+        detial: '甜润奶油，与草莓的自然甜度搭配',
+        price: '198',
+        spec: '2.0'
+      }]
+    }
+  },
+  methods: {
+    toDetail (id) {
+      this.$router.push({
+        path: `/detail/${id}`
+      })
     }
   }
 }

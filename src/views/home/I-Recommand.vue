@@ -3,52 +3,26 @@
     <div class="recommand container">
       <ITitle :title="title" :detail="detail" :sum="sum"></ITitle>
       <ul>
-        <li>
+        <li v-for="(item,index) in remList"
+          :key="index"
+          @click="toDetail(item.id)">
           <div class="left">
             <i></i>
             <i></i>
-            <img src="../../../static/images/recommand.jpg" alt="">
+            <img :src="item.imgSrc" alt="">
           </div>
           <div class="right">
-            <h3>Ice Cream Cake with Longan 桂圆冰淇淋</h3>
-            <p class="describe">
-              /樱桃酒味从巧克力卷的缝隙飘出/
-              <br/>
-
-              /向往极北的黑森林，纷飞的雪花里有精灵的歌咏/
+            <h3>{{ item.title }}</h3>
+            <p class="describe" v-for="(des,index) in item.describe"
+              :key="index">
+              {{ des }}
               <br/>
             </p>
-            <p class="info">Thick dark chocolate and rich fruity Kirsch (cherry spirit) are locked in a Pandora’s Box of plump cake layers and chocolate. Don’t take a bite or you’ll free the passion!</p>
+            <p class="info">{{ item.detail }}</p>
             <div class="car_info">
-              <p class="pay">￥198.00/2.0磅</p>
-              <p>尺寸：13*13cm</p>
-              <p>适合3-4人食用</p>
-              <div class="sel">
-                <span>立即购买</span>
-                <span>加入购物车</span>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="left">
-            <i></i>
-            <i></i>
-            <img src="../../../static/images/recommand.jpg" alt="">
-          </div>
-          <div class="right">
-            <h3>Ice Cream Cake with Longan 桂圆冰淇淋</h3>
-            <p class="describe">
-              /樱桃酒味从巧克力卷的缝隙飘出/
-              <br/>
-              /向往极北的黑森林，纷飞的雪花里有精灵的歌咏/
-              <br/>
-            </p>
-            <p class="info">Thick dark chocolate and rich fruity Kirsch (cherry spirit) are locked in a Pandora’s Box of plump cake layers and chocolate. Don’t take a bite or you’ll free the passion!</p>
-            <div class="car_info">
-              <p class="pay">￥198.00/2.0磅</p>
-              <p>尺寸：13*13cm</p>
-              <p>适合3-4人食用</p>
+              <p class="pay">￥{{ item.price }}.00/{{ item.spec }}磅</p>
+              <p>尺寸: {{ item.size }}cm</p>
+              <p>{{ item.suitEat }}</p>
               <div class="sel">
                 <span>立即购买</span>
                 <span>加入购物车</span>
@@ -72,7 +46,47 @@ export default {
     return {
       title: '产品推荐',
       detail: 'Product recommendations',
-      sum: '他人的参考，仅供参考'
+      sum: '他人的参考，仅供参考',
+      remList: [{
+        id: '006',
+        imgSrc: '../../../static/images/recommand.jpg',
+        title: 'Ice Cream Cake with Longan 桂圆冰淇淋',
+        describe: ['/樱桃酒味从巧克力卷的缝隙飘出/', '/向往极北的黑森林，纷飞的雪花里有精灵的歌咏/'],
+        detail: 'Thick dark chocolate and rich fruity Kirsch (cherry spirit) are locked in a Pandora’s Box of plump cake layers and chocolate. Don’t take a bite or you’ll free the passion!',
+        price: '198',
+        spec: '2.0',
+        size: '13*13',
+        suitEat: '适合3-4人食用'
+      },
+      {
+        id: '007',
+        imgSrc: '../../../static/images/recommand.jpg',
+        title: 'Ice Cream Cake with Longan 桂圆冰淇淋',
+        describe: ['/樱桃酒味从巧克力卷的缝隙飘出/', '/向往极北的黑森林，纷飞的雪花里有精灵的歌咏/'],
+        detail: 'Thick dark chocolate and rich fruity Kirsch (cherry spirit) are locked in a Pandora’s Box of plump cake layers and chocolate. Don’t take a bite or you’ll free the passion!',
+        price: '198',
+        spec: '2.0',
+        size: '13*13',
+        suitEat: '适合3-4人食用'
+      },
+      {
+        id: '008',
+        imgSrc: '../../../static/images/recommand.jpg',
+        title: 'Ice Cream Cake with Longan 桂圆冰淇淋',
+        describe: ['/樱桃酒味从巧克力卷的缝隙飘出/', '/向往极北的黑森林，纷飞的雪花里有精灵的歌咏/'],
+        detail: 'Thick dark chocolate and rich fruity Kirsch (cherry spirit) are locked in a Pandora’s Box of plump cake layers and chocolate. Don’t take a bite or you’ll free the passion!',
+        price: '198',
+        spec: '2.0',
+        size: '13*13',
+        suitEat: '适合3-4人食用'
+      }]
+    }
+  },
+  methods: {
+    toDetail (id) {
+      this.$router.push({
+        path: `/detail/${id}`
+      })
     }
   }
 }
@@ -90,6 +104,7 @@ export default {
     li {
       overflow: hidden;
       padding-bottom: 50px;
+      cursor: pointer;
       .left {
         position: relative;
       }
@@ -111,7 +126,7 @@ export default {
           line-height: 24px;
           letter-spacing: 4px;
           color: #333333;
-          margin-bottom: 30px;
+          margin-bottom: 10px;
         }
         .info {
           width: 296px;

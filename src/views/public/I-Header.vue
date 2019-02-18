@@ -39,7 +39,7 @@ export default {
       this.aindex = 5
     } else if (this.$route.name === 'About') {
       this.aindex = 6
-    } else if (this.$route.name === 'Login' || this.$route.name === 'Register') {
+    } else if (this.$route.name === 'Home' || this.$route.name === 'Register' || this.$route.name === 'Agreement' || this.$route.name === 'Detail') {
       this.aindex = null
     }
   },

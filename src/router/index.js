@@ -7,6 +7,7 @@ import ShowNews from '@/components/ShowNews'
 import About from '@/components/About'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
+import Agreement from '@/components/Agreement'
 import AboutContent from '@/views/about/AboutContent'
 import Aboutcompany from '@/views/about/Aboutcompany'
 import Aboutculture from '@/views/about/Aboutculture'
@@ -76,6 +77,11 @@ export default new Router({
       path: '/register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/agreement',
+      name: 'Agreement',
+      component: Agreement
     },
     {
       path: '',

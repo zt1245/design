@@ -9,10 +9,10 @@
 					<input type="password" name="upwd" id="upwd" placeholder="请输入密码" />
 					<i>注册</i>
 					<p>
-            <span>已有账号，去登陆</span>
+            <span @click="goLogin()">已有账号，去登陆</span>
           </p>
           <input type="checkbox" name="rember" id="rember" checked="checked">已阅读并同意
-          <span class="protocol">《i甜点idessert用户服务协议》</span>
+          <span class="protocol" @click="toprotocol()">《i甜点idessert用户服务协议》</span>
 			</div>
 		</div>
   </div>
@@ -20,6 +20,18 @@
 
 <script>
 export default {
+  methods: {
+    goLogin () {
+      this.$router.push({
+        path: '/login'
+      })
+    },
+    toprotocol () {
+      this.$router.push({
+        path: '/agreement'
+      })
+    }
+  }
 }
 </script>
 
@@ -79,6 +91,7 @@ export default {
       }
       .protocol {
         color: #cf4248;
+        cursor: pointer;
       }
     }
   }

@@ -9,7 +9,7 @@
 					<input type="password" name="upwd" id="upwd" placeholder="请输入密码" />
 					<i>立即登陆</i>
 					<p>
-            <span>去注册</span>
+            <span @click="goRegister()">去注册</span>
             <span>忘记密码</span>
           </p>
 			</div>
@@ -19,6 +19,13 @@
 
 <script>
 export default {
+  methods: {
+    goRegister () {
+      this.$router.push({
+        path: '/register'
+      })
+    }
+  }
 }
 </script>
 

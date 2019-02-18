@@ -39,6 +39,8 @@ export default {
       this.aindex = 5
     } else if (this.$route.name === 'About') {
       this.aindex = 6
+    } else if (this.$route.name === 'Login' || this.$route.name === 'Register') {
+      this.aindex = null
     }
   },
   methods: {

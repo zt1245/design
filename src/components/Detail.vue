@@ -5,10 +5,13 @@
       :key="index">
 			<div class="left">
 				<!--小图-->
-				<div class="cake_photo_s">
+				<div class="cake_photo_s"
+          @mouseover="show()"
+          @mouseout="hide()">
 					<img :src="item.imgArr[actindex]"/>
 					<!--遮罩层-->
-					<div class="mask"></div>
+					<div class="mask"
+            v-show="isShow"></div>
 				</div>
 				<!--图片列表-->
 				<ul>
@@ -20,8 +23,9 @@
           </li>
 				</ul>
 				<!--大图-->
-				<div class="cake_photo_b">
-					<img src="../../static/images/teatime_01.png"/>
+				<div class="cake_photo_b"
+          v-show="isShow">
+					<img :src="item.imgArr[actindex]"/>
 				</div>
 			</div>
 			<div class="right">
@@ -48,47 +52,57 @@
 				<div class="outer_box">
 					<div class="detail_img">
 						<img src="../../static/images/detail_img.jpg"/>
-						<ul>
-							<li>
-								<i class="iconfont icon-chicunleixing"></i>
-								{{ item.sizeArr[selNum] }}cm
-							</li>
-							<li>
-								<i class="iconfont icon-ren"></i>
-								{{ item.suitEatArr[selNum] }}
-							</li>
-							<li>
-								<i class="iconfont icon-a-cj"></i>
-								含{{ item.setArr[selNum] }}套餐具
-							</li>
-							<li>
-								<i class="iconfont icon-shijian"></i>
-								最早明天 09:30配送
-							</li>
-						</ul>
-						<p class="price">
-							￥
-							<span>{{ item.priceArr[selNum] }}.00</span>
-							/{{ item.specArr[selNum] }}磅
-						</p>
+						<div class="outer_right">
+              <ul>
+                <li>
+                  <i class="iconfont icon-chicunleixing"></i>
+                  {{ item.sizeArr[selNum] }}cm
+                </li>
+                <li>
+                  <i class="iconfont icon-ren"></i>
+                  {{ item.suitEatArr[selNum] }}
+                </li>
+                <li>
+                  <i class="iconfont icon-a-cj"></i>
+                  含{{ item.setArr[selNum] }}套餐具
+                </li>
+                <li>
+                  <i class="iconfont icon-shijian"></i>
+                  最早明天 09:30配送
+                </li>
+              </ul>
+              <p class="price">
+                ￥
+                <span>{{ item.priceArr[selNum] }}.00</span>
+                /{{ item.specArr[selNum] }}磅
+              </p>
+            </div>
 					</div>
 					<div class="cake_size">
-						<span>商品规格</span>
+						<span>商品规格：</span>
 						<ul>
 							<li v-for="(specItem,specIndex) in item.specArr"
-                :key="specIndex">
+                :key="specIndex"
+                :class="{ select: selNum === specIndex }"
+                @click="changeSize(specIndex)">
 								{{ specItem }}磅
 								<i class="iconfont"
-                  :class="{ 'icon-right': selNum === specIndex }"></i>
+                  :class="{ 'icon-xuanzhong': selNum === specIndex }"></i>
 							</li>
 						</ul>
 					</div>
 					<div class="buy_button">
-						<a href="#">立即购买</a>
-						<a href="#">加入购物车</a>
+						<span class="buy">立即购买</span>
+						<span class="car">加入购物车</span>
 					</div>
 				</div>
 			</div>
+		</div>
+    <!--详情图开始-->
+		<div class="detail_photo container">
+			<img v-for="(deImg,deIndex) in detailImg"
+        :key="deIndex"
+        :src="deImg"/>
 		</div>
   </div>
 </template>
@@ -99,6 +113,7 @@ export default {
     return {
       actindex: 0,
       selNum: 0,
+      isShow: false,
       detailList: [{
         id: '001',
         imgArr: ['../../static/images/teatime_01.png', '../../static/images/teatime_02.png', '../../static/images/teatime_03.png', '../../static/images/teatime_04.png'],
@@ -110,12 +125,22 @@ export default {
         specArr: ['1.0', '2.0', '3.0', '5.0'],
         setArr: ['10', '10', '15', '20'],
         sweetArr: ['1', '1', '0', '0', '0']
-      }]
+      }],
+      detailImg: ['../../static/images/teatime_detail_01.jpg', '../../static/images/teatime_detail_02.jpg', '../../static/images/teatime_detail_03.jpg', '../../static/images/teatime_detail_04.jpg', '../../static/images/teatime_detail_05.jpg']
     }
   },
   methods: {
     switchNum (num) {
       this.actindex = num
+    },
+    changeSize (num) {
+      this.selNum = num
+    },
+    show () {
+      this.isShow = true
+    },
+    hide () {
+      this.isShow = false
     }
   }
 }
@@ -128,7 +153,29 @@ export default {
     margin-top: 20px;
     display: flex;
     justify-content: space-between;
+    border-bottom: 1px solid #D8D8D8;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
     .left {
+      position: relative;
+      margin-right: 80px;
+      .cake_photo_b {
+        width: 420px;
+        height: 420px;
+        border: 1px solid rgba(0,0,0,.05);
+        position: absolute;
+        top: 20px;
+        left: 450px;
+        z-index: 100;
+        overflow: hidden;
+        img {
+          width: 840px;
+          height: 840px;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+      }
       .cake_photo_s {
         width: 420px;
         height: 420px;
@@ -142,8 +189,7 @@ export default {
         .mask {
           width: 210px;
           height: 210px;
-          background: url(../../static/images/mask.png) no-repeat;
-          display: none;
+          background: url(../../static/images/mask.png);
           position: absolute;
           top: 0;
           left: 0;
@@ -198,6 +244,93 @@ export default {
         line-height: 30px;
         font-size: 14px;
         color: #684029;
+      }
+      .outer_box {
+        padding-top: 25px;
+        .detail_img {
+          display: flex;
+          margin-bottom: 35px;
+          img {
+            width: 300px;
+            height: 170px;
+          }
+          .outer_right {
+            margin-left: 30px;
+            i {
+              color: #C69C6D;
+              padding-right: 10px;
+            }
+            li {
+              line-height: 35px;
+            }
+            .price {
+              color: #C69C6D;
+              padding-left: 8px;
+              span {
+                font-size: 22px;
+                padding-left: 12px;
+              }
+            }
+          }
+        }
+        .cake_size {
+          display: flex;
+          span {
+            line-height: 30px;
+            height: 30px;
+            color: #684029;
+            font-size: 12px;
+          }
+          ul {
+            display: flex;
+            li {
+              position: relative;
+              width: 60px;
+              line-height: 30px;
+              height: 30px;
+              font-size: 12px;
+              color: #684029;
+              text-align: center;
+              border: 1px solid #e7e0dd;
+              cursor: pointer;
+              margin-left: 15px;
+              margin-bottom: 14px;
+              i {
+                position: absolute;
+                top: -10px;
+                left: -3px;
+                font-size: 16px;
+                color: #684029;
+              }
+            }
+            li:hover {
+              color: #C69C6D;
+            }
+            .select {
+              border-color: #684029;
+            }
+          }
+        }
+        .buy_button {
+          margin-top: 10px;
+          display: flex;
+          span {
+            width: 167px;
+            height: 40px;
+            display: block;
+            text-align: center;
+            line-height: 40px;
+            background: #684029;
+            color: #FFFFFF;
+            font-size: 14px;
+            margin-right: 15px;
+            cursor: pointer;
+          }
+          .buy {
+            background: #F4F4F4;
+            color: #7A5844;
+          }
+        }
       }
     }
   }

@@ -9,6 +9,7 @@ import Login from '@/components/Login'
 import Register from '@/components/Register'
 import Agreement from '@/components/Agreement'
 import Detail from '@/components/Detail'
+import Car from '@/components/Car'
 import AboutContent from '@/views/about/AboutContent'
 import Aboutcompany from '@/views/about/Aboutcompany'
 import Aboutculture from '@/views/about/Aboutculture'
@@ -88,6 +89,11 @@ export default new Router({
       path: '/detail/:id',
       name: 'Detail',
       component: Detail
+    },
+    {
+      path: '/car',
+      name: 'Car',
+      component: Car
     },
     {
       path: '',

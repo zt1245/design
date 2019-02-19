@@ -16,7 +16,8 @@
 					<span @click="login()">登录 </span>/
 					<span @click="register()">注册</span>
 				</p>
-				<i class="iconfont icon-gouwuchekong"></i>
+				<i class="iconfont icon-gouwuchekong"
+          @click="goShop()"></i>
 			</div>
 		</div>
 	</div>
@@ -39,7 +40,7 @@ export default {
       this.aindex = 5
     } else if (this.$route.name === 'About') {
       this.aindex = 6
-    } else if (this.$route.name === 'Home' || this.$route.name === 'Register' || this.$route.name === 'Agreement' || this.$route.name === 'Detail') {
+    } else if (this.$route.name === 'Home' || this.$route.name === 'Register' || this.$route.name === 'Agreement' || this.$route.name === 'Detail' || this.$route.name === 'Car') {
       this.aindex = null
     }
   },
@@ -81,6 +82,11 @@ export default {
           path: '/about'
         })
       }
+    },
+    goShop () {
+      this.$router.push({
+        path: '/car'
+      })
     }
   }
 }
@@ -111,6 +117,9 @@ export default {
       color: #cf4248;
     }
     span {
+      cursor: pointer;
+    }
+    .icon-gouwuchekong {
       cursor: pointer;
     }
 	}

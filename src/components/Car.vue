@@ -43,9 +43,9 @@
 							<td class="cake_price">￥{{ item.price }}.00</td>
 							<td class="cake_num">
 								<div class="number">
-									<input type="button" class="reduce" value="+"/>
+									<input type="button" class="reduce" value="-"/>
 									<input type="text" class="tex" value="1"/>
-									<input type="button" class="add" value="-"/>
+									<input type="button" class="add" value="+"/>
 								</div>
 							</td>
 							<td class="money">￥298.00</td>
@@ -70,7 +70,7 @@
 					</p>
 				</div>
 				<div class="submit_button">
-					<span>去结算</span>
+					<span @click="goCheckout()">去结算</span>
 				</div>
 			</div>
 		</div>
@@ -130,6 +130,11 @@ export default {
     goShop () {
       this.$router.push({
         path: '/category'
+      })
+    },
+    goCheckout () {
+      this.$router.push({
+        path: '/carcheckout'
       })
     }
   }
@@ -198,6 +203,7 @@ export default {
         text-align: center;
         font-size: 14px;
         margin-top: 30px;
+        cursor: pointer;
       }
     }
   }
@@ -287,13 +293,23 @@ export default {
           }
           .cake_num {
             padding-left: 226px;
-            input:nth-child(1) {
-              width: 20px;
-              height: 20px
+            input:nth-child(1),input:nth-child(3) {
+              width: 24px;
+              height: 24px;
+              border: none;
+              outline: none;
+              border: 1px solid #e7e7e7;
+              background: #FFFFFF;
+              color: #684029;
             }
             input:nth-child(2) {
               width: 50px;
+              height: 20px;
               text-align: center;
+              border: none;
+              outline: none;
+              border: 1px solid #e7e7e7;
+              color: #684029;
             }
           }
           .money {

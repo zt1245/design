@@ -10,6 +10,7 @@ import Register from '@/components/Register'
 import Agreement from '@/components/Agreement'
 import Detail from '@/components/Detail'
 import Car from '@/components/Car'
+import CarCheckout from '@/components/CarCheckout'
 import AboutContent from '@/views/about/AboutContent'
 import Aboutcompany from '@/views/about/Aboutcompany'
 import Aboutculture from '@/views/about/Aboutculture'
@@ -94,6 +95,11 @@ export default new Router({
       path: '/car',
       name: 'Car',
       component: Car
+    },
+    {
+      path: '/carCheckout',
+      name: 'CarCheckout',
+      component: CarCheckout
     },
     {
       path: '',

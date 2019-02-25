@@ -34,7 +34,7 @@ export default {
         id: '001',
         imgSrc: '../../../static/images/cake.jpg',
         title: '草莓奶油蛋糕',
-        detial: '甜润奶油，与草莓的自然甜度搭配',
+        detail: '甜润奶油，与草莓的自然甜度搭配',
         price: '198',
         spec: '2.0'
       },
@@ -42,7 +42,7 @@ export default {
         id: '002',
         imgSrc: '../../../static/images/cake.jpg',
         title: '草莓奶油蛋糕',
-        detial: '甜润奶油，与草莓的自然甜度搭配',
+        detail: '甜润奶油，与草莓的自然甜度搭配',
         price: '198',
         spec: '2.0'
       },
@@ -50,7 +50,7 @@ export default {
         id: '003',
         imgSrc: '../../../static/images/cake.jpg',
         title: '草莓奶油蛋糕',
-        detial: '甜润奶油，与草莓的自然甜度搭配',
+        detail: '甜润奶油，与草莓的自然甜度搭配',
         price: '198',
         spec: '2.0'
       },
@@ -58,7 +58,7 @@ export default {
         id: '004',
         imgSrc: '../../../static/images/cake.jpg',
         title: '草莓奶油蛋糕',
-        detial: '甜润奶油，与草莓的自然甜度搭配',
+        detail: '甜润奶油，与草莓的自然甜度搭配',
         price: '198',
         spec: '2.0'
       }]

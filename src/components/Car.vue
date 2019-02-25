@@ -10,7 +10,8 @@
 			</div>
     </div>
     <!-- 添加了商品之后的页面 -->
-    <div class="own_pro container">
+    <div class="own_pro container"
+      v-show="isPro === false">
 			<div class="car_goods_info">
 				<div class="all_s">
 					<input type="checkbox" name="allSel" id="allSel"/>全选
@@ -58,7 +59,8 @@
 			</div>
     </div>
     <!-- 结算 -->
-    <div class="total container">
+    <div class="total container"
+      v-show="isPro === false">
       <p class="all_empty">
 				<i class="iconfont icon-lajitong01"></i>
 				全部清空

@@ -3,10 +3,52 @@
     <div class="delivery-info container">
       <h3 class="delivery-info-title">配送信息</h3>
       <div class="address-info-content">
+        <!-- 用户没有地址信息显示的模块 -->
         <div class="cart-address-button"
-          @click="address()">
+          @click="address()"
+          v-show="addr === false">
           +&nbsp;&nbsp;添加新的地址
         </div>
+        <!-- 用户添加了地址信息 -->
+        <div class="cart-have-address"
+          v-show="addr">
+          <div class="left-info">
+            <p>木子</p>
+            <p><i class="iconfont icon-shouji"></i>15859361245</p>
+            <p><i class="iconfont icon-dingwei"></i>深圳市宝安区航城大道</p>
+          </div>
+          <div class="right-button">
+            <span @click="select()">切换地址（2）</span>
+            <span @click="add()">+添加新的地址</span>
+          </div>
+        </div>
+        <!-- 切换地址的弹框 -->
+        <div class="select-address"
+          v-show="selectAdd">
+          <div class="top-title">
+            <span>请选择收货地址</span>
+            <i class="iconfont icon-cuo"
+              @click="cuo()"></i>
+          </div>
+          <ul>
+            <li>
+              <p>木子</p>
+              <p><i class="iconfont icon-shouji"></i>15859361245</p>
+              <p><i class="iconfont icon-dingwei"></i>深圳市宝安区航城大道</p>
+            </li>
+            <li>
+              <p>木子</p>
+              <p><i class="iconfont icon-shouji"></i>15859361245</p>
+              <p><i class="iconfont icon-dingwei"></i>深圳市宝安区航城大道</p>
+            </li>
+            <li class="zeng">
+              <p>+添加新地址</p>
+            </li>
+          </ul>
+          <span class="use"
+            @click="use()">使用</span>
+        </div>
+        <!-- 添加地址的弹框 -->
         <div class="add-address"
           v-show="addAddress">
           <p>添加地址</p>
@@ -116,8 +158,10 @@ export default {
     return {
       value1: '',
       value2: '',
+      addr: false,
       addAddress: false,
       options: regionData,
+      selectAdd: false,
       selectedOptions: [],
       pickerOptions: {
         disabledDate (time) {
@@ -153,6 +197,19 @@ export default {
     },
     sure () {
       this.addAddress = false
+      this.addr = true
+    },
+    add () {
+      this.addAddress = true
+    },
+    select () {
+      this.selectAdd = true
+    },
+    cuo () {
+      this.selectAdd = false
+    },
+    use () {
+      this.selectAdd = false
     }
   }
 }
@@ -187,6 +244,105 @@ export default {
         text-align: center;
         cursor: pointer;
       }
+      .select-address {
+        padding: 0 24px 20px;
+        background: #fafafa;
+        border: 4px solid rgba(0, 0, 0, 0.16);
+        box-shadow: 0 -1px 17px 0 rgba(0,0,0,0.38);
+        position: fixed;
+        left: 50%;
+        margin-left: -348px;
+        z-index: 1000;
+        .top-title {
+          display: flex;
+          justify-content: space-between;
+          padding: 20px 0;
+          i:hover {
+            color: #cf4248;
+            cursor: pointer;
+          }
+        }
+        ul {
+          overflow: hidden;
+          li {
+            float: left;
+            background: #ffffff;
+            padding: 20px;
+            text-align: left;
+            width: 48%;
+            border: 1px solid #E1E1E1;
+            margin-bottom: 20px;
+            cursor: pointer;
+            p {
+              color: #684029;
+              line-height: 30px;
+              i {
+                color: #D5BFA7;
+              }
+            }
+            p:nth-child(1) {
+              font-weight: 700;
+            }
+          }
+          li:nth-child(2n+1) {
+            margin-right: 20px;
+          }
+          .zeng {
+            p {
+              text-align: center;
+              padding: 20px 0;
+            }
+          }
+        }
+        .use {
+          display: inline-block;
+          margin: 35px 0;
+          padding: 10px 40px;
+          background: #cf4248;
+          color: #ffffff;
+          cursor: pointer;
+        }
+        .use:hover {
+          background: #e0282f;
+        }
+      }
+      .cart-have-address {
+        display: flex;
+        justify-content: space-between;
+        text-align: left;
+        .left-info {
+          p {
+            color: #D5BFA7;
+            font-size: 14px;
+            line-height: 20px;
+          }
+          p:nth-child(1) {
+            color: #684029;
+            font-size: 16px;
+            padding: 10px 0;
+            font-weight: 700;
+          }
+        }
+        .right-button {
+          display: flex;
+          flex-direction: column;
+          padding-top: 20px;
+          span {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            color: #684029;
+            cursor: pointer;
+          }
+          span:nth-child(1) {
+            border: 1px solid #EFEAE5;
+          }
+          span:nth-child(1):hover {
+            border-color: #D5BFA7;
+            color: #D5BFA7;
+          }
+        }
+      }
       .cart-address-button:hover {
         color: #cf4248;
       }
@@ -194,7 +350,7 @@ export default {
         padding: 28px 42px;
         text-align: left;
         font-size: 14px;
-        position: absolute;
+        position: fixed;
         background: #ffffff;
         border: 1px solid #dcdfe6;
         z-index: 1000;

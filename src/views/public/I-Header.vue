@@ -40,7 +40,7 @@ export default {
       this.aindex = 5
     } else if (this.$route.name === 'About') {
       this.aindex = 6
-    } else if (this.$route.name === 'Home' || this.$route.name === 'Register' || this.$route.name === 'Agreement' || this.$route.name === 'Detail' || this.$route.name === 'Car') {
+    } else if (this.$route.name === 'Register' || this.$route.name === 'Agreement' || this.$route.name === 'Detail' || this.$route.name === 'Car') {
       this.aindex = null
     }
   },

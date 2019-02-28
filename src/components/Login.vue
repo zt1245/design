@@ -31,7 +31,7 @@ export default {
 
 <style lang="scss" scoped>
 .login {
-  background: url(../../static/images/loginbg.png) no-repeat;
+  background: url(../../static/images/loginbg.jpg) no-repeat;
   padding: 500px 0 200px;
   background-size: cover;
   position: relative;

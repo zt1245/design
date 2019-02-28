@@ -145,7 +145,7 @@
           </div>
           <span>深圳市宝安区新安街道兴东社区</span>
         </div>
-        <input type="button" class="go-pay" name="go-pay" value="下单结算">
+        <input type="button" class="go-pay" name="go-pay" value="去支付">
       </div>
     </div>
   </div>

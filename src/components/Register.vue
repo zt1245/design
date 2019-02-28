@@ -37,9 +37,8 @@ export default {
 
 <style lang="scss" scoped>
 .register {
-  background: url(../../static/images/loginbg.jpg) no-repeat;
-  padding: 250px 0 200px;
-  background-position: center;
+  background: url(../../static/images/loginbg.png) no-repeat;
+  padding: 500px 0 200px;
   position: relative;
   .content {
     width: 385px;

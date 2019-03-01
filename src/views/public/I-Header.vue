@@ -40,13 +40,18 @@ export default {
       this.aindex = 5
     } else if (this.$route.name === 'About') {
       this.aindex = 6
-    } else if (this.$route.name === 'Register' || this.$route.name === 'Agreement' || this.$route.name === 'Detail' || this.$route.name === 'Car') {
+    } else if (this.$route.name === 'Agreement' || this.$route.name === 'Detail' || this.$route.name === 'Car') {
       this.aindex = null
+    } else if (this.$route.name === 'Register' || this.$route.name === 'Login') {
+      this.aindex = null
+      this.isActive = true
     }
   },
   methods: {
     handleScroll () {
       if (window.scrollY > 0) {
+        this.isActive = true
+      } else if (this.$route.name === 'Login' || this.$route.name === 'Register') {
         this.isActive = true
       } else {
         this.isActive = false
@@ -57,11 +62,13 @@ export default {
       this.$router.push({
         path: '/login'
       })
+      this.isActive = true
     },
     register () {
       this.$router.push({
         path: '/register'
       })
+      this.isActive = true
     },
     linkto (index) {
       this.aindex = index
@@ -82,11 +89,13 @@ export default {
           path: '/about'
         })
       }
+      this.isActive = false
     },
     goShop () {
       this.$router.push({
         path: '/car'
       })
+      this.isActive = false
     }
   }
 }

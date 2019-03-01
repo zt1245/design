@@ -5,8 +5,11 @@
 				<h2 class="active">用户注册</h2>
 			</div>
 			<div class="login_form">
-					<input type="text" name="uname" id="uname" placeholder="请输入用户名" />
-					<input type="password" name="upwd" id="upwd" placeholder="请输入密码" />
+					<input type="text" name="uname" id="uname" placeholder="输入手机号码" />
+					<input type="password" name="upwd" id="upwd" placeholder="密码：请输入8-20位字符" />
+					<input type="password" name="spwd" id="spwd" placeholder="确认密码" />
+					<input type="text" name="code" id="code" placeholder="短信验证码" />
+          <span class="code">获取验证码</span>
 					<i>注册</i>
 					<p>
             <span @click="goLogin()">已有账号，去登陆</span>
@@ -57,13 +60,27 @@ export default {
       }
     }
     .login_form {
-      input:nth-child(1),input:nth-child(2) {
+      input:nth-child(1),input:nth-child(2),input:nth-child(3),input:nth-child(4) {
         width: 238px;
         border: none;
         outline: none;
         border-bottom: 1px solid #e4eaec;
         height: 40px;
         padding-left: 10px;
+        margin-bottom: 10px;
+      }
+      input:nth-child(4) {
+        width: 119px;
+      }
+      .code {
+        display: inline-block;
+        background: #FAFAFA;
+        border: 1px solid #EBEBEB;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 20px;
+        margin-left: 14px;
+        cursor: pointer;
       }
       i {
         height: 40px;

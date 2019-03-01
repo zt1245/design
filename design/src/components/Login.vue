@@ -5,8 +5,8 @@
 				<h2 class="active">账号密码登录</h2>
 			</div>
 			<div class="login_form">
-					<input type="text" name="uname" id="uname" placeholder="请输入您的账号" />
-					<input type="password" name="upwd" id="upwd" placeholder="请输入密码" />
+					<input type="text" ref="uname" placeholder="请输入您的账号" />
+					<input type="password" ref="upwd" placeholder="请输入密码" />
 					<i>立即登陆</i>
 					<p>
             <span @click="goRegister()">去注册</span>

@@ -5,10 +5,10 @@
 				<h2 class="active">用户注册</h2>
 			</div>
 			<div class="login_form">
-					<input type="text" name="uname" id="uname" placeholder="输入手机号码" />
-					<input type="password" name="upwd" id="upwd" placeholder="密码：请输入8-20位字符" />
-					<input type="password" name="spwd" id="spwd" placeholder="确认密码" />
-					<input type="text" name="code" id="code" placeholder="短信验证码" />
+					<input type="text" ref="uname" placeholder="输入手机号码" />
+					<input type="password" ref="upwd" placeholder="密码：请输入8-20位字符" />
+					<input type="password" ref="spwd" placeholder="确认密码" />
+					<input type="text" ref="vcode" placeholder="短信验证码" />
           <span class="code">获取验证码</span>
 					<i>注册</i>
 					<p>

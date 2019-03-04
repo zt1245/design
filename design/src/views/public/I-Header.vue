@@ -12,10 +12,16 @@
 				</li>
 			</ul>
 			<div class="nav_fun">
-				<p>
+				<p v-show="isLogin === false">
 					<span @click="login()">登录 </span>/
 					<span @click="register()">注册</span>
 				</p>
+        <p v-show="isLogin" @click="toMy()" class="mine" @mouseover="showMy()" @mouseout="hideMy()">我的
+          <ul v-show="isOrder" class="myOrder">
+            <li>我的订单</li>
+            <li @click="signOut()">退出登录</li>
+          </ul>
+        </p>
 				<i class="iconfont icon-gouwuchekong"
           @click="goShop()"></i>
 			</div>
@@ -29,7 +35,9 @@ export default {
     return {
       navList: ['首页', '蛋糕', '果汁', '冰淇淋', '甜甜圈', '新闻资讯', '关于我们'],
       aindex: 0,
-      isActive: false
+      isActive: false,
+      isLogin: true,
+      isOrder: false
     }
   },
   mounted () {
@@ -96,6 +104,20 @@ export default {
         path: '/car'
       })
       this.isActive = false
+    },
+    toMy () {
+      this.$router.push({
+        path: '/my'
+      })
+    },
+    showMy () {
+      this.isOrder = true
+    },
+    hideMy () {
+      this.isOrder = false
+    },
+    signOut () {
+      this.isLogin = false
     }
   }
 }
@@ -115,6 +137,13 @@ export default {
 	.nav_fun {
 		line-height: 75px;
 		display: flex;
+    .myOrder {
+      display: flex;
+      flex-direction: column;
+    }
+    .mine {
+      cursor: pointer;
+    }
 		p {
 			margin-right: 20px;
 		}

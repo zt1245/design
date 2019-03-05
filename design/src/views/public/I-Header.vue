@@ -16,9 +16,9 @@
 					<span @click="login()">登录 </span>/
 					<span @click="register()">注册</span>
 				</p>
-        <p v-show="isLogin" @click="toMy()" class="mine" @mouseover="showMy()" @mouseout="hideMy()">我的
+        <p v-show="isLogin" class="mine" @mouseover="showMy()" @mouseout="hideMy()">木子
           <ul v-show="isOrder" class="myOrder">
-            <li>我的订单</li>
+            <li @click="toMy()">个人中心</li>
             <li @click="signOut()">退出登录</li>
           </ul>
         </p>
@@ -48,7 +48,7 @@ export default {
       this.aindex = 5
     } else if (this.$route.name === 'About') {
       this.aindex = 6
-    } else if (this.$route.name === 'Agreement' || this.$route.name === 'Detail' || this.$route.name === 'Car') {
+    } else if (this.$route.name === 'Agreement' || this.$route.name === 'Detail' || this.$route.name === 'Car' || this.$route.name === 'My') {
       this.aindex = null
     } else if (this.$route.name === 'Register' || this.$route.name === 'Login') {
       this.aindex = null
@@ -118,6 +118,9 @@ export default {
     },
     signOut () {
       this.isLogin = false
+      this.$router.push({
+        path: '/'
+      })
     }
   }
 }
@@ -140,9 +143,17 @@ export default {
     .myOrder {
       display: flex;
       flex-direction: column;
+      padding: 5px 0;
+      background: #ffffff;
+      li {
+        padding: 0 18px;
+        line-height: 30px;
+      }
     }
     .mine {
       cursor: pointer;
+      width: 100px;
+      position: relative;
     }
 		p {
 			margin-right: 20px;

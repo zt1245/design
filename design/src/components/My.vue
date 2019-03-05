@@ -12,5 +12,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.my {
+  padding-top: 75px;
+}
 </style>

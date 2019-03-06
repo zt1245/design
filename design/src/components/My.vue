@@ -1,7 +1,9 @@
 <template>
   <div class="my">
-    <div class="container">
-      <div class="info-left"></div>
+    <div class="myInfo">
+      <div class="user_box container">
+        <div class="portrait"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -14,5 +16,12 @@ export default {
 <style lang="scss" scoped>
 .my {
   padding-top: 75px;
+  .myInfo {
+    background: #f5f5f5;
+    padding: 70px 0 20px;
+    .user_box {
+      background: #ffffff;
+    }
+  }
 }
 </style>

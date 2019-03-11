@@ -3,15 +3,18 @@
     <div class="content container"
       v-for="(item,index) in detailList"
       :key="index">
-			<div class="left">
+			<div class="left" ref="mBox">
 				<!--小图-->
 				<div class="cake_photo_s"
           @mouseover="show()"
-          @mouseout="hide()">
+          @mouseout="hide()"
+          ref="small"
+          @mousemove="move()">
 					<img :src="item.imgArr[actindex]"/>
 					<!--遮罩层-->
 					<div class="mask"
-            v-show="isShow"></div>
+            v-show="isShow"
+            ref="sPic"></div>
 				</div>
 				<!--图片列表-->
 				<ul>
@@ -25,7 +28,7 @@
 				<!--大图-->
 				<div class="cake_photo_b"
           v-show="isShow">
-					<img :src="item.imgArr[actindex]"/>
+					<img :src="item.imgArr[actindex]" ref="bPic"/>
 				</div>
 			</div>
 			<div class="right">
@@ -141,6 +144,32 @@ export default {
     },
     hide () {
       this.isShow = false
+    },
+    // 实现放大镜
+    move (e) {
+      e = e || event
+      var x = e.pageX
+      var y = e.pageY
+      var left = x - this.$refs.small[0].offsetLeft - this.$refs.sPic[0].offsetWidth / 2 - this.$refs.mBox[0].offsetLeft
+      var top = y - this.$refs.small[0].offsetTop - this.$refs.sPic[0].offsetHeight / 2 - this.$refs.mBox[0].offsetTop
+      var le = this.$refs.sPic[0].offsetWidth
+      var to = this.$refs.sPic[0].offsetHeight
+      if (left >= le) {
+        left = le
+      } else if (left < 0) {
+        left = 0
+      }
+      if (top >= to) {
+        top = to
+      } else if (top < 0) {
+        top = 0
+      }
+      var bigLeft = (left * this.$refs.bPic[0].offsetWidth) / this.$refs.small[0].offsetWidth
+      var bigTop = (top * this.$refs.bPic[0].offsetHeight) / this.$refs.small[0].offsetHeight
+      this.$refs.sPic[0].style.left = left + 'px'
+      this.$refs.sPic[0].style.top = top + 'px'
+      this.$refs.bPic[0].style.left = -bigLeft + 'px'
+      this.$refs.bPic[0].style.top = -bigTop + 'px'
     }
   }
 }

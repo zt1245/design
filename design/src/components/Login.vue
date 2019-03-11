@@ -7,7 +7,7 @@
 			<div class="login_form">
 					<input type="text" ref="uname" placeholder="请输入您的账号" />
 					<input type="password" ref="upwd" placeholder="请输入密码" />
-					<i>立即登陆</i>
+					<i @click="Login()">立即登陆</i>
 					<p>
             <span @click="goRegister()">去注册</span>
             <span>忘记密码</span>
@@ -23,6 +23,23 @@ export default {
     goRegister () {
       this.$router.push({
         path: '/register'
+      })
+    },
+    Login () {
+      let uname = this.$refs.uname.value
+      let password = this.$refs.upwd.value
+      this.axios.post('http://localhost:3001/login', {
+        uname,
+        password
+      }).then((res) => {
+        if (res.data.code === 2) {
+          localStorage.setItem('uname', uname)
+          this.$router.push({
+            path: '/'
+          })
+        } else {
+          alert(res.data.msg)
+        }
       })
     }
   }

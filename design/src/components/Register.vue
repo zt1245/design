@@ -6,11 +6,9 @@
 			</div>
 			<div class="login_form">
 					<input type="text" ref="uname" placeholder="输入手机号码" />
-					<input type="password" ref="upwd" placeholder="密码：请输入8-20位字符" />
+					<input type="password" ref="password" placeholder="密码：请输入8-20位字符" />
 					<input type="password" ref="spwd" placeholder="确认密码" />
-					<input type="text" ref="vcode" placeholder="短信验证码" />
-          <span class="code">获取验证码</span>
-					<i>注册</i>
+					<i @click="Register()">注册</i>
 					<p>
             <span @click="goLogin()">已有账号，去登陆</span>
           </p>
@@ -32,6 +30,24 @@ export default {
     toprotocol () {
       this.$router.push({
         path: '/agreement'
+      })
+    },
+    Register () {
+      let uname = this.$refs.uname.value
+      let password = this.$refs.password.value
+      console.log(uname, password)
+      this.axios.post('http://localhost:3001/register', {
+        uname,
+        password
+      }).then((res) => {
+        console.log(res)
+        if (res.data.code === 2) {
+          this.$router.push({
+            path: '/login'
+          })
+        } else {
+          alert(res.data.msg)
+        }
       })
     }
   }
@@ -60,7 +76,7 @@ export default {
       }
     }
     .login_form {
-      input:nth-child(1),input:nth-child(2),input:nth-child(3),input:nth-child(4) {
+      input:nth-child(1),input:nth-child(2),input:nth-child(3) {
         width: 238px;
         border: none;
         outline: none;
@@ -68,19 +84,6 @@ export default {
         height: 40px;
         padding-left: 10px;
         margin-bottom: 10px;
-      }
-      input:nth-child(4) {
-        width: 119px;
-      }
-      .code {
-        display: inline-block;
-        background: #FAFAFA;
-        border: 1px solid #EBEBEB;
-        height: 40px;
-        line-height: 40px;
-        padding: 0 20px;
-        margin-left: 14px;
-        cursor: pointer;
       }
       i {
         height: 40px;

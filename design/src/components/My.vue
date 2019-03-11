@@ -7,7 +7,6 @@
           <div class="right">
             <p>昵称：木子</p>
             <p>手机号：1585933546</p>
-            <span>忘记密码</span>
           </div>
         </div>
       </div>
@@ -107,21 +106,14 @@ export default {
       background: #ffffff;
       display: flex;
       img {
-        width: 200px;
-        height: 200px;
+        width: 100px;
+        height: 100px;
       }
       .right {
         margin-left: 50px;
         text-align: left;
         p {
           line-height: 30px;
-        }
-        span {
-          line-height: 30px;
-          cursor: pointer;
-        }
-        span:hover {
-          color: #cf4248;
         }
       }
     }

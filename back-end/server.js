@@ -22,17 +22,17 @@ app.get('/', function(req, res) {
 // 登录接口
 app.post('/login',function(req,res){
   var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
-    host: 'localhost',
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
     user: 'root',
-    password: '',
-    database: 'user'
+    password: 'ZT1245com',
+    database: 'design'
   });
-  console.log(req.body.username);
+  console.log(req.body.uname);
   console.log(req.body.password);
-  var username = req.body.username;
+  var uname = req.body.uname;
   var password = req.body.password;
   connection.connect();
-  var  sql = `SELECT * FROM userInfo where username="${username}" and password="${password}"`;
+  var  sql = `SELECT * FROM user where uname="${uname}" and password="${password}"`;
   connection.query(sql,function (err, result) {
     if(err){
       res.send({code:-1,msg:'登录失败'});
@@ -41,7 +41,7 @@ app.post('/login',function(req,res){
       if(result.length==0){
         res.send({code:1,msg:'用户名或者密码错误'});
       }else{
-        res.send({code:2,msg:'登录成功',userneme: username});
+        res.send({code:2,msg:'登录成功',uname: uname});
       }
     }
   });
@@ -49,18 +49,16 @@ app.post('/login',function(req,res){
 
 // 注册接口
 app.post('/register',function(req,res){
-  // console.log(req.body);
   var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
-    host: 'localhost',
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
     user: 'root',
-    password: '',
-    database: 'user'
+    password: 'ZT1245com',
+    database: 'design'
   });
-  var username = req.body.username;
+  var uname = req.body.uname;
   var password = req.body.password;
   connection.connect();
-  // var  sql = `insert into userInfo (username,password) VALUES(${username},${password})`;
-  var  sql = `SELECT * FROM userInfo where username="${username}"`;
+  var  sql = `SELECT * FROM user where uname="${uname}"`;
   connection.query(sql,function (err, result) {
     if(err){
       res.send({code:-1,msg:'查询数据库失败'});
@@ -70,13 +68,13 @@ app.post('/register',function(req,res){
         res.send({code:1,msg:'用户名已存在'});
       }else{
         console.log('++++++++++++++');
-        var  sql1 = `insert into userInfo (username,password) VALUES("${username}","${password}")`;
+        var  sql1 = `insert into user (uname,password) VALUES("${uname}","${password}")`;
         connection.query(sql1,function (err, result) {
           console.log(err);
           if(err){
             res.send({code:-1,msg:'插入失败'});
           }else{
-            res.send({code:2,msg:'插入成功',username:username});
+            res.send({code:2,msg:'插入成功',uname:uname});
           }
         });
       }

@@ -12,11 +12,11 @@
 				</li>
 			</ul>
 			<div class="nav_fun">
-				<p v-show="isLogin === false">
+				<p v-show="!username">
 					<span @click="login()">登录 </span>/
 					<span @click="register()">注册</span>
 				</p>
-        <p v-show="isLogin" class="mine" @mouseover="showMy()" @mouseout="hideMy()">木子
+        <p v-show="username" class="mine" @mouseover="showMy()" @mouseout="hideMy()">{{ username }}
           <ul v-show="isOrder" class="myOrder">
             <li @click="toMy()">个人中心</li>
             <li @click="signOut()">退出登录</li>
@@ -36,8 +36,8 @@ export default {
       navList: ['首页', '蛋糕', '果汁', '冰淇淋', '甜甜圈', '新闻资讯', '关于我们'],
       aindex: 0,
       isActive: false,
-      isLogin: true,
-      isOrder: false
+      isOrder: false,
+      username: ''
     }
   },
   mounted () {
@@ -54,6 +54,7 @@ export default {
       this.aindex = null
       this.isActive = true
     }
+    this.username = localStorage.getItem('uname')
   },
   methods: {
     handleScroll () {
@@ -117,7 +118,8 @@ export default {
       this.isOrder = false
     },
     signOut () {
-      this.isLogin = false
+      localStorage.setItem('uname', '')
+      this.username = localStorage.getItem('uname')
       this.$router.push({
         path: '/'
       })

@@ -1,6 +1,6 @@
 <template>
   <div class="news">
-    <img src="../../static/images/newban.png" class="ban">
+    <img src="http://localhost:8081/static/images/newban.png" class="ban">
     <div class="newsmenu">
     <div class="new_nav">
       <ul class="container">

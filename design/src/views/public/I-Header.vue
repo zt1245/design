@@ -182,7 +182,7 @@ export default {
 		width: 150px;
 		height: 68px;
 		display: block;
-		background: url(../../../static/images/logo.png);
+		background: url(http://localhost:8081/static/images/logo.png);
 		text-indent: -9999px;
 	}
 	ul {

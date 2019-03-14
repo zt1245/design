@@ -4,7 +4,7 @@
       <li v-for="(item,index) in newList"
         :key="index"
         @click="goto(index)">
-        <img src="../../../static/images/newM.png">
+        <img src="http://localhost:8081/static/images/newM.png">
         <div class="listInfo">
           <h5>{{ item.title }}</h5>
           <p>{{ item.section[0] }}</p>

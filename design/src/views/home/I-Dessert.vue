@@ -2,21 +2,21 @@
   <div class="dessert container">
     <ITitle :title="title" :detail="detail" :sum="sum"></ITitle>
     <ul class="dessert-content">
-      <li><img src="../../../static/images/juice.jpg"></li>
+      <li><img src="http://localhost:8081/static/images/juice.jpg"></li>
       <li class="describe">
         <p>果汁</p>
         <span>采购新鲜优质水果，鲜榨果汁，加入为数不多秘制原料，口感更佳。</span>
       </li>
-      <li><img src="../../../static/images/ice.jpg"></li>
+      <li><img src="http://localhost:8081/static/images/ice.jpg"></li>
       <li>
         <div class="describe">
           <p>蛋糕</p>
           <span>采购新鲜原材料，加入为数不多秘制原料，口感更佳。</span>
         </div>
-        <img src="../../../static/images/doughnut.jpg">
+        <img src="http://localhost:8081/static/images/doughnut.jpg">
       </li>
       <li>
-        <img src="../../../static/images/caked.jpg">
+        <img src="http://localhost:8081/static/images/caked.jpg">
         <div class="doughnut">
           <p>甜甜圈 </p>
           <span>采购新鲜原材料，加入为数不多秘制原料，口感更佳。有独立蛋糕也有蛋糕和雪糕结合体。</span>

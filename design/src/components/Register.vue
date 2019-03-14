@@ -56,7 +56,7 @@ export default {
 
 <style lang="scss" scoped>
 .register {
-  background: url(../../static/images/loginbg.jpg) no-repeat;
+  background: url(http://localhost:8081/static/images/loginbg.jpg) no-repeat;
   padding: 500px 0 200px;
   position: relative;
   background-size: cover;

@@ -39,12 +39,12 @@ export default {
 .aboutcontent {
   ul {
     li:nth-child(1) {
-      background: url(../../../static/images/company.jpg) no-repeat;
+      background: url(http://localhost:8081/static/images/company.jpg) no-repeat;
       background-size: cover;
       text-align: left;
     }
     li:nth-child(2) {
-      background: url(../../../static/images/culture.jpg) no-repeat;
+      background: url(http://localhost:8081/static/images/culture.jpg) no-repeat;
       background-size: cover;
       background-position: center;
       p {
@@ -55,7 +55,7 @@ export default {
       }
     }
     li:nth-child(3) {
-      background: url(../../../static/images/probg.jpg) no-repeat;
+      background: url(http://localhost:8081/static/images/probg.jpg) no-repeat;
       background-size: cover;
       text-align: right;
       p {

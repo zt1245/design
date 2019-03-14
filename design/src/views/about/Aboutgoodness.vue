@@ -2,7 +2,7 @@
   <div class="aboutgoodness">
     <p v-for="(item,index) in goodnessList"
       :key="index">{{ item }}</p>
-    <img src="../../../static/images/about.jpg">
+    <img src="http://localhost:8081/static/images/about.jpg">
   </div>
 </template>
 

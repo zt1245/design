@@ -50,7 +50,7 @@ export default {
 
 <style lang="scss" scoped>
 .order {
-  background: url(../../../static/images/banner05.png);
+  background: url(http://localhost:8081/static/images/banner05.png);
   position: relative;
   .order-meng {
     padding: 270px 0;

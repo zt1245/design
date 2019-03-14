@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <img src="../../static/images/newban.png" class="ban">
+    <img src="http://localhost:8081/static/images/newban.png" class="ban">
     <div class="about-nav">
       <ul class="container">
         <li v-for="(item,index) in aboutNav"

@@ -49,7 +49,7 @@ export default {
       sum: '他人的参考，仅供参考',
       remList: [{
         id: '006',
-        imgSrc: '../../../static/images/recommand.jpg',
+        imgSrc: 'http://localhost:8081/static/images/recommand.jpg',
         title: 'Ice Cream Cake with Longan 桂圆冰淇淋',
         describe: ['/樱桃酒味从巧克力卷的缝隙飘出/', '/向往极北的黑森林，纷飞的雪花里有精灵的歌咏/'],
         detail: 'Thick dark chocolate and rich fruity Kirsch (cherry spirit) are locked in a Pandora’s Box of plump cake layers and chocolate. Don’t take a bite or you’ll free the passion!',
@@ -60,7 +60,7 @@ export default {
       },
       {
         id: '007',
-        imgSrc: '../../../static/images/recommand.jpg',
+        imgSrc: 'http://localhost:8081/static/images/recommand.jpg',
         title: 'Ice Cream Cake with Longan 桂圆冰淇淋',
         describe: ['/樱桃酒味从巧克力卷的缝隙飘出/', '/向往极北的黑森林，纷飞的雪花里有精灵的歌咏/'],
         detail: 'Thick dark chocolate and rich fruity Kirsch (cherry spirit) are locked in a Pandora’s Box of plump cake layers and chocolate. Don’t take a bite or you’ll free the passion!',
@@ -71,7 +71,7 @@ export default {
       },
       {
         id: '008',
-        imgSrc: '../../../static/images/recommand.jpg',
+        imgSrc: 'http://localhost:8081/static/images/recommand.jpg',
         title: 'Ice Cream Cake with Longan 桂圆冰淇淋',
         describe: ['/樱桃酒味从巧克力卷的缝隙飘出/', '/向往极北的黑森林，纷飞的雪花里有精灵的歌咏/'],
         detail: 'Thick dark chocolate and rich fruity Kirsch (cherry spirit) are locked in a Pandora’s Box of plump cake layers and chocolate. Don’t take a bite or you’ll free the passion!',
@@ -94,7 +94,7 @@ export default {
 
 <style lang="scss" scoped>
 .recommad-bg {
-  background: url(../../../static/images/rebg.jpg);
+  background: url(http://localhost:8081/static/images/rebg.jpg);
 }
 .recommand {
   ul {

@@ -4,7 +4,7 @@
     <div class="no_pro container"
       v-show="isPro">
       <div class="car_not_pro container">
-				<img src="../../static/images/cartempty.png"/>
+				<img src="http://localhost:8081/static/images/cartempty.png"/>
 				<span>您的购物车里还没有商品</span>
 				<p @click="goShop()">去购物 >></p>
 			</div>

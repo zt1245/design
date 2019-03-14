@@ -7,6 +7,43 @@
           <div class="right">
             <p>昵称：木子</p>
             <p>手机号：1585933546</p>
+            <p>收货地址管理</p>
+            <el-table
+              :data="tableData"
+              style="width: 100%">
+              <el-table-column
+                label="姓名"
+                width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.name }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="手机号"
+                width="150">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.tel }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="地址"
+                width="400">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.address }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="200">
+                <template slot-scope="scope">
+                  <el-button
+                    size="mini"
+                    @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                  <el-button
+                    size="mini"
+                    type="danger"
+                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
         </div>
       </div>
@@ -81,12 +118,38 @@ export default {
           imgSrc: '../../static/images/cake.jpg'
         }]
       }],
-      tPrice: 98
+      tPrice: 98,
+      tableData: [{
+        tel: '123465465464',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      },
+      {
+        tel: '123465465464',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1517 弄'
+      },
+      {
+        tel: '123465465464',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1519 弄'
+      },
+      {
+        tel: '123465465464',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1516 弄'
+      }]
     }
   },
   methods: {
     changeSel (id) {
       this.sindex = id
+    },
+    handleEdit (index, row) {
+      console.log(index, row)
+    },
+    handleDelete (index, row) {
+      console.log(index, row)
     }
   }
 }

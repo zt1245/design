@@ -32,7 +32,7 @@ export default {
       sum: '理应追逐最新的，向更好、更高处进发',
       NewPro: [{
         id: '001',
-        imgSrc: '../../../static/images/cake.jpg',
+        imgSrc: 'http://localhost:8081/static/images/cake.jpg',
         title: '草莓奶油蛋糕',
         detail: '甜润奶油，与草莓的自然甜度搭配',
         price: '198',
@@ -40,7 +40,7 @@ export default {
       },
       {
         id: '002',
-        imgSrc: '../../../static/images/cake.jpg',
+        imgSrc: 'http://localhost:8081/static/images/cake.jpg',
         title: '草莓奶油蛋糕',
         detail: '甜润奶油，与草莓的自然甜度搭配',
         price: '198',
@@ -48,7 +48,7 @@ export default {
       },
       {
         id: '003',
-        imgSrc: '../../../static/images/cake.jpg',
+        imgSrc: 'http://localhost:8081/static/images/cake.jpg',
         title: '草莓奶油蛋糕',
         detail: '甜润奶油，与草莓的自然甜度搭配',
         price: '198',
@@ -56,7 +56,7 @@ export default {
       },
       {
         id: '004',
-        imgSrc: '../../../static/images/cake.jpg',
+        imgSrc: 'http://localhost:8081/static/images/cake.jpg',
         title: '草莓奶油蛋糕',
         detail: '甜润奶油，与草莓的自然甜度搭配',
         price: '198',

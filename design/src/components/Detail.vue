@@ -129,7 +129,7 @@ export default {
         setArr: ['10', '10', '15', '20'],
         sweetArr: ['1', '1', '0', '0', '0']
       }],
-      detailImg: ['../../static/images/teatime_detail_01.jpg', '../../static/images/teatime_detail_02.jpg', '../../static/images/teatime_detail_03.jpg', '../../static/images/teatime_detail_04.jpg', '../../static/images/teatime_detail_05.jpg']
+      detailImg: ['http://localhost:8081/static/images/teatime_detail_01.jpg', 'http://localhost:8081/static/images/teatime_detail_02.jpg', 'http://localhost:8081/static/images/teatime_detail_03.jpg', 'http://localhost:8081/static/images/teatime_detail_04.jpg', 'http://localhost:8081/static/images/teatime_detail_05.jpg']
     }
   },
   methods: {
@@ -218,7 +218,7 @@ export default {
         .mask {
           width: 210px;
           height: 210px;
-          background: url(../../static/images/mask.png);
+          background: url(http://localhost:8081/static/images/mask.png);
           position: absolute;
           top: 0;
           left: 0;

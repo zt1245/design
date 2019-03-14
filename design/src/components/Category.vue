@@ -1,6 +1,6 @@
 <template>
   <div class="category">
-    <img src="../../static/images/newban.png" class="ban">
+    <img src="http://localhost:8081/static/images/newban.png" class="ban">
     <div class="type container">
       <dl class="cat-list">
         <dt>分类：</dt>
@@ -16,7 +16,7 @@
       <ul>
         <li v-for="(item,index) in 10"
           :key="index">
-          <img src="../../static/images/caking.jpg">
+          <img src="http://localhost:8081/static/images/caking.jpg">
           <p>百利甜情人</p>
           <span>￥298.00/2.0磅</span>
           <div class="label-entrance">

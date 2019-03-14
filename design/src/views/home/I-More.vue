@@ -38,7 +38,7 @@ export default {
 <style lang="scss" scoped>
 .more {
   width: 100%;
-  background: url(../../../static/images/banner06.jpg) center;
+  background: url(http://localhost:8081/static/images/banner06.jpg) center;
   padding: 50px 0;
   ul {
     display: flex;

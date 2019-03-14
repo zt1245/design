@@ -54,7 +54,7 @@
 				</div>
 				<div class="outer_box">
 					<div class="detail_img">
-						<img src="../../static/images/detail_img.jpg"/>
+						<img src="http://localhost:8081/static/images/detail_img.jpg"/>
 						<div class="outer_right">
               <ul>
                 <li>

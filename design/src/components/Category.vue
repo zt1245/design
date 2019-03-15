@@ -14,11 +14,11 @@
     </div>
     <div class="pro-list container">
       <ul>
-        <li v-for="(item,index) in 10"
+        <li v-for="(item,index) in proList"
           :key="index">
-          <img src="http://localhost:8081/static/images/caking.jpg">
-          <p>百利甜情人</p>
-          <span>￥298.00/2.0磅</span>
+          <img :src="item.pro_img">
+          <p>{{ item.title }}</p>
+          <span>￥{{ item.unit_price.split(",")[0].split("[")[1] }}/2.0磅</span>
           <div class="label-entrance">
             <i>人气 ></i>
             <i>新品 ></i>
@@ -41,13 +41,25 @@ export default {
   data () {
     return {
       typeList: ['全部分类', '蛋糕', '果汁', '冰淇淋', '甜甜圈'],
-      selnum: 0
+      selnum: 0,
+      proList: []
     }
   },
   mounted () {
     if (this.$route.name === 'Category') {
       this.selnum = 1
     }
+    let type = 'cake'
+    this.axios.post('http://localhost:3001/category', {
+      type
+    }).then((res) => {
+      console.log(res)
+      if (res.data.code === 2) {
+        this.proList = res.data.result
+      } else {
+        alert(res.data.msg)
+      }
+    })
   },
   methods: {
     selection (index) {

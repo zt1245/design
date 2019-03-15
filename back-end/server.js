@@ -82,6 +82,33 @@ app.post('/register',function(req,res){
   });
 });
 
+// 查询分类接口
+app.post('/category',function(req,res){
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  console.log(req.body.type);
+  var type = req.body.type;
+  connection.connect();
+  var  sql = `SELECT * FROM product where type="${type}"`;
+  connection.query(sql,function (err, result) {
+    if(err){
+      res.send({code:-1,msg:'登录失败'});
+    }else{
+      console.log(result);
+      res.send({code:2,msg:'查询成功',result});
+      // if(result.length==0){
+      //   res.send({code:1,msg:'查询失败'});
+      // }else{
+      //   res.send({code:2,msg:'查询成功',result});
+      // }
+    }
+  });
+})
+
 app.listen(3001,()=>{
   console.log('success',function(){
     console.log('服务器启动成功,且地址是','http://localhost:3001')

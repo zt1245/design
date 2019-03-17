@@ -18,17 +18,21 @@
           :key="index">
           <img :src="item.pro_img">
           <p>{{ item.title }}</p>
-          <span>￥{{ item.unit_price.split(",")[0].split("[")[1] }}/2.0磅</span>
+          <span>￥{{ item.unit_price.split(",")[0] }}/2.0磅</span>
           <div class="label-entrance">
-            <i>人气 ></i>
-            <i>新品 ></i>
+            <i v-for="(tab,tabindex) in item.tab.split(',')"
+              :key="tabindex">{{ tab }} ></i>
           </div>
           <div class="car">
             <i class="iconfont icon-jiarugouwuche"></i>
             加入购物车
           </div>
           <div class="label">
-            <i class="iconfont icon-renqibiaoqian1"></i>
+            <i class="iconfont icon-renqibiaoqian1"
+              v-show="item.label === '1'"></i>
+            <i class="iconfont icon-xinpinbiaoqian1"
+              v-show="item.label === '0'"
+              :class="{ green: item.label === '0' }"></i>
           </div>
         </li>
       </ul>
@@ -42,7 +46,8 @@ export default {
     return {
       typeList: ['全部分类', '蛋糕', '果汁', '冰淇淋', '甜甜圈'],
       selnum: 0,
-      proList: []
+      proList: [],
+      tabList: []
     }
   },
   mounted () {
@@ -123,6 +128,9 @@ export default {
         position: relative;
         margin-bottom: 50px;
         .label {
+          .green {
+            color: rgb(5, 181, 112);
+          }
           i {
             display: inline-block;
             color: #cf4248;
@@ -140,6 +148,7 @@ export default {
             font-size: 14px;
             border-radius: 100px;
             color: #cf4248;
+            margin-right: 5px;
           }
         }
         img {
@@ -149,6 +158,10 @@ export default {
         p {
           font-size: 14px;
           line-height: 20px;
+          width: 228px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
         span {
           display: block;

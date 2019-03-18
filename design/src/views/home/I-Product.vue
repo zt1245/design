@@ -3,15 +3,27 @@
     <ITitle :title="title" :detail="detail" :sum="sum"></ITitle>
     <ul>
       <li v-for="(item,index) in NewPro"
-        :key="index"
-        @click="toDetail(item.id)">
-        <img :src="item.imgSrc" alt="">
+        :key="index">
+        <img :src="item.pro_img" alt="" @click="toDetail(item.id)">
         <h6>{{ item.title }}</h6>
-        <p>{{ item.detail }}</p>
-        <i></i>
+        <p>{{ item.describe }}</p>
+        <i class="line"></i>
         <div class="info">
-          <span class="spec">￥{{ item.price }}.00/{{ item.spec }}磅</span>
+          <span class="spec">￥{{ item.unit_price.split(',')[0] }}/2.0磅</span>
           <span class="car">加入购物车</span>
+        </div>
+        <div class="spec-detail">
+          <p>￥250.00/2.0磅<i class="iconfont icon-cuo"></i></p>
+          <ul>
+            <li>1.0磅</li>
+            <li>2.0磅</li>
+            <li>3.0磅</li>
+            <li>5.0磅</li>
+          </ul>
+          <div class="btn">
+            <span class="now">立即购买</span>
+            <span class="car">加入购物车</span>
+          </div>
         </div>
       </li>
     </ul>
@@ -30,38 +42,7 @@ export default {
       title: '新品上市',
       detail: 'New products listed',
       sum: '理应追逐最新的，向更好、更高处进发',
-      NewPro: [{
-        id: '001',
-        imgSrc: 'http://localhost:8081/static/images/cake.jpg',
-        title: '草莓奶油蛋糕',
-        detail: '甜润奶油，与草莓的自然甜度搭配',
-        price: '198',
-        spec: '2.0'
-      },
-      {
-        id: '002',
-        imgSrc: 'http://localhost:8081/static/images/cake.jpg',
-        title: '草莓奶油蛋糕',
-        detail: '甜润奶油，与草莓的自然甜度搭配',
-        price: '198',
-        spec: '2.0'
-      },
-      {
-        id: '003',
-        imgSrc: 'http://localhost:8081/static/images/cake.jpg',
-        title: '草莓奶油蛋糕',
-        detail: '甜润奶油，与草莓的自然甜度搭配',
-        price: '198',
-        spec: '2.0'
-      },
-      {
-        id: '004',
-        imgSrc: 'http://localhost:8081/static/images/cake.jpg',
-        title: '草莓奶油蛋糕',
-        detail: '甜润奶油，与草莓的自然甜度搭配',
-        price: '198',
-        spec: '2.0'
-      }]
+      NewPro: []
     }
   },
   methods: {
@@ -70,6 +51,18 @@ export default {
         path: `/detail/${id}`
       })
     }
+  },
+  mounted () {
+    let label = '1'
+    this.axios.post('http://localhost:3001/label', {
+      label
+    }).then((res) => {
+      if (res.data.code === 2) {
+        this.NewPro = res.data.result.slice(-4)
+      } else {
+        alert(res.data.msg)
+      }
+    })
   }
 }
 </script>
@@ -82,6 +75,7 @@ export default {
     margin-top: 20px;
     li {
       width: 263px;
+      position: relative;
       img {
         width: 263px;
         cursor: pointer;
@@ -90,16 +84,22 @@ export default {
         text-align: left;
         padding: 10px 0;
         font-size: 16px;
-        cursor: pointer;
+        width: 263px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
       }
       p {
         text-align: left;
         font-size: 14px;
         color: #616161;
         padding-bottom: 20px;
-        cursor: pointer;
+        width: 263px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
       }
-      i {
+      .line {
         display: block;
         border-top: 1px dashed #cf4248;
       }
@@ -119,6 +119,55 @@ export default {
           font-size: 12px;
           color: #ffffff;
           cursor: pointer;
+        }
+      }
+      .spec-detail {
+        position: absolute;
+        width: 263px;
+        bottom: -10px;
+        background: #f5f5f5;
+        padding: 5px 0;
+        p {
+          font-size: 16px;
+          color: #cf4248;
+          padding-bottom: 0;
+          position: relative;
+          i {
+            color: #333333;
+            position: absolute;
+            right: 8px;
+            cursor: pointer;
+          }
+          i:hover {
+            color: #cf4248;
+          }
+        }
+        ul {
+          display: flex;
+          margin-top: 10px;
+          li {
+            border: 1px solid #D0C3BB;
+            padding: 5px 0;
+            margin: 5px;
+            font-size: 14px;
+          }
+        }
+        .btn {
+          display: flex;
+          justify-content: space-around;
+          margin-top: 10px;
+        }
+        span {
+          font-size: 14px;
+          display: inline-block;
+          padding: 6px 12px;
+        }
+        .now {
+          background: #ffffff;
+        }
+        .car {
+          color: #ffffff;
+          background: #cf4248;
         }
       }
     }

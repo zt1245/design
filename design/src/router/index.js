@@ -28,13 +28,12 @@ export default new Router({
       component: Home
     },
     {
-      path: '/category',
+      path: '/category/:type',
       name: 'Category',
       component: Category
     },
     {
       path: '/news',
-      name: 'News',
       component: News,
       children: [{
         path: '',
@@ -49,7 +48,6 @@ export default new Router({
     },
     {
       path: '/about',
-      name: 'About',
       component: About,
       children: [{
         path: '',
@@ -109,7 +107,6 @@ export default new Router({
     },
     {
       path: '',
-      name: 'Home',
       component: Home
     }
   ],

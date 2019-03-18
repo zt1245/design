@@ -27,8 +27,6 @@ app.post('/login',function(req,res){
     password: 'ZT1245com',
     database: 'design'
   });
-  console.log(req.body.uname);
-  console.log(req.body.password);
   var uname = req.body.uname;
   var password = req.body.password;
   connection.connect();
@@ -37,7 +35,6 @@ app.post('/login',function(req,res){
     if(err){
       res.send({code:-1,msg:'登录失败'});
     }else{
-      console.log(result);
       if(result.length==0){
         res.send({code:1,msg:'用户名或者密码错误'});
       }else{
@@ -63,14 +60,11 @@ app.post('/register',function(req,res){
     if(err){
       res.send({code:-1,msg:'查询数据库失败'});
     }else{
-      console.log(result);
       if(result.length>0){
         res.send({code:1,msg:'用户名已存在'});
       }else{
-        console.log('++++++++++++++');
         var  sql1 = `insert into user (uname,password) VALUES("${uname}","${password}")`;
         connection.query(sql1,function (err, result) {
-          console.log(err);
           if(err){
             res.send({code:-1,msg:'插入失败'});
           }else{
@@ -82,7 +76,7 @@ app.post('/register',function(req,res){
   });
 });
 
-// 查询分类接口
+// 查询分类接口(蛋糕，果汁，甜甜圈，冰淇淋)
 app.post('/category',function(req,res){
   var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
     host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
@@ -90,7 +84,6 @@ app.post('/category',function(req,res){
     password: 'ZT1245com',
     database: 'design'
   });
-  console.log(req.body.type);
   var type = req.body.type;
   connection.connect();
   var  sql = `SELECT * FROM product where type="${type}"`;
@@ -98,13 +91,66 @@ app.post('/category',function(req,res){
     if(err){
       res.send({code:-1,msg:'登录失败'});
     }else{
-      console.log(result);
       res.send({code:2,msg:'查询成功',result});
-      // if(result.length==0){
-      //   res.send({code:1,msg:'查询失败'});
-      // }else{
-      //   res.send({code:2,msg:'查询成功',result});
-      // }
+    }
+  });
+})
+
+//查询全部商品信息
+app.post('/all',function(req,res){
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  connection.connect();
+  var  sql = `SELECT * FROM product`;
+  connection.query(sql,function (err, result) {
+    if(err){
+      res.send({code:-1,msg:'登录失败'});
+    }else{
+      res.send({code:2,msg:'查询成功',result});
+    }
+  });
+})
+
+// 查询label（新品或推荐）
+app.post('/label',function(req,res){
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  var label = req.body.label;
+  connection.connect();
+  var  sql = `SELECT * FROM product where label="${label}"`;
+  connection.query(sql,function (err, result) {
+    if(err){
+      res.send({code:-1,msg:'登录失败'});
+    }else{
+      res.send({code:2,msg:'查询成功',result});
+    }
+  });
+})
+
+// 查询某个id商品
+app.post('/pro',function(req,res){
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  var id = req.body.id;
+  connection.connect();
+  var  sql = `SELECT * FROM product where id="${id}"`;
+  connection.query(sql,function (err, result) {
+    if(err){
+      res.send({code:-1,msg:'登录失败'});
+    }else{
+      res.send({code:2,msg:'查询成功',result});
     }
   });
 })

@@ -23,9 +23,9 @@
             <i v-for="(tab,tabindex) in item.tab.split(',')"
               :key="tabindex">{{ tab }} ></i>
           </div>
-          <div class="car">
-            <i class="iconfont icon-jiarugouwuche"></i>
-            加入购物车
+          <div class="car" @click="toDetail(item.id)">
+            <i class="iconfont icon-xiangqing"></i>
+            查看详情
           </div>
           <div class="label">
             <i class="iconfont icon-renqibiaoqian1"
@@ -51,14 +51,19 @@ export default {
     }
   },
   mounted () {
-    if (this.$route.name === 'Category') {
+    if (this.$route.params.type === 'cake') {
       this.selnum = 1
+    } else if (this.$route.params.type === 'drink') {
+      this.selnum = 2
+    } else if (this.$route.params.type === 'ice') {
+      this.selnum = 3
+    } else if (this.$route.params.type === 'sweet') {
+      this.selnum = 4
     }
-    let type = 'cake'
+    let type = this.$route.params.type
     this.axios.post('http://localhost:3001/category', {
       type
     }).then((res) => {
-      console.log(res)
       if (res.data.code === 2) {
         this.proList = res.data.result
       } else {
@@ -68,7 +73,40 @@ export default {
   },
   methods: {
     selection (index) {
+      if (index === 0) {
+        this.axios.post('http://localhost:3001/all').then((res) => {
+          if (res.data.code === 2) {
+            this.proList = res.data.result
+          } else {
+            alert(res.data.msg)
+          }
+        })
+      } else {
+        if (index === 1) {
+          var type = 'cake'
+        } else if (index === 2) {
+          type = 'drink'
+        } else if (index === 3) {
+          type = 'ice'
+        } else if (index === 4) {
+          type = 'sweet'
+        }
+        this.axios.post('http://localhost:3001/category', {
+          type
+        }).then((res) => {
+          if (res.data.code === 2) {
+            this.proList = res.data.result
+          } else {
+            alert(res.data.msg)
+          }
+        })
+      }
       this.selnum = index
+    },
+    toDetail (id) {
+      this.$router.push({
+        path: `/detail/${id}`
+      })
     }
   }
 }
@@ -83,6 +121,7 @@ export default {
     font-size: 14px;
     line-height: 18px;
     margin-top: 10px;
+    cursor: pointer;
     i {
       display: inline-block;
       font-size: 18px;
@@ -154,6 +193,7 @@ export default {
         img {
           width: 228px;
           height: 246px;
+          cursor: pointer;
         }
         p {
           font-size: 14px;

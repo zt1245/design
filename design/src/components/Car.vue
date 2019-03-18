@@ -81,8 +81,9 @@
       <p>商品推荐</p>
       <ul>
         <li v-for="(item,index) in groomList"
-          :key="index">
-          <img :src="item.imgSrc">
+          :key="index"
+          @click="toDetail(item.id)">
+          <img :src="item.pro_img">
         </li>
       </ul>
     </div>
@@ -94,22 +95,7 @@ export default {
   data () {
     return {
       isPro: false,
-      groomList: [{
-        id: '001',
-        imgSrc: '../../static/images/caked.jpg'
-      },
-      {
-        id: '002',
-        imgSrc: '../../static/images/caked.jpg'
-      },
-      {
-        id: '003',
-        imgSrc: '../../static/images/caked.jpg'
-      },
-      {
-        id: '004',
-        imgSrc: '../../static/images/caked.jpg'
-      }],
+      groomList: [],
       carList: [{
         id: '001',
         imgSrc: '../../static/images/bailey.jpg',
@@ -138,7 +124,24 @@ export default {
       this.$router.push({
         path: '/carcheckout'
       })
+    },
+    toDetail (id) {
+      this.$router.push({
+        path: `/detail/${id}`
+      })
     }
+  },
+  mounted () {
+    let label = '0'
+    this.axios.post('http://localhost:3001/label', {
+      label
+    }).then((res) => {
+      if (res.data.code === 2) {
+        this.groomList = res.data.result.slice(-4)
+      } else {
+        alert(res.data.msg)
+      }
+    })
   }
 }
 </script>

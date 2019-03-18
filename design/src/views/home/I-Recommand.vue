@@ -4,28 +4,40 @@
       <ITitle :title="title" :detail="detail" :sum="sum"></ITitle>
       <ul>
         <li v-for="(item,index) in remList"
-          :key="index"
-          @click="toDetail(item.id)">
+          :key="index">
           <div class="left">
             <i></i>
             <i></i>
-            <img :src="item.imgSrc" alt="">
+            <img :src="item.pro_img" alt="" @click="toDetail(item.id)">
           </div>
           <div class="right">
             <h3>{{ item.title }}</h3>
-            <p class="describe" v-for="(des,index) in item.describe"
+            <p class="describe" v-for="(des,index) in item.detail.split(',')"
               :key="index">
               {{ des }}
               <br/>
             </p>
-            <p class="info">{{ item.detail }}</p>
+            <p class="info">{{ item.describe }}</p>
             <div class="car_info">
-              <p class="pay">￥{{ item.price }}.00/{{ item.spec }}磅</p>
-              <p>尺寸: {{ item.size }}cm</p>
-              <p>{{ item.suitEat }}</p>
+              <p class="pay">￥{{ item.unit_price.split(',')[0] }}/2.0磅</p>
+              <p>尺寸: 13*13cm</p>
+              <p>适合3-4人食用</p>
               <div class="sel">
                 <span>立即购买</span>
                 <span>加入购物车</span>
+              </div>
+            </div>
+            <div class="spec-detail">
+              <p>￥250.00/2.0磅<i class="iconfont icon-cuo"></i></p>
+              <ul>
+                <li>1.0磅</li>
+                <li>2.0磅</li>
+                <li>3.0磅</li>
+                <li>5.0磅</li>
+              </ul>
+              <div class="btn">
+                <span class="now">立即购买</span>
+                <span class="car">加入购物车</span>
               </div>
             </div>
           </div>
@@ -47,39 +59,7 @@ export default {
       title: '产品推荐',
       detail: 'Product recommendations',
       sum: '他人的参考，仅供参考',
-      remList: [{
-        id: '006',
-        imgSrc: 'http://localhost:8081/static/images/recommand.jpg',
-        title: 'Ice Cream Cake with Longan 桂圆冰淇淋',
-        describe: ['/樱桃酒味从巧克力卷的缝隙飘出/', '/向往极北的黑森林，纷飞的雪花里有精灵的歌咏/'],
-        detail: 'Thick dark chocolate and rich fruity Kirsch (cherry spirit) are locked in a Pandora’s Box of plump cake layers and chocolate. Don’t take a bite or you’ll free the passion!',
-        price: '198',
-        spec: '2.0',
-        size: '13*13',
-        suitEat: '适合3-4人食用'
-      },
-      {
-        id: '007',
-        imgSrc: 'http://localhost:8081/static/images/recommand.jpg',
-        title: 'Ice Cream Cake with Longan 桂圆冰淇淋',
-        describe: ['/樱桃酒味从巧克力卷的缝隙飘出/', '/向往极北的黑森林，纷飞的雪花里有精灵的歌咏/'],
-        detail: 'Thick dark chocolate and rich fruity Kirsch (cherry spirit) are locked in a Pandora’s Box of plump cake layers and chocolate. Don’t take a bite or you’ll free the passion!',
-        price: '198',
-        spec: '2.0',
-        size: '13*13',
-        suitEat: '适合3-4人食用'
-      },
-      {
-        id: '008',
-        imgSrc: 'http://localhost:8081/static/images/recommand.jpg',
-        title: 'Ice Cream Cake with Longan 桂圆冰淇淋',
-        describe: ['/樱桃酒味从巧克力卷的缝隙飘出/', '/向往极北的黑森林，纷飞的雪花里有精灵的歌咏/'],
-        detail: 'Thick dark chocolate and rich fruity Kirsch (cherry spirit) are locked in a Pandora’s Box of plump cake layers and chocolate. Don’t take a bite or you’ll free the passion!',
-        price: '198',
-        spec: '2.0',
-        size: '13*13',
-        suitEat: '适合3-4人食用'
-      }]
+      remList: []
     }
   },
   methods: {
@@ -88,6 +68,18 @@ export default {
         path: `/detail/${id}`
       })
     }
+  },
+  mounted () {
+    let label = '0'
+    this.axios.post('http://localhost:3001/label', {
+      label
+    }).then((res) => {
+      if (res.data.code === 2) {
+        this.remList = res.data.result.slice(-4)
+      } else {
+        alert(res.data.msg)
+      }
+    })
   }
 }
 </script>
@@ -104,7 +96,10 @@ export default {
     li {
       overflow: hidden;
       padding-bottom: 50px;
-      cursor: pointer;
+      img {
+        cursor: pointer;
+        border: 1px solid #cccccc;
+      }
       .left {
         position: relative;
       }
@@ -140,7 +135,7 @@ export default {
           font-family: MicrosoftYaHei;
           color: #cf4248;
           position: absolute;
-          bottom: 15px;
+          bottom: -8px;
           right: 40px;
           p {
             font-size: 16px;
@@ -168,6 +163,57 @@ export default {
               color: #ffffff;
               cursor: pointer;
             }
+          }
+        }
+        .spec-detail {
+          position: absolute;
+          width: 263px;
+          bottom: -18px;
+          background: #ffffff;
+          padding: 12px 0;
+          right: 0;
+          p {
+            font-size: 16px;
+            color: #cf4248;
+            padding-left: 5px;
+            position: relative;
+            i {
+              color: #333333;
+              position: absolute;
+              right: 0;
+              cursor: pointer;
+            }
+            i:hover {
+              color: #cf4248;
+            }
+          }
+          ul {
+            display: flex;
+            margin-top: 10px;
+            padding-bottom: 0;
+            li {
+              border: 1px solid #D0C3BB;
+              padding: 5px 10px;
+              margin: 5px;
+              font-size: 14px;
+            }
+          }
+          .btn {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+          }
+          span {
+            font-size: 14px;
+            display: inline-block;
+            padding: 6px 12px;
+          }
+          .now {
+            background: #f5f5f5;
+          }
+          .car {
+            color: #ffffff;
+            background: #cf4248;
           }
         }
       }

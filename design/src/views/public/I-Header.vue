@@ -42,7 +42,7 @@ export default {
   },
   mounted () {
     window.addEventListener('scroll', this.handleScroll)
-    if (this.$route.name === 'Category') {
+    if (this.$route.params.type === 'cake') {
       this.aindex = 1
     } else if (this.$route.name === 'NewsMenu' || this.$route.name === 'ShowNews') {
       this.aindex = 5
@@ -53,6 +53,12 @@ export default {
     } else if (this.$route.name === 'Register' || this.$route.name === 'Login') {
       this.aindex = null
       this.isActive = true
+    } else if (this.$route.params.type === 'drink') {
+      this.aindex = 2
+    } else if (this.$route.params.type === 'ice') {
+      this.aindex = 3
+    } else if (this.$route.params.type === 'sweet') {
+      this.aindex = 4
     }
     this.username = localStorage.getItem('uname')
   },
@@ -86,8 +92,12 @@ export default {
           path: '/'
         })
       } else if (index === 1) {
+        window.location.reload()
         this.$router.push({
-          path: '/category'
+          name: 'Category',
+          params: {
+            type: 'cake'
+          }
         })
       } else if (index === 5) {
         this.$router.push({
@@ -97,13 +107,44 @@ export default {
         this.$router.push({
           path: '/about'
         })
+      } else if (index === 2) {
+        window.location.reload()
+        this.$router.push({
+          name: 'Category',
+          params: {
+            type: 'drink'
+          }
+        })
+      } else if (index === 3) {
+        window.location.reload()
+        this.$router.push({
+          name: 'Category',
+          params: {
+            type: 'ice'
+          }
+        })
+      } else if (index === 4) {
+        window.location.reload()
+        this.$router.push({
+          name: 'Category',
+          params: {
+            type: 'sweet'
+          }
+        })
       }
       this.isActive = false
     },
     goShop () {
-      this.$router.push({
-        path: '/car'
-      })
+      if (localStorage.getItem('uname')) {
+        this.$router.push({
+          path: '/car'
+        })
+      } else {
+        alert('用户没有登录，请登录')
+        this.$router.push({
+          path: '/login'
+        })
+      }
       this.isActive = false
     },
     toMy () {

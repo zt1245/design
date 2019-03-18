@@ -1,7 +1,7 @@
 <template>
   <div class="detail">
     <div class="content container"
-      v-for="(item,index) in detailList"
+      v-for="(item,index) in datailList"
       :key="index">
 			<div class="left" ref="mBox">
 				<!--小图-->
@@ -10,7 +10,7 @@
           @mouseout="hide()"
           ref="small"
           @mousemove="move()">
-					<img :src="item.imgArr[actindex]"/>
+					<img :src="maynifier_img[actindex]"/>
 					<!--遮罩层-->
 					<div class="mask"
             v-show="isShow"
@@ -19,7 +19,7 @@
 				<!--图片列表-->
 				<ul>
 					<li :class="{ active: actindex === num }"
-            v-for="(srcIndex,num) in item.imgArr"
+            v-for="(srcIndex,num) in maynifier_img"
             :key="num"
             @click="switchNum(num)">
             <img :src="srcIndex"/>
@@ -28,7 +28,7 @@
 				<!--大图-->
 				<div class="cake_photo_b"
           v-show="isShow">
-					<img :src="item.imgArr[actindex]" ref="bPic"/>
+					<img :src="maynifier_img[actindex]" ref="bPic"/>
 				</div>
 			</div>
 			<div class="right">
@@ -43,14 +43,15 @@
 						<span>参考甜度：</span>
 						<span>
 							<i class="iconfont icon-tangguo"
-                v-for="(sweetItem,sweetIndex) in item.sweetArr"
+                v-for="(sweetItem,sweetIndex) in sweet"
                 :key="sweetIndex"
                 :class="{ sweetIcon: sweetItem === '1' }"></i>
 						</span>
 					</li>
 				</ul>
 				<div class="pro_detial">
-					{{ item.detail}}
+          <p v-for="(item,index) in detailArr"
+            :key="index">{{ item }}</p>
 				</div>
 				<div class="outer_box">
 					<div class="detail_img">
@@ -59,15 +60,15 @@
               <ul>
                 <li>
                   <i class="iconfont icon-chicunleixing"></i>
-                  {{ item.sizeArr[selNum] }}cm
+                  {{ sizeArr[selNum] }}cm
                 </li>
                 <li>
                   <i class="iconfont icon-ren"></i>
-                  {{ item.suitEatArr[selNum] }}
+                  {{ suitEatArr[selNum] }}
                 </li>
                 <li>
                   <i class="iconfont icon-a-cj"></i>
-                  含{{ item.setArr[selNum] }}套餐具
+                  含{{ setArr[selNum] }}套餐具
                 </li>
                 <li>
                   <i class="iconfont icon-shijian"></i>
@@ -76,15 +77,15 @@
               </ul>
               <p class="price">
                 ￥
-                <span>{{ item.priceArr[selNum] }}.00</span>
-                /{{ item.specArr[selNum] }}磅
+                <span>{{ unit_price[selNum] }}</span>
+                /{{ specArr[selNum] }}磅
               </p>
             </div>
 					</div>
 					<div class="cake_size">
 						<span>商品规格：</span>
 						<ul>
-							<li v-for="(specItem,specIndex) in item.specArr"
+							<li v-for="(specItem,specIndex) in specArr"
                 :key="specIndex"
                 :class="{ select: selNum === specIndex }"
                 @click="changeSize(specIndex)">
@@ -101,9 +102,9 @@
 				</div>
 			</div>
 		</div>
-    <!--详情图开始-->
+    <!-- 详情图开始 -->
 		<div class="detail_photo container">
-			<img v-for="(deImg,deIndex) in detailImg"
+			<img v-for="(deImg,deIndex) in detail_img"
         :key="deIndex"
         :src="deImg"/>
 		</div>
@@ -117,19 +118,16 @@ export default {
       actindex: 0,
       selNum: 0,
       isShow: false,
-      detailList: [{
-        id: '001',
-        imgArr: ['../../static/images/teatime_01.png', '../../static/images/teatime_02.png', '../../static/images/teatime_03.png', '../../static/images/teatime_04.png'],
-        title: 'Teatime 浅草',
-        detail: '/“浅草才能没马蹄”//切着吃的雨前西湖龙井//中国绿茶与爽脆果实，工笔勾勒一杯好茶//复杂而纯粹的深浅绿意/*本款为季节性产品，夹心层由南水梨/马蹄更替。',
-        sizeArr: ['13*13', '17*17', '23*23', '30*30'],
-        suitEatArr: ['适合3-4人分享', '适合7-8人分享', '适合11-12人分享', '适合15-20人分享'],
-        priceArr: ['199', '258', '300', '500'],
-        specArr: ['1.0', '2.0', '3.0', '5.0'],
-        setArr: ['10', '10', '15', '20'],
-        sweetArr: ['1', '1', '0', '0', '0']
-      }],
-      detailImg: ['http://localhost:8081/static/images/teatime_detail_01.jpg', 'http://localhost:8081/static/images/teatime_detail_02.jpg', 'http://localhost:8081/static/images/teatime_detail_03.jpg', 'http://localhost:8081/static/images/teatime_detail_04.jpg', 'http://localhost:8081/static/images/teatime_detail_05.jpg']
+      datailList: [],
+      detailArr: [],
+      maynifier_img: [],
+      sweet: [],
+      unit_price: [],
+      detail_img: [],
+      sizeArr: ['13*13', '17*17', '23*23', '30*30'],
+      suitEatArr: ['适合3-4人分享', '适合7-8人分享', '适合11-12人分享', '适合15-20人分享'],
+      specArr: ['1.0', '2.0', '3.0', '5.0'],
+      setArr: ['10', '10', '15', '20']
     }
   },
   methods: {
@@ -171,6 +169,23 @@ export default {
       this.$refs.bPic[0].style.left = -bigLeft + 'px'
       this.$refs.bPic[0].style.top = -bigTop + 'px'
     }
+  },
+  mounted () {
+    let id = this.$route.params.id
+    this.axios.post('http://localhost:3001/pro', {
+      id
+    }).then((res) => {
+      if (res.data.code === 2) {
+        this.datailList = res.data.result
+        this.detailArr = this.datailList[0].detail.split(',')
+        this.maynifier_img = this.datailList[0].maynifier_img.split(',')
+        this.sweet = this.datailList[0].sweet.split(',')
+        this.unit_price = this.datailList[0].unit_price.split(',')
+        this.detail_img = this.datailList[0].detail_img.split(',')
+      } else {
+        alert(res.data.msg)
+      }
+    })
   }
 }
 </script>

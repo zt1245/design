@@ -7,7 +7,7 @@
 			<div class="login_form">
 					<input type="text" ref="uname" placeholder="请输入您的账号" />
 					<input type="password" ref="upwd" placeholder="请输入密码" />
-					<i @click="Login()">立即登陆</i>
+					<i @click="Login()" class="log">立即登陆</i>
 					<p>
             <span @click="goRegister()">去注册</span>
             <span>忘记密码</span>
@@ -34,6 +34,8 @@ export default {
       }).then((res) => {
         if (res.data.code === 2) {
           localStorage.setItem('uname', uname)
+          alert('登陆成功')
+          window.location.reload()
           this.$router.push({
             path: '/'
           })

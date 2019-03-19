@@ -132,6 +132,7 @@ export default {
     }
   },
   mounted () {
+    // 查询推荐信息
     let label = '0'
     this.axios.post('http://localhost:3001/label', {
       label
@@ -141,6 +142,15 @@ export default {
       } else {
         alert(res.data.msg)
       }
+    })
+    // 查询购物车列表数据
+    this.axios.post('http://localhost:3001/carInfo').then((res) => {
+      console.log(res)
+      // if (res.data.code === 2) {
+      //   this.groomList = res.data.result.slice(-4)
+      // } else {
+      //   alert(res.data.msg)
+      // }
     })
   }
 }

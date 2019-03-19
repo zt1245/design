@@ -10,18 +10,19 @@
         <i class="line"></i>
         <div class="info">
           <span class="spec">￥{{ item.unit_price.split(',')[0] }}/2.0磅</span>
-          <span class="car">加入购物车</span>
+          <span class="car" @click="showSpec(index)">加入购物车</span>
         </div>
-        <div class="spec-detail">
-          <p>￥250.00/2.0磅<i class="iconfont icon-cuo"></i></p>
+        <div class="spec-detail"
+          v-show="specIndex === index">
+          <p>￥{{ item.unit_price.split(',')[inum] }}/{{ specArr[inum] }}.0磅<i class="iconfont icon-cuo" @click="hideSpec()"></i></p>
           <ul>
-            <li>1.0磅</li>
-            <li>2.0磅</li>
-            <li>3.0磅</li>
-            <li>5.0磅</li>
+            <li v-for="(sItem,sIndex) in specArr"
+              :key="sIndex"
+              @click="showRight(sIndex)"
+              :class="{ active:  sIndex === inum}"><i v-show="sIndex === inum" class="iconfont icon-xuanzhong"></i>{{ sItem }}.0磅</li>
           </ul>
           <div class="btn">
-            <span class="now">立即购买</span>
+            <span class="now" @click="buyNow(item.id,index)">立即购买</span>
             <span class="car">加入购物车</span>
           </div>
         </div>
@@ -42,13 +43,47 @@ export default {
       title: '新品上市',
       detail: 'New products listed',
       sum: '理应追逐最新的，向更好、更高处进发',
-      NewPro: []
+      NewPro: [],
+      specIndex: null,
+      inum: 0,
+      specArr: [1, 2, 3, 5],
+      buynowArr: []
     }
   },
   methods: {
     toDetail (id) {
       this.$router.push({
         path: `/detail/${id}`
+      })
+    },
+    showSpec (index) {
+      this.specIndex = index
+    },
+    hideSpec () {
+      this.specIndex = null
+    },
+    showRight (index) {
+      this.inum = index
+    },
+    buyNow (id, index) {
+      // id是商品的id号，index是第几个的价格和规格
+      let productid = id
+      let username = localStorage.getItem('uname')
+      let price = this.NewPro[index].unit_price.split(',')[this.inum]
+      let spec = this.specArr[this.inum]
+      this.axios.post('http://localhost:3001/addCar', {
+        productid,
+        username,
+        price,
+        spec
+      }).then((res) => {
+        if (res.data.code === 2) {
+          this.$router.push({
+            path: '/car'
+          })
+        } else {
+          alert(res.data.msg)
+        }
       })
     }
   },
@@ -150,6 +185,16 @@ export default {
             padding: 5px 0;
             margin: 5px;
             font-size: 14px;
+            position: relative;
+            cursor: pointer;
+            .icon-xuanzhong {
+              position: absolute;
+              top: -3px;
+              left: -3px;
+            }
+          }
+          .active {
+            border: 1px solid #000000;
           }
         }
         .btn {
@@ -161,6 +206,7 @@ export default {
           font-size: 14px;
           display: inline-block;
           padding: 6px 12px;
+          cursor: pointer;
         }
         .now {
           background: #ffffff;

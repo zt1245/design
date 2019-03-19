@@ -211,6 +211,8 @@ export default {
     use () {
       this.selectAdd = false
     }
+  },
+  mounted () {
   }
 }
 </script>

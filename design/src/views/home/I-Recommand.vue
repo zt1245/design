@@ -23,23 +23,27 @@
               <p>尺寸: 13*13cm</p>
               <p>适合3-4人食用</p>
               <div class="sel">
-                <span>立即购买</span>
-                <span>加入购物车</span>
+                <span @click="showSpec(index)">立即购买</span>
+                <span @click="showSpec(index)">加入购物车</span>
               </div>
             </div>
-            <div class="spec-detail">
-              <p>￥250.00/2.0磅<i class="iconfont icon-cuo"></i></p>
-              <ul>
-                <li>1.0磅</li>
-                <li>2.0磅</li>
-                <li>3.0磅</li>
-                <li>5.0磅</li>
-              </ul>
-              <div class="btn">
-                <span class="now">立即购买</span>
-                <span class="car">加入购物车</span>
+            <transition name="custom-classes-transition"
+              enter-active-class="animated bounceInLeft"
+              leave-active-class="animated bounceOutRight">
+              <div class="spec-detail" v-show="specIndex === index">
+                <p>￥{{ item.unit_price.split(',')[inum] }}/{{ specArr[inum] }}.0磅<i class="iconfont icon-cuo" @click="hideSpec()"></i></p>
+                <ul>
+                  <li v-for="(sItem,sIndex) in specArr"
+                    :key="sIndex"
+                    @click="showRight(sIndex)"
+                    :class="{ active:  sIndex === inum}"><i v-show="sIndex === inum" class="iconfont icon-xuanzhong"></i>{{ sItem }}.0磅</li>
+                </ul>
+                <div class="btn">
+                  <span class="now">立即购买</span>
+                  <span class="car">加入购物车</span>
+                </div>
               </div>
-            </div>
+            </transition>
           </div>
         </li>
       </ul>
@@ -49,6 +53,7 @@
 
 <script>
 import ITitle from '@/views/home/I-Title.vue'
+import animate from 'animate.css'
 export default {
   name: 'IRecommand',
   components: {
@@ -59,7 +64,10 @@ export default {
       title: '产品推荐',
       detail: 'Product recommendations',
       sum: '他人的参考，仅供参考',
-      remList: []
+      remList: [],
+      specIndex: null,
+      specArr: [1, 2, 3, 5],
+      inum: 0
     }
   },
   methods: {
@@ -67,6 +75,15 @@ export default {
       this.$router.push({
         path: `/detail/${id}`
       })
+    },
+    showSpec (index) {
+      this.specIndex = index
+    },
+    hideSpec () {
+      this.specIndex = null
+    },
+    showRight (index) {
+      this.inum = index
     }
   },
   mounted () {
@@ -196,6 +213,16 @@ export default {
               padding: 5px 10px;
               margin: 5px;
               font-size: 14px;
+              position: relative;
+              cursor: pointer;
+              .icon-xuanzhong {
+                position: absolute;
+                top: -3px;
+                left: -3px;
+              }
+            }
+            .active {
+              border: 1px solid #000000;
             }
           }
           .btn {

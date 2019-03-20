@@ -210,10 +210,49 @@ app.post('/carInfo',function(req,res){
   var sql = `select a.title,a.pro_img,b.* from product a,cart b where a.id = b.product_id`;
   connection.query(sql,function (err, result) {
     if(err){
-      console.log(err)
       res.send({code:-1,msg:'查询失败'});
     }else{
-      console.log(result)
+      res.send({code:2,msg:'查询成功',result});
+    }
+  });
+});
+
+// 修改某个商品数量的接口（加一或减一）
+app.post('/updatePro',function(req,res){
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  let quantity = req.body.quantity
+  let id = req.body.id
+  connection.connect();
+  var sql = `update cart set quantity=${quantity} where id="${id}"`;
+  connection.query(sql,function (err, result) {
+    if(err){
+      res.send({code:-1,msg:'修改失败'});
+    }else{
+      res.send({code:2,msg:'修改成功',result});
+    }
+  });
+});
+
+// 确认订单页面的查询数据接口
+app.post('/checkOrder',function(req,res){
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  let proList = req.body.proList
+  connection.connect();
+  var sql = `SELECT t1.quantity,t1.spec,t1.unit_price,t2.title,t2.pro_img FROM (SELECT * FROM cart WHERE cart.id in (18,19))as t1,product t2 WHERE t1.product_id = t2.id`;
+  connection.query(sql,function (err, result) {
+    if(err){
+      res.send({code:-1,msg:'查询失败'});
+    }else{
       res.send({code:2,msg:'查询成功',result});
     }
   });

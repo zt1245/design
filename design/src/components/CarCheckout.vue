@@ -213,6 +213,16 @@ export default {
     }
   },
   mounted () {
+    var proList = localStorage.getItem('idList')
+    this.axios.post('http://localhost:3001/checkOrder', {
+      proList
+    }).then((res) => {
+      if (res.data.code === 2) {
+        console.log(res.data.result)
+      } else {
+        alert(res.data.msg)
+      }
+    })
   }
 }
 </script>

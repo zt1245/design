@@ -14,7 +14,7 @@
       v-show="isPro === false">
 			<div class="car_goods_info">
 				<div class="all_s">
-					<input type="checkbox" name="allSel" id="allSel"/>全选
+					<input type="checkbox" v-model="checked" @click="checkedAll()"/>全选
 				</div>
 				<ul class="thead_ul">
 					<li>商品</li>
@@ -28,28 +28,28 @@
               v-for="(item,index) in carList"
               :key="index">
 							<td>
-                <input type="checkbox" class="sel"/>
+                <input type="checkbox" class="sel" v-model="checkboxList" :value="item.id"/>
               </td>
 							<td class="goods_img">
-								<img :src="item.imgSrc"/>
+								<img :src="item.pro_img"/>
 							</td>
 							<td class="goods_cake">
 								<h4>{{ item.title }}</h4>
-								<span class="spec">规格：<span>{{ item.spec }}磅</span></span>
+								<span class="spec">规格：<span>{{ item.spec }}.0磅</span></span>
 								<span class="goods_laid">
 									<i class="iconfont icon-a-cj"></i>
-									赠送&nbsp;{{ item.set }}&nbsp;套餐具
+									赠送&nbsp;10&nbsp;套餐具
 								</span>
 							</td>
-							<td class="cake_price">￥{{ item.price }}.00</td>
+							<td class="cake_price">￥{{ item.unit_price }}.00</td>
 							<td class="cake_num">
 								<div class="number">
-									<input type="button" class="reduce" value="-"/>
-									<input type="text" class="tex" value="1"/>
-									<input type="button" class="add" value="+"/>
+									<button @click="reduce(index, item.id)">-</button>
+                  <input type="text" v-model="item.quantity">
+                  <button @click="add(index, item.id)">+</button>
 								</div>
 							</td>
-							<td class="money">￥298.00</td>
+							<td class="money">￥{{ item.unit_price * item.quantity }}.00</td>
 							<td class="delete_cake">
 								<i class="iconfont icon-asmkticon0245-copy-copy-copy"></i>
 							</td>
@@ -68,7 +68,7 @@
 			<div class="total_sum">
 				<div class="sum_total">
 					<p>合计: ¥
-						<span> 00.00</span>
+						<span> {{ totalPrice() }}.00</span>
 					</p>
 				</div>
 				<div class="submit_button">
@@ -96,39 +96,99 @@ export default {
     return {
       isPro: false,
       groomList: [],
-      carList: [{
-        id: '001',
-        imgSrc: '../../static/images/bailey.jpg',
-        title: 'Bailey Love Triangle 百利甜情人',
-        spec: '2.0',
-        set: '10',
-        price: '198'
-      },
-      {
-        id: '002',
-        imgSrc: '../../static/images/bailey.jpg',
-        title: 'Bailey Love Triangle 百利甜情人',
-        spec: '2.0',
-        set: '10',
-        price: '198'
-      }]
+      carList: [],
+      checked: false,
+      checkboxList: []
     }
   },
   methods: {
     goShop () {
       this.$router.push({
-        path: '/category'
+        path: `/category/cake`
       })
     },
     goCheckout () {
-      this.$router.push({
-        path: '/carcheckout'
-      })
+      if (this.checkboxList.length === 0) {
+        alert('未选择购买的商品，请选择')
+      } else {
+        localStorage.setItem('idList', JSON.stringify(this.checkboxList))
+        this.$router.push({
+          name: 'CarCheckout'
+        })
+      }
     },
     toDetail (id) {
       this.$router.push({
         path: `/detail/${id}`
       })
+    },
+    checkedAll () {
+      if (this.checked) {
+        this.checkboxList = []
+      } else {
+        this.checkboxList = []
+        this.carList.forEach((item) => {
+          this.checkboxList.push(item.id)
+        })
+      }
+    },
+    add (index, id) {
+      this.carList[index].quantity++
+      var quantity = parseInt(this.carList[index].quantity)
+      // 商品数量加一
+      this.axios.post('http://localhost:3001/updatePro', {
+        quantity,
+        id
+      }).then((res) => {
+        if (res.data.code === -1) {
+          alert('操作失败，请重试')
+        }
+      })
+    },
+    reduce (index, id) {
+      if (this.carList[index].quantity <= 1) {
+        this.carList[index].quantity = 1
+        var quantity = 1
+      } else {
+        this.carList[index].quantity--
+        quantity = parseInt(this.carList[index].quantity)
+      }
+      // 商品数量减一
+      this.axios.post('http://localhost:3001/updatePro', {
+        quantity,
+        id
+      }).then((res) => {
+        if (res.data.code === -1) {
+          alert('操作失败，请重试')
+        }
+      })
+    },
+    // 查询购物车列表数据的方法
+    selCarInfo () {
+      this.axios.post('http://localhost:3001/carInfo').then((res) => {
+        if (res.data.code === 2) {
+          this.carList = res.data.result
+          if (this.carList.length === 0) {
+            this.isPro = true
+          } else {
+            this.isPro = false
+          }
+        } else {
+          alert(res.data.msg)
+        }
+      })
+    },
+    // 总金额显示
+    totalPrice () {
+      var totalPrice = 0
+      for (var i = 0; i < this.carList.length; i++) {
+        for (var j = 0; j < this.checkboxList.length; j++) {
+          if (this.carList[i].id === this.checkboxList[j]) {
+            totalPrice += this.carList[i].quantity * this.carList[i].unit_price
+          }
+        }
+      }
+      return totalPrice
     }
   },
   mounted () {
@@ -143,15 +203,20 @@ export default {
         alert(res.data.msg)
       }
     })
-    // 查询购物车列表数据
-    this.axios.post('http://localhost:3001/carInfo').then((res) => {
-      console.log(res)
-      // if (res.data.code === 2) {
-      //   this.groomList = res.data.result.slice(-4)
-      // } else {
-      //   alert(res.data.msg)
-      // }
-    })
+    this.selCarInfo()
+  },
+  watch: {
+    // 监听全选反选
+    checkboxList: {
+      handler (val, oldVal) {
+        if (this.checkboxList.length === this.carList.length) {
+          this.checked = true
+        } else {
+          this.checked = false
+        }
+      },
+      deep: true
+    }
   }
 }
 </script>
@@ -237,6 +302,7 @@ export default {
       justify-content: space-between;
       padding-bottom: 50px;
       li {
+        cursor: pointer;
         img {
           width: 252px;
           height: 252px;
@@ -291,6 +357,8 @@ export default {
               color: #684029;
               font-size: 14px;
               padding: 10px 0;
+              width: 196px;
+              line-height: 20px;
             }
             .spec {
               color: #D5BFA7;
@@ -308,23 +376,23 @@ export default {
           }
           .cake_num {
             padding-left: 226px;
-            input:nth-child(1),input:nth-child(3) {
-              width: 24px;
-              height: 24px;
-              border: none;
+            button {
+              width: 30px;
+              height: 30px;
               outline: none;
               border: 1px solid #e7e7e7;
-              background: #FFFFFF;
               color: #684029;
+              cursor: pointer;
+              background: #fff;
             }
-            input:nth-child(2) {
+            input {
               width: 50px;
-              height: 20px;
-              text-align: center;
-              border: none;
+              height: 30px;
               outline: none;
               border: 1px solid #e7e7e7;
               color: #684029;
+              background: #fff;
+              text-align: center;
             }
           }
           .money {

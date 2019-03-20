@@ -26,4 +26,7 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+.el-loading-spinner {
+  position: fixed !important;
+}
 </style>

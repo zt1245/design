@@ -39,7 +39,7 @@
                     :class="{ active:  sIndex === inum}"><i v-show="sIndex === inum" class="iconfont icon-xuanzhong"></i>{{ sItem }}.0磅</li>
                 </ul>
                 <div class="btn">
-                  <span class="now">立即购买</span>
+                  <span class="now" @click="buyNow(item.id,index)">立即购买</span>
                   <span class="car">加入购物车</span>
                 </div>
               </div>

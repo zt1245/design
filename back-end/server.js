@@ -246,14 +246,36 @@ app.post('/checkOrder',function(req,res){
     password: 'ZT1245com',
     database: 'design'
   });
-  let proList = req.body.proList
+  let proList = JSON.parse(req.body.proList)
   connection.connect();
-  var sql = `SELECT t1.quantity,t1.spec,t1.unit_price,t2.title,t2.pro_img FROM (SELECT * FROM cart WHERE cart.id in (18,19))as t1,product t2 WHERE t1.product_id = t2.id`;
+  var sql = `SELECT t1.quantity,t1.spec,t1.unit_price,t2.title,t2.pro_img FROM (SELECT * FROM cart WHERE cart.id in (${proList}))as t1,product t2 WHERE t1.product_id = t2.id`;
   connection.query(sql,function (err, result) {
     if(err){
       res.send({code:-1,msg:'查询失败'});
     }else{
       res.send({code:2,msg:'查询成功',result});
+    }
+  });
+});
+
+// 删除某个商品的接口
+app.post('/delete',function(req,res){
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  let id = req.body.idNum
+  let uname = req.body.username 
+  connection.connect();
+  var sql = `DELETE FROM cart WHERE id='${id}' and user_name='${uname}'`;
+  connection.query(sql,function (err, result) {
+    if(err){
+      console.log(err)
+      res.send({code:-1,msg:'删除失败'});
+    }else{
+      res.send({code:2,msg:'删除成功'});
     }
   });
 });

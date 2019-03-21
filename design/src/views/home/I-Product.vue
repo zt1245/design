@@ -23,7 +23,7 @@
           </ul>
           <div class="btn">
             <span class="now" @click="buyNow(item.id,index)">立即购买</span>
-            <span class="car">加入购物车</span>
+            <span class="car" @click="addCar(item.id,index)">加入购物车</span>
           </div>
         </div>
       </li>
@@ -83,6 +83,26 @@ export default {
           })
         } else {
           alert(res.data.msg)
+        }
+      })
+    },
+    addCar (id, index) {
+      // id是商品的id号，index是第几个的价格和规格
+      this.hideSpec()
+      let productid = id
+      let username = localStorage.getItem('uname')
+      let price = this.NewPro[index].unit_price.split(',')[this.inum]
+      let spec = this.specArr[this.inum]
+      this.axios.post('http://localhost:3001/addCar', {
+        productid,
+        username,
+        price,
+        spec
+      }).then((res) => {
+        if (res.data.code === 2) {
+          alert('成功添加至购物车！')
+        } else {
+          alert('添加至购物车失败，请重试')
         }
       })
     }

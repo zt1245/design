@@ -89,15 +89,15 @@
                 :key="specIndex"
                 :class="{ select: selNum === specIndex }"
                 @click="changeSize(specIndex)">
-								{{ specItem }}磅
+								{{ specItem }}.0磅
 								<i class="iconfont"
                   :class="{ 'icon-xuanzhong': selNum === specIndex }"></i>
 							</li>
 						</ul>
 					</div>
 					<div class="buy_button">
-						<span class="buy">立即购买</span>
-						<span class="car">加入购物车</span>
+						<span class="buy" @click="buyNow()">立即购买</span>
+						<span class="car" @click="addCar()">加入购物车</span>
 					</div>
 				</div>
 			</div>
@@ -126,7 +126,7 @@ export default {
       detail_img: [],
       sizeArr: ['13*13', '17*17', '23*23', '30*30'],
       suitEatArr: ['适合3-4人分享', '适合7-8人分享', '适合11-12人分享', '适合15-20人分享'],
-      specArr: ['1.0', '2.0', '3.0', '5.0'],
+      specArr: ['1', '2', '3', '5'],
       setArr: ['10', '10', '15', '20']
     }
   },
@@ -168,6 +168,46 @@ export default {
       this.$refs.sPic[0].style.top = top + 'px'
       this.$refs.bPic[0].style.left = -bigLeft + 'px'
       this.$refs.bPic[0].style.top = -bigTop + 'px'
+    },
+    buyNow () {
+      // id是商品的id号，index是第几个的价格和规格
+      let productid = this.$route.params.id
+      let username = localStorage.getItem('uname')
+      let price = this.unit_price
+      let spec = this.specArr[this.selNum]
+      this.axios.post('http://localhost:3001/addCar', {
+        productid,
+        username,
+        price,
+        spec
+      }).then((res) => {
+        if (res.data.code === 2) {
+          this.$router.push({
+            path: '/car'
+          })
+        } else {
+          alert(res.data.msg)
+        }
+      })
+    },
+    addCar () {
+      // id是商品的id号，index是第几个的价格和规格
+      let productid = this.$route.params.id
+      let username = localStorage.getItem('uname')
+      let price = this.unit_price
+      let spec = this.specArr[this.selNum]
+      this.axios.post('http://localhost:3001/addCar', {
+        productid,
+        username,
+        price,
+        spec
+      }).then((res) => {
+        if (res.data.code === 2) {
+          alert('成功添加至购物车！')
+        } else {
+          alert('添加至购物车失败，请重试')
+        }
+      })
     }
   },
   mounted () {

@@ -51,7 +51,7 @@
 							</td>
 							<td class="money">￥{{ item.unit_price * item.quantity }}.00</td>
 							<td class="delete_cake">
-								<i class="iconfont icon-asmkticon0245-copy-copy-copy"></i>
+								<i class="iconfont icon-asmkticon0245-copy-copy-copy" @click="cut(item.id)"></i>
 							</td>
 						</tr>
 					</table>
@@ -61,7 +61,7 @@
     <!-- 结算 -->
     <div class="total container"
       v-show="isPro === false">
-      <p class="all_empty">
+      <p class="all_empty" @click="empty()">
 				<i class="iconfont icon-lajitong01"></i>
 				全部清空
 			</p>
@@ -189,6 +189,25 @@ export default {
         }
       }
       return totalPrice
+    },
+    // 删除某个商品
+    cut (num) {
+      let idNum = num
+      let username = localStorage.getItem('uname')
+      this.axios.post('http://localhost:3001/delete', {
+        idNum,
+        username
+      }).then((res) => {
+        if (res.data.code === 2) {
+          alert('删除成功')
+          window.location.reload()
+        } else {
+          alert('删除失败，请重试')
+        }
+      })
+    },
+    // 清空
+    empty () {
     }
   },
   mounted () {

@@ -111,7 +111,7 @@
             <tr v-for="(item,index) in goodsList"
               :key="index">
               <td class="goods-img">
-                <img :src="item.imgSrc">
+                <img :src="item.pro_img">
               </td>
               <td class="goods-cake">
                 <div>
@@ -119,9 +119,9 @@
                   <span class="goods-spec">规格：{{ item.spec }}</span>
                 </div>
               </td>
-              <td class="car-unit-price">￥{{ item.price }}.00</td>
-              <td class="number-li">{{ item.num }}</td>
-              <td class="money">￥{{ parseInt(item.price)*parseInt(item.num) }}.00</td>
+              <td class="car-unit-price">￥{{ item.unit_price }}.00</td>
+              <td class="number-li">{{ item.quantity }}</td>
+              <td class="money">￥{{ parseInt(item.unit_price)*parseInt(item.quantity) }}.00</td>
             </tr>
           </tbody>
         </table>
@@ -135,7 +135,7 @@
       <div class="payment-info">
         <div class="total-amount">
           您总共需要支付
-          <span>￥240.00</span>
+          <span>￥{{ totalPrice() }}.00</span>
         </div>
         <div class="user-info-confirm">
           <span class="user-message">收货人信息：</span>
@@ -210,6 +210,13 @@ export default {
     },
     use () {
       this.selectAdd = false
+    },
+    totalPrice () {
+      var totalPrice = 0
+      for (var i = 0; i < this.goodsList.length; i++) {
+        totalPrice += this.goodsList[i].unit_price * this.goodsList[i].quantity
+      }
+      return totalPrice
     }
   },
   mounted () {
@@ -218,7 +225,7 @@ export default {
       proList
     }).then((res) => {
       if (res.data.code === 2) {
-        console.log(res.data.result)
+        this.goodsList = res.data.result
       } else {
         alert(res.data.msg)
       }

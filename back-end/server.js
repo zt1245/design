@@ -206,8 +206,9 @@ app.post('/carInfo',function(req,res){
     password: 'ZT1245com',
     database: 'design'
   });
+  let uname = req.body.uname
   connection.connect();
-  var sql = `select a.title,a.pro_img,b.* from product a,cart b where a.id = b.product_id`;
+  var sql = `select a.title,a.pro_img,b.* from product a,cart b where a.id = b.product_id and user_name = '${uname}'`;
   connection.query(sql,function (err, result) {
     if(err){
       res.send({code:-1,msg:'查询失败'});
@@ -270,6 +271,27 @@ app.post('/delete',function(req,res){
   let uname = req.body.username 
   connection.connect();
   var sql = `DELETE FROM cart WHERE id='${id}' and user_name='${uname}'`;
+  connection.query(sql,function (err, result) {
+    if(err){
+      console.log(err)
+      res.send({code:-1,msg:'删除失败'});
+    }else{
+      res.send({code:2,msg:'删除成功'});
+    }
+  });
+});
+
+// 清空某个用户的购物车接口
+app.post('/empty',function(req,res){
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  let uname = req.body.username
+  connection.connect();
+  var sql = `DELETE FROM cart WHERE user_name='${uname}'`;
   connection.query(sql,function (err, result) {
     if(err){
       console.log(err)

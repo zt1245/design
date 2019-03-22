@@ -165,7 +165,10 @@ export default {
     },
     // 查询购物车列表数据的方法
     selCarInfo () {
-      this.axios.post('http://localhost:3001/carInfo').then((res) => {
+      let uname = localStorage.getItem('uname')
+      this.axios.post('http://localhost:3001/carInfo', {
+        uname
+      }).then((res) => {
         if (res.data.code === 2) {
           this.carList = res.data.result
           if (this.carList.length === 0) {
@@ -208,6 +211,17 @@ export default {
     },
     // 清空
     empty () {
+      let username = localStorage.getItem('uname')
+      this.axios.post('http://localhost:3001/empty', {
+        username
+      }).then((res) => {
+        if (res.data.code === 2) {
+          alert('清空成功')
+          window.location.reload()
+        } else {
+          alert('清空失败，请重试')
+        }
+      })
     }
   },
   mounted () {

@@ -12,7 +12,11 @@
         </dd>
       </dl>
     </div>
-    <div class="pro-list container">
+    <div class="pro-list container"
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)">
       <ul>
         <li v-for="(item,index) in proList"
           :key="index">
@@ -47,7 +51,8 @@ export default {
       typeList: ['全部分类', '蛋糕', '果汁', '冰淇淋', '甜甜圈'],
       selnum: 0,
       proList: [],
-      tabList: []
+      tabList: [],
+      loading: true
     }
   },
   mounted () {
@@ -70,6 +75,7 @@ export default {
         alert(res.data.msg)
       }
     })
+    this.loading = false
   },
   methods: {
     selection (index) {

@@ -301,6 +301,49 @@ app.post('/empty',function(req,res){
     }
   });
 });
+// 查询某个用户的地址信息接口
+app.post('/selAdd',function(req,res){k
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  let uname = req.body.uname
+  connection.connect();
+  var sql = `SELECT * FROM address where user_id="${uname}"`;
+  connection.query(sql,function (err, result) {
+    if(err){  
+      res.send({code:-1,msg:'查询失败'});
+    }else{
+      res.send({code:2,msg:'查询成功',result});
+    }
+  });
+});
+
+//添加某个用户的地址接口
+app.post('/addAddr',function(req,res){
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  let area = req.body.area
+  let addr = req.body.addr
+  let name = req.body.name
+  let tel = req.body.tel
+  let username = req.body.username
+  connection.connect();
+  var sql = `insert into address (user_id,name,phone,area,addr) VALUES("${username}","${name}","${tel}","${area}","${addr}")`;
+  connection.query(sql,function (err, result) {
+    if(err){  
+      res.send({code:-1,msg:'插入失败'});
+    }else{
+      res.send({code:2,msg:'插入成功',result});
+    }
+  });
+});
 
 app.listen(3001,()=>{
   console.log('success',function(){

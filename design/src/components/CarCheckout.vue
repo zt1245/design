@@ -54,24 +54,19 @@
           <p>添加地址</p>
           <div class="area">
             <span>所在地区：</span>
-            <el-cascader
-              size="large"
-              :options="options"
-              v-model="selectedOptions"
-              @change="handleChange">
-            </el-cascader>
+            <input type="text" placeholder="请填写所在地区" ref="area">
           </div>
           <div class="detail-address">
             <span>详细地址：</span>
-            <input type="text" placeholder="请填写街道，门牌号等">
+            <input type="text" placeholder="请填写街道，门牌号等" ref="addr">
           </div>
           <div class="conginee">
             <span>收货人：</span>
-            <input type="text" placeholder="收货人姓名">
+            <input type="text" placeholder="收货人姓名" ref="name">
           </div>
           <div class="telephone">
             <span>手机号码：</span>
-            <input type="text" placeholder="收货人手机">
+            <input type="text" placeholder="收货人手机" ref="tel">
           </div>
           <div class="icon">
             <i @click="cancel()">取消</i>
@@ -160,37 +155,18 @@ export default {
       value2: '',
       addr: false,
       addAddress: false,
-      options: regionData,
       selectAdd: false,
-      selectedOptions: [],
       pickerOptions: {
         disabledDate (time) {
           return time.getTime() < Date.now() - 8.64e7
         }
       },
-      goodsList: [{
-        id: '001',
-        imgSrc: '../../static/images/caked.jpg',
-        title: '四口味挂耳咖啡混合装（4包入）',
-        spec: '2.0',
-        price: '40',
-        num: '1'
-      },
-      {
-        id: '001',
-        imgSrc: '../../static/images/caked.jpg',
-        title: '四口味挂耳咖啡混合装（4包入）',
-        spec: '2.0',
-        price: '40',
-        num: '5'
-      }]
+      goodsList: []
     }
   },
   methods: {
     address () {
       this.addAddress = true
-    },
-    handleChange (value) {
     },
     cancel () {
       this.addAddress = false
@@ -198,6 +174,25 @@ export default {
     sure () {
       this.addAddress = false
       this.addr = true
+      let area = this.$refs.area
+      let addr = this.$refs.addr
+      let name = this.$refs.name
+      let tel = this.$refs.tel
+      console.log(area, addr, name, tel)
+      let username = localStorage.getItem('uname')
+      this.axios.post('http://localhost:3001/addAddr', {
+        area,
+        addr,
+        name,
+        tel,
+        username
+      }).then((res) => {
+        if (res.data.code === 2) {
+          console.log(res)
+        } else {
+          alert(res.data.msg)
+        }
+      })
     },
     add () {
       this.addAddress = true
@@ -226,6 +221,21 @@ export default {
     }).then((res) => {
       if (res.data.code === 2) {
         this.goodsList = res.data.result
+      } else {
+        alert(res.data.msg)
+      }
+    })
+    var uname = localStorage.getItem('uname')
+    this.axios.post('http://localhost:3001/selAdd', {
+      uname
+    }).then((res) => {
+      if (res.data.code === 2) {
+        console.log(res)
+        if (res.data.result.length === 0) {
+          this.addr = false
+        } else {
+          this.addr = true
+        }
       } else {
         alert(res.data.msg)
       }
@@ -272,6 +282,7 @@ export default {
         left: 50%;
         margin-left: -348px;
         z-index: 1000;
+        top: 16%;
         .top-title {
           display: flex;
           justify-content: space-between;

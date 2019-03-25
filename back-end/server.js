@@ -302,7 +302,7 @@ app.post('/empty',function(req,res){
   });
 });
 // 查询某个用户的地址信息接口
-app.post('/selAdd',function(req,res){k
+app.post('/selAdd',function(req,res){
   var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
     host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
     user: 'root',

@@ -13,9 +13,9 @@
         <div class="cart-have-address"
           v-show="addr">
           <div class="left-info">
-            <p>木子</p>
-            <p><i class="iconfont icon-shouji"></i>15859361245</p>
-            <p><i class="iconfont icon-dingwei"></i>深圳市宝安区航城大道</p>
+            <p>{{ addName }}</p>
+            <p><i class="iconfont icon-shouji"></i>{{ addTel }}</p>
+            <p><i class="iconfont icon-dingwei"></i>{{ addarea }}{{ address }}</p>
           </div>
           <div class="right-button">
             <span @click="select()">切换地址（2）</span>
@@ -161,7 +161,11 @@ export default {
           return time.getTime() < Date.now() - 8.64e7
         }
       },
-      goodsList: []
+      goodsList: [],
+      addName: '',
+      address: '',
+      addTel: '',
+      addarea: ''
     }
   },
   methods: {
@@ -174,11 +178,10 @@ export default {
     sure () {
       this.addAddress = false
       this.addr = true
-      let area = this.$refs.area
-      let addr = this.$refs.addr
-      let name = this.$refs.name
-      let tel = this.$refs.tel
-      console.log(area, addr, name, tel)
+      let area = this.$refs.area.value
+      let addr = this.$refs.addr.value
+      let name = this.$refs.name.value
+      let tel = this.$refs.tel.value
       let username = localStorage.getItem('uname')
       this.axios.post('http://localhost:3001/addAddr', {
         area,
@@ -188,9 +191,13 @@ export default {
         username
       }).then((res) => {
         if (res.data.code === 2) {
-          console.log(res)
+          this.addName = name
+          this.addTel = tel
+          this.addarea = area
+          this.address = addr
+          alert('添加成功')
         } else {
-          alert(res.data.msg)
+          alert('添加失败，请重试!')
         }
       })
     },

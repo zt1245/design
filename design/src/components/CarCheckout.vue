@@ -5,7 +5,7 @@
       <div class="address-info-content">
         <!-- 用户没有地址信息显示的模块 -->
         <div class="cart-address-button"
-          @click="address()"
+          @click="changeadd()"
           v-show="addr === false">
           +&nbsp;&nbsp;添加新的地址
         </div>
@@ -18,7 +18,7 @@
             <p><i class="iconfont icon-dingwei"></i>{{ addarea }}{{ address }}</p>
           </div>
           <div class="right-button">
-            <span @click="select()">切换地址（2）</span>
+            <span @click="select()">切换地址（{{ addList.length }}）</span>
             <span @click="add()">+添加新的地址</span>
           </div>
         </div>
@@ -31,15 +31,11 @@
               @click="cuo()"></i>
           </div>
           <ul>
-            <li>
-              <p>木子</p>
-              <p><i class="iconfont icon-shouji"></i>15859361245</p>
-              <p><i class="iconfont icon-dingwei"></i>深圳市宝安区航城大道</p>
-            </li>
-            <li>
-              <p>木子</p>
-              <p><i class="iconfont icon-shouji"></i>15859361245</p>
-              <p><i class="iconfont icon-dingwei"></i>深圳市宝安区航城大道</p>
+            <li v-for="(item,index) in addList"
+              :key="index">
+              <p>{{ item.name }}</p>
+              <p><i class="iconfont icon-shouji"></i>{{ item.phone }}</p>
+              <p><i class="iconfont icon-dingwei"></i>{{ item.area }}{{ item.addr }}</p>
             </li>
             <li class="zeng">
               <p>+添加新地址</p>
@@ -135,10 +131,10 @@
         <div class="user-info-confirm">
           <span class="user-message">收货人信息：</span>
           <div class="user-info">
-            木子
-            <span>13545859875</span>
+            {{ addName }}
+            <span>{{ addTel }}</span>
           </div>
-          <span>深圳市宝安区新安街道兴东社区</span>
+          <span>{{ addarea }}{{ address }}</span>
         </div>
         <input type="button" class="go-pay" name="go-pay" value="去支付">
       </div>
@@ -165,11 +161,12 @@ export default {
       addName: '',
       address: '',
       addTel: '',
-      addarea: ''
+      addarea: '',
+      addList: []
     }
   },
   methods: {
-    address () {
+    changeadd () {
       this.addAddress = true
     },
     cancel () {
@@ -237,11 +234,15 @@ export default {
       uname
     }).then((res) => {
       if (res.data.code === 2) {
-        console.log(res)
         if (res.data.result.length === 0) {
           this.addr = false
         } else {
           this.addr = true
+          this.addList = res.data.result
+          this.addName = res.data.result[0].name
+          this.addTel = res.data.result[0].phone
+          this.addarea = res.data.result[0].area
+          this.address = res.data.result[0].addr
         }
       } else {
         alert(res.data.msg)

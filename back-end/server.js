@@ -2,6 +2,20 @@ var mysql = require('mysql');
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+const cors = require('cors')
+var async = require('async')
+var multer = require('multer')({
+  dest: 'd:/pic/'
+});
+const fs = require('fs');
+var path = require('path');
+app.use(cors())
+let options = {
+  setHeaders: function (res, path, stat) {
+    res.set('Access-Control-Allow-Origin', '*')
+  }
+}
+app.use(express.static('public', options))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 

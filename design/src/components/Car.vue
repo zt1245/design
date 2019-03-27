@@ -143,22 +143,22 @@ export default {
         let idList = this.checkboxList
         console.log(idList)
         // 当前用户
-        let user_name = localStorage.getItem('uname')
+        let uname = localStorage.getItem('uname')
         this.axios.post('http://localhost:3001/IdList', {
           idList,
           outTradeNo,
           currentdate,
           status,
           totalPrice,
-          user_name
+          uname
         }).then((res) => {
           if (res.data.code === 2) {
             console.log('成功')
           }
         })
-        // this.$router.push({
-        //   name: 'CarCheckout'
-        // })
+        this.$router.push({
+          name: 'CarCheckout'
+        })
       }
     },
     toDetail (id) {

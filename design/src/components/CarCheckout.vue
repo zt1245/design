@@ -135,7 +135,7 @@
           </div>
           <span>{{ province }}{{ city }}{{ area }}{{ address }}</span>
         </div>
-        <input type="button" class="go-pay" name="go-pay" value="去支付">
+        <input type="button" class="go-pay" name="go-pay" value="去支付" @click="toPay()">
       </div>
     </div>
   </div>
@@ -305,6 +305,11 @@ export default {
     },
     changeSelIndex (index) {
       this.selIndex = index
+    },
+    toPay () {
+      this.$router.push({
+        path: '/payment'
+      })
     }
   },
   mounted () {

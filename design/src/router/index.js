@@ -12,6 +12,7 @@ import Detail from '@/components/Detail'
 import Car from '@/components/Car'
 import CarCheckout from '@/components/CarCheckout'
 import My from '@/components/My'
+import Payment from '@/components/Payment'
 import AboutContent from '@/views/about/AboutContent'
 import Aboutcompany from '@/views/about/Aboutcompany'
 import Aboutculture from '@/views/about/Aboutculture'
@@ -93,17 +94,60 @@ export default new Router({
     {
       path: '/car',
       name: 'Car',
-      component: Car
+      component: Car,
+      beforeEnter: (to, from, next) => {
+        if (localStorage.getItem('uname')) {
+          next()
+        } else {
+          alert('未登录，请登录！')
+          this.$router.push({
+            path: '/login'
+          })
+        }
+      }
     },
     {
       path: '/carCheckout',
       name: 'CarCheckout',
-      component: CarCheckout
+      component: CarCheckout,
+      beforeEnter: (to, from, next) => {
+        if (localStorage.getItem('uname')) {
+          next()
+        } else {
+          next({
+            path: '/'
+          })
+        }
+      }
     },
     {
       path: '/my',
       name: 'My',
-      component: My
+      component: My,
+      beforeEnter: (to, from, next) => {
+        if (localStorage.getItem('uname')) {
+          next()
+        } else {
+          alert('未登录，请登录！')
+          next({
+            path: '/login'
+          })
+        }
+      }
+    },
+    {
+      path: '/payment',
+      name: 'Payment',
+      component: Payment,
+      beforeEnter: (to, from, next) => {
+        if (localStorage.getItem('uname')) {
+          next()
+        } else {
+          next({
+            path: '/'
+          })
+        }
+      }
     },
     {
       path: '',

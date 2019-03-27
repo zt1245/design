@@ -15,7 +15,7 @@
           <div class="left-info">
             <p>{{ addName }}</p>
             <p><i class="iconfont icon-shouji"></i>{{ addTel }}</p>
-            <p><i class="iconfont icon-dingwei"></i>{{ addarea }}{{ address }}</p>
+            <p><i class="iconfont icon-dingwei"></i>{{ province }}{{ city }}{{ area }}{{ address }}</p>
           </div>
           <div class="right-button">
             <span @click="select()">切换地址（{{ addList.length }}）</span>
@@ -32,13 +32,12 @@
           </div>
           <ul>
             <li v-for="(item,index) in addList"
-              :key="index">
+              :key="index"
+              :class="{sel: selIndex === index}"
+              @click="changeSelIndex(index)">
               <p>{{ item.name }}</p>
               <p><i class="iconfont icon-shouji"></i>{{ item.phone }}</p>
-              <p><i class="iconfont icon-dingwei"></i>{{ item.area }}{{ item.addr }}</p>
-            </li>
-            <li class="zeng">
-              <p>+添加新地址</p>
+              <p><i class="iconfont icon-dingwei"></i>{{ item.province }}{{ item.city }}{{ item.area }}{{ item.addr }}</p>
             </li>
           </ul>
           <span class="use"
@@ -49,8 +48,8 @@
           v-show="addAddress">
           <p>添加地址</p>
           <div class="area">
-            <span>所在地区：</span>
-            <input type="text" placeholder="请填写所在地区" ref="area">
+            <span class="inarea">所在地区：</span>
+            <area-select type='all' :placeholders="placeholders" :level='2' v-model="send_search_form.selected" :data="pcaa"></area-select>
           </div>
           <div class="detail-address">
             <span>详细地址：</span>
@@ -107,7 +106,7 @@
               <td class="goods-cake">
                 <div>
                   <h4>{{ item.title }}</h4>
-                  <span class="goods-spec">规格：{{ item.spec }}</span>
+                  <span class="goods-spec">规格：{{ item.spec }}.0</span>
                 </div>
               </td>
               <td class="car-unit-price">￥{{ item.unit_price }}.00</td>
@@ -134,7 +133,7 @@
             {{ addName }}
             <span>{{ addTel }}</span>
           </div>
-          <span>{{ addarea }}{{ address }}</span>
+          <span>{{ province }}{{ city }}{{ area }}{{ address }}</span>
         </div>
         <input type="button" class="go-pay" name="go-pay" value="去支付">
       </div>
@@ -143,7 +142,8 @@
 </template>
 
 <script>
-import { regionData } from 'element-china-area-data'
+import { AreaSelect } from 'vue-area-linkage'
+import AreaData, { pca, pcaa } from 'area-data'
 export default {
   data () {
     return {
@@ -152,18 +152,44 @@ export default {
       addr: false,
       addAddress: false,
       selectAdd: false,
+      selIndex: 0,
       pickerOptions: {
         disabledDate (time) {
           return time.getTime() < Date.now() - 8.64e7
         }
       },
+      // 商品列表
       goodsList: [],
+      // 收货人
       addName: '',
+      // 省
+      province: '',
+      // 市
+      city: '',
+      // 区
+      area: '',
+      // 收货地址
       address: '',
+      // 手机号
       addTel: '',
-      addarea: '',
-      addList: []
+      // 收货地址list
+      addList: [],
+      pca: pca,
+      pcaa: pcaa,
+      placeholders: ['', '', ''],
+      send_search_form: {
+        orderCode: '',
+        itemName: '',
+        orderTime: [],
+        consigneeName: '',
+        state: '',
+        selected: []
+      },
+      talPrice: ''
     }
+  },
+  component: {
+    AreaSelect: AreaSelect
   },
   methods: {
     changeadd () {
@@ -175,12 +201,42 @@ export default {
     sure () {
       this.addAddress = false
       this.addr = true
-      let area = this.$refs.area.value
+      // 获取省份的信息
+      for (const key in this.send_search_form.selected[0]) {
+        if (this.send_search_form.selected[0].hasOwnProperty(key)) {
+          const element = this.send_search_form.selected[0][key]
+          console.log(key, element)
+          this.province = element
+        }
+      }
+      this.addr = true
+      // 获取市的信息
+      for (const key in this.send_search_form.selected[1]) {
+        if (this.send_search_form.selected[1].hasOwnProperty(key)) {
+          const element = this.send_search_form.selected[1][key]
+          console.log(key, element)
+          this.city = element
+        }
+      }
+      this.addr = true
+      // 获取区的信息
+      for (const key in this.send_search_form.selected[2]) {
+        if (this.send_search_form.selected[2].hasOwnProperty(key)) {
+          const element = this.send_search_form.selected[2][key]
+          console.log(key, element)
+          this.area = element
+        }
+      }
+      let province = this.province
+      let city = this.city
+      let area = this.area
       let addr = this.$refs.addr.value
       let name = this.$refs.name.value
       let tel = this.$refs.tel.value
       let username = localStorage.getItem('uname')
       this.axios.post('http://localhost:3001/addAddr', {
+        province,
+        city,
         area,
         addr,
         name,
@@ -209,13 +265,46 @@ export default {
     },
     use () {
       this.selectAdd = false
+      this.addName = this.addList[this.selIndex].name
+      this.addTel = this.addList[this.selIndex].phone
+      this.province = this.addList[this.selIndex].province
+      this.city = this.addList[this.selIndex].city
+      this.address = this.addList[this.selIndex].address
+      this.area = this.addList[this.selIndex].area
     },
     totalPrice () {
       var totalPrice = 0
       for (var i = 0; i < this.goodsList.length; i++) {
         totalPrice += this.goodsList[i].unit_price * this.goodsList[i].quantity
       }
+      this.talPrice = totalPrice
       return totalPrice
+    },
+    addSel () {
+      var uname = localStorage.getItem('uname')
+      this.axios.post('http://localhost:3001/selAdd', {
+        uname
+      }).then((res) => {
+        if (res.data.code === 2) {
+          if (res.data.result.length === 0) {
+            this.addr = false
+          } else {
+            this.addr = true
+            this.addList = res.data.result
+            this.addName = res.data.result[0].name
+            this.addTel = res.data.result[0].phone
+            this.province = res.data.result[0].province
+            this.city = res.data.result[0].city
+            this.area = res.data.result[0].area
+            this.address = res.data.result[0].addr
+          }
+        } else {
+          alert(res.data.msg)
+        }
+      })
+    },
+    changeSelIndex (index) {
+      this.selIndex = index
     }
   },
   mounted () {
@@ -229,25 +318,7 @@ export default {
         alert(res.data.msg)
       }
     })
-    var uname = localStorage.getItem('uname')
-    this.axios.post('http://localhost:3001/selAdd', {
-      uname
-    }).then((res) => {
-      if (res.data.code === 2) {
-        if (res.data.result.length === 0) {
-          this.addr = false
-        } else {
-          this.addr = true
-          this.addList = res.data.result
-          this.addName = res.data.result[0].name
-          this.addTel = res.data.result[0].phone
-          this.addarea = res.data.result[0].area
-          this.address = res.data.result[0].addr
-        }
-      } else {
-        alert(res.data.msg)
-      }
-    })
+    this.addSel()
   }
 }
 </script>
@@ -302,14 +373,18 @@ export default {
         }
         ul {
           overflow: hidden;
+          display: flex;
+          flex-wrap: wrap;
+          width: 500px;
+          justify-content: space-between;
           li {
-            float: left;
             background: #ffffff;
             padding: 20px;
             text-align: left;
             width: 48%;
             border: 1px solid #E1E1E1;
             margin-bottom: 20px;
+            box-sizing: border-box;
             cursor: pointer;
             p {
               color: #684029;
@@ -322,14 +397,14 @@ export default {
               font-weight: 700;
             }
           }
+          .sel {
+            border: 1px solid #f90000;
+          }
           li:nth-child(2n+1) {
             margin-right: 20px;
           }
-          .zeng {
-            p {
-              text-align: center;
-              padding: 20px 0;
-            }
+          li:hover {
+            border: 1px solid #684029;
           }
         }
         .use {
@@ -371,6 +446,7 @@ export default {
             margin-bottom: 10px;
             color: #684029;
             cursor: pointer;
+            text-align: center;
           }
           span:nth-child(1) {
             border: 1px solid #EFEAE5;
@@ -397,7 +473,7 @@ export default {
         margin-left: -296px;
         margin-top: -152px;
         div {
-          margin: 10px 0;
+          margin: 20px 0;
         }
         p {
           color: #cacaca;
@@ -586,6 +662,13 @@ export default {
         border-top: 2px solid #E1E1E1;
       }
     }
+  }
+  .inarea {
+    margin-bottom: 25px;
+    display: block;
+  }
+  .sel {
+    border: 1px solid #f90000;
   }
 }
 </style>

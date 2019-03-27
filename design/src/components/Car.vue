@@ -98,7 +98,8 @@ export default {
       groomList: [],
       carList: [],
       checked: false,
-      checkboxList: []
+      checkboxList: [],
+      toprice: ''
     }
   },
   methods: {
@@ -112,9 +113,52 @@ export default {
         alert('未选择购买的商品，请选择')
       } else {
         localStorage.setItem('idList', JSON.stringify(this.checkboxList))
-        this.$router.push({
-          name: 'CarCheckout'
+        // 生成订单号
+        var outTradeNo = ''
+        for (var i = 0; i < 6; i++) {
+          outTradeNo += Math.floor(Math.random() * 10)
+        }
+        outTradeNo = new Date().getTime() + outTradeNo
+        console.log(outTradeNo)
+        // 生成当前时间（订单开始时间）
+        var date = new Date()
+        var seperator1 = '-'
+        var seperator2 = ':'
+        var month = date.getMonth() + 1
+        var strDate = date.getDate()
+        if (month >= 1 && month <= 9) {
+          month = '0' + month
+        }
+        if (strDate >= 0 && strDate <= 9) {
+          strDate = '0' + strDate
+        }
+        var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate + ' ' + date.getHours() + seperator2 + date.getMinutes() + seperator2 + date.getSeconds()
+        console.log(currentdate)
+        // 订单状态
+        var status = '待付款'
+        // 总价格
+        let totalPrice = this.toprice
+        console.log(totalPrice)
+        // 删除购物车里面已经选择的商品,勾选的商品添加到order订单中
+        let idList = this.checkboxList
+        console.log(idList)
+        // 当前用户
+        let user_name = localStorage.getItem('uname')
+        this.axios.post('http://localhost:3001/IdList', {
+          idList,
+          outTradeNo,
+          currentdate,
+          status,
+          totalPrice,
+          user_name
+        }).then((res) => {
+          if (res.data.code === 2) {
+            console.log('成功')
+          }
         })
+        // this.$router.push({
+        //   name: 'CarCheckout'
+        // })
       }
     },
     toDetail (id) {
@@ -191,6 +235,7 @@ export default {
           }
         }
       }
+      this.toprice = totalPrice
       return totalPrice
     },
     // 删除某个商品

@@ -315,6 +315,7 @@ app.post('/empty',function(req,res){
     }
   });
 });
+
 // 查询某个用户的地址信息接口
 app.post('/selAdd',function(req,res){
   var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
@@ -327,6 +328,7 @@ app.post('/selAdd',function(req,res){
   connection.connect();
   var sql = `SELECT * FROM address where user_id="${uname}"`;
   connection.query(sql,function (err, result) {
+    console.log(err)
     if(err){  
       res.send({code:-1,msg:'查询失败'});
     }else{
@@ -348,15 +350,69 @@ app.post('/addAddr',function(req,res){
   let name = req.body.name
   let tel = req.body.tel
   let username = req.body.username
+  let province = req.body.province
+  let city = req.body.city
   connection.connect();
-  var sql = `insert into address (user_id,name,phone,area,addr) VALUES("${username}","${name}","${tel}","${area}","${addr}")`;
+  var sql = `insert into address (user_id,name,phone,area,addr,city,province) VALUES("${username}","${name}","${tel}","${area}","${addr}","${city}","${province}")`;
   connection.query(sql,function (err, result) {
+    console.log(err)
     if(err){  
       res.send({code:-1,msg:'插入失败'});
     }else{
       res.send({code:2,msg:'插入成功',result});
     }
   });
+});
+
+// 删除选中的商品的信息的接口
+app.post('/IdList',function(req,res){
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  // 选中的id的数组
+  let idList = req.body.idList
+  // 订单号
+  let order_no = req.body.outTradeNo
+  // 订单开始时间（生成订单的时间）
+  let begin_time = req.body.currentdate
+  // 订单状态
+  let status = req.body.status
+  // 总价格
+  let totalPrice = req.body.totalPrice
+  // 用户名字
+  let  user_name = req.body.user_name
+  connection.connect();
+  var sql = `select * from cart WHERE id in (${ idList })`;
+  connection.query(sql,function (err, result) {
+    console.log(err)
+    if(err){  
+      res.send({code:-1,msg:'查询失败'});
+    }else{
+      // res.send({code:2,msg:'查询成功',result});
+      console.log(result)
+      // 商品id
+      let product_id = ''
+      for (var i = 0; i < result.length; i++) {
+        product_id += result[i].product_id+ ","
+      }
+      if (product_id.length > 0) {
+        product_id = product_id.substr(0, product_id.length - 1);
+      }
+      console.log(product_id)
+    }
+  });
+  // var sql = `delete from  cart  where id in (${ idList })`;
+  // connection.query(sql,function (err, result) {
+  //   console.log(err)
+  //   if(err){  
+  //     res.send({code:-1,msg:'删除失败'});
+  //   }else{
+  //     res.send({code:2,msg:'删除成功',result});
+  //   }
+  // });
 });
 
 app.listen(3001,()=>{

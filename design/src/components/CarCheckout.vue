@@ -119,7 +119,7 @@
       <!-- 订单留言 -->
       <div class="leave-message">
         <label>订单留言</label>
-        <textarea name="memo" id="action-add-memo" maxlength="200" placeholder="请留下您对订单或商品的特殊要求，200字以内"></textarea>
+        <textarea name="memo" id="action-add-memo" maxlength="200" placeholder="请留下您对订单或商品的特殊要求，200字以内" ref="leMsg"></textarea>
       </div>
       <!-- 支付信息 -->
       <div class="payment-info">
@@ -129,13 +129,15 @@
         </div>
         <div class="user-info-confirm">
           <span class="user-message">收货人信息：</span>
+          <p>订单编号：{{ order_no }}</p>
           <div class="user-info">
-            {{ addName }}
-            <span>{{ addTel }}</span>
+            收货人：{{ addName }}
           </div>
-          <span>{{ province }}{{ city }}{{ area }}{{ address }}</span>
+          <p>手机号：{{ addTel }}</p>
+          <span>收货地址：{{ province }}{{ city }}{{ area }}{{ address }}</span>
         </div>
         <input type="button" class="go-pay" name="go-pay" value="去支付" @click="toPay()">
+        <input type="button" class="cancel" name="go-pay" value="取消订单" @click="cancelPay()">
       </div>
     </div>
   </div>
@@ -172,6 +174,8 @@ export default {
       address: '',
       // 手机号
       addTel: '',
+      // 关联地址的id
+      add_id: '',
       // 收货地址list
       addList: [],
       pca: pca,
@@ -185,7 +189,8 @@ export default {
         state: '',
         selected: []
       },
-      talPrice: ''
+      talPrice: '',
+      order_no: ''
     }
   },
   component: {
@@ -195,9 +200,11 @@ export default {
     changeadd () {
       this.addAddress = true
     },
+    // 添加地址点击取消
     cancel () {
       this.addAddress = false
     },
+    // 添加地址点击确定
     sure () {
       this.addAddress = false
       this.addr = true
@@ -205,7 +212,6 @@ export default {
       for (const key in this.send_search_form.selected[0]) {
         if (this.send_search_form.selected[0].hasOwnProperty(key)) {
           const element = this.send_search_form.selected[0][key]
-          console.log(key, element)
           this.province = element
         }
       }
@@ -214,7 +220,6 @@ export default {
       for (const key in this.send_search_form.selected[1]) {
         if (this.send_search_form.selected[1].hasOwnProperty(key)) {
           const element = this.send_search_form.selected[1][key]
-          console.log(key, element)
           this.city = element
         }
       }
@@ -223,7 +228,6 @@ export default {
       for (const key in this.send_search_form.selected[2]) {
         if (this.send_search_form.selected[2].hasOwnProperty(key)) {
           const element = this.send_search_form.selected[2][key]
-          console.log(key, element)
           this.area = element
         }
       }
@@ -271,7 +275,9 @@ export default {
       this.city = this.addList[this.selIndex].city
       this.address = this.addList[this.selIndex].address
       this.area = this.addList[this.selIndex].area
+      this.add_id = this.addList[this.selIndex].id
     },
+    // 总金额
     totalPrice () {
       var totalPrice = 0
       for (var i = 0; i < this.goodsList.length; i++) {
@@ -297,6 +303,7 @@ export default {
             this.city = res.data.result[0].city
             this.area = res.data.result[0].area
             this.address = res.data.result[0].addr
+            this.add_id = res.data.result[0].id
           }
         } else {
           alert(res.data.msg)
@@ -306,9 +313,96 @@ export default {
     changeSelIndex (index) {
       this.selIndex = index
     },
+    // 去支付
     toPay () {
-      this.$router.push({
-        path: '/payment'
+      // 订单编号
+      let orderNo = this.order_no
+      // 状态
+      let status = '未发货'
+      // 生成当前时间（订单开始时间）
+      var date = new Date()
+      var seperator1 = '-'
+      var seperator2 = ':'
+      var month = date.getMonth() + 1
+      var strDate = date.getDate()
+      if (month >= 1 && month <= 9) {
+        month = '0' + month
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = '0' + strDate
+      }
+      var cancledate = date.getFullYear() + seperator1 + month + seperator1 + strDate + ' ' + date.getHours() + seperator2 + date.getMinutes() + seperator2 + date.getSeconds()
+      // 地址id
+      var addId = this.add_id
+      // 配送时间
+      var deliveryTime = this.value2
+      // 配送日期
+      var deliveryDate = this.value1
+      // 留言
+      var message = this.$refs.leMsg.value
+      console.log(orderNo, status, cancledate, addId, deliveryDate, deliveryTime, message)
+      this.axios.post('http://localhost:3001/updateStatus', {
+        orderNo,
+        status,
+        cancledate,
+        addId,
+        deliveryTime,
+        deliveryDate,
+        message
+      }).then((res) => {
+        if (res.data.code === 2) {
+          this.$router.push({
+            path: '/payment'
+          })
+        } else {
+          alert('操作失败，请重试')
+        }
+      })
+    },
+    // 取消订单
+    cancelPay () {
+      // 订单编号
+      let orderNo = this.order_no
+      // 状态
+      let status = '交易关闭'
+      // 生成当前时间（订单开始时间）
+      var date = new Date()
+      var seperator1 = '-'
+      var seperator2 = ':'
+      var month = date.getMonth() + 1
+      var strDate = date.getDate()
+      if (month >= 1 && month <= 9) {
+        month = '0' + month
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = '0' + strDate
+      }
+      var cancledate = date.getFullYear() + seperator1 + month + seperator1 + strDate + ' ' + date.getHours() + seperator2 + date.getMinutes() + seperator2 + date.getSeconds()
+      // 地址id
+      var addId = this.add_id
+      // 配送时间
+      var deliveryTime = this.value2
+      // 配送日期
+      var deliveryDate = this.value1
+      // 留言
+      var message = this.$refs.leMsg.value
+      this.axios.post('http://localhost:3001/updateStatus', {
+        orderNo,
+        status,
+        cancledate,
+        addId,
+        deliveryTime,
+        deliveryDate,
+        message
+      }).then((res) => {
+        if (res.data.code === 2) {
+          alert('取消订单成功')
+          this.$router.push({
+            path: '/'
+          })
+        } else {
+          alert('取消失败，请重试')
+        }
       })
     }
   },
@@ -319,11 +413,13 @@ export default {
     }).then((res) => {
       if (res.data.code === 2) {
         this.goodsList = res.data.result
+        console.log(res)
       } else {
         alert(res.data.msg)
       }
     })
     this.addSel()
+    this.order_no = localStorage.getItem('order_no')
   }
 }
 </script>
@@ -380,8 +476,10 @@ export default {
           overflow: hidden;
           display: flex;
           flex-wrap: wrap;
-          width: 500px;
+          width: 600px;
           justify-content: space-between;
+          height: 300px;
+          overflow-y: auto;
           li {
             background: #ffffff;
             padding: 20px;
@@ -653,6 +751,10 @@ export default {
         border: none;
         float: right;
         cursor: pointer;
+      }
+      .cancel {
+        background: #cccccc;
+        margin-right: 20px;
       }
     }
     .user-info-confirm {

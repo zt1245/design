@@ -119,7 +119,6 @@ export default {
           outTradeNo += Math.floor(Math.random() * 10)
         }
         outTradeNo = new Date().getTime() + outTradeNo
-        console.log(outTradeNo)
         // 生成当前时间（订单开始时间）
         var date = new Date()
         var seperator1 = '-'
@@ -133,15 +132,12 @@ export default {
           strDate = '0' + strDate
         }
         var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate + ' ' + date.getHours() + seperator2 + date.getMinutes() + seperator2 + date.getSeconds()
-        console.log(currentdate)
         // 订单状态
         var status = '待付款'
         // 总价格
         let totalPrice = this.toprice
-        console.log(totalPrice)
         // 删除购物车里面已经选择的商品,勾选的商品添加到order订单中
         let idList = this.checkboxList
-        console.log(idList)
         // 当前用户
         let uname = localStorage.getItem('uname')
         this.axios.post('http://localhost:3001/IdList', {
@@ -156,6 +152,7 @@ export default {
             console.log('成功')
           }
         })
+        localStorage.setItem('order_no', outTradeNo)
         this.$router.push({
           name: 'CarCheckout'
         })

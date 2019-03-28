@@ -13,6 +13,8 @@ import Car from '@/components/Car'
 import CarCheckout from '@/components/CarCheckout'
 import My from '@/components/My'
 import Payment from '@/components/Payment'
+import Success from '@/components/Success'
+import Fail from '@/components/Fail'
 import AboutContent from '@/views/about/AboutContent'
 import Aboutcompany from '@/views/about/Aboutcompany'
 import Aboutculture from '@/views/about/Aboutculture'
@@ -140,6 +142,35 @@ export default new Router({
       name: 'Payment',
       component: Payment,
       beforeEnter: (to, from, next) => {
+        if (localStorage.getItem('uname')) {
+          next()
+        } else {
+          next({
+            path: '/'
+          })
+        }
+      }
+    },
+    {
+      path: '/success',
+      name: 'Success',
+      component: Success,
+      beforeEnter: (to, from, next) => {
+        if (localStorage.getItem('uname')) {
+          next()
+        } else {
+          next({
+            path: '/'
+          })
+        }
+      }
+    },
+    {
+      path: '/fail',
+      name: 'Fail',
+      component: Fail,
+      beforeEnter: (to, from, next) => {
+        console.log(to, from, next)
         if (localStorage.getItem('uname')) {
           next()
         } else {

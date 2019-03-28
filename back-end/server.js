@@ -364,7 +364,7 @@ app.post('/addAddr', function (req, res) {
   });
 });
 
-// 删除选中的商品的信息的接口
+// 将选中的商品拼接成字符串插入到orderList订单中并将cart表中相对应的商品的接口
 app.post('/IdList', function (req, res) {
   var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
     host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
@@ -418,7 +418,7 @@ app.post('/IdList', function (req, res) {
       if (quantity.length > 0) {
         quantity = quantity.substr(0, quantity.length - 1);
       }
-      console.log(product_id, spec, unit_price, quantity)
+      console.log(product_id, spec, unit_price, quantity, order_no)
       var sql1 = `insert into orderList (order_no,user_name,product_id,status,begin_time,spec,unit_price,quantity,total_price) VALUES("${order_no}","${user_name}","${product_id}","${status}","${begin_time}","${spec}","${unit_price}","${quantity}","${totalPrice}")`;
       connection.query(sql1, function (err, result) {
         console.log(err)
@@ -426,17 +426,69 @@ app.post('/IdList', function (req, res) {
           res.send({ code: -1, msg: '插入失败' });
         } else {
           var sql2 = `delete from  cart  where id in (${idList})`;
-          console.log(err)
-          if (err) {
-            res.send({ code: -1, msg: '删除失败' });
-          } else {
-            res.send({ code: 2, msg: '删除成功', result });
-          }
+          connection.query(sql2, function (err, result) {
+            console.log(err)
+            if (err) {
+              res.send({ code: -1, msg: '删除失败' });
+            } else {
+              res.send({ code: 2, msg: '删除成功', result });
+            }
+          })
         }
       })
     }
   })
 })
+
+// 取消订单的接口
+app.post('/updateStatus', function (req, res) {
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  let order_no = req.body.orderNo
+  let status = req.body.status
+  let close_time = req.body.cancledate
+  let add_id = req.body.addId
+  let delivery_time = req.body.deliveryTime
+  let delivery_date = req.body.deliveryDate
+  let message = req.body.message
+  connection.connect();
+  var sql = `update orderList set status="${status}",close_time="${close_time}",add_id="${add_id}",delivery_time="${delivery_time}",delivery_date="${delivery_date}",message="${message}" where order_no="${order_no}"`;
+  connection.query(sql, function (err, result) {
+    if (err) {
+      console.log(err)
+      res.send({ code: -1, msg: '取消失败' });
+    } else {
+      res.send({ code: 2, msg: '取消成功' });
+    }
+  });
+});
+
+// 修改订单状态
+app.post('/Status', function (req, res) {
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  let order_no = req.body.orderNo
+  let status = req.body.status
+  let payment_time = req.body.paytime
+  connection.connect();
+  var sql = `update orderList set status="${status}",payment_time="${payment_time}" where order_no="${order_no}"`;
+  connection.query(sql, function (err, result) {
+    if (err) {
+      console.log(err)
+      res.send({ code: -1, msg: '修改失败' });
+    } else {
+      res.send({ code: 2, msg: '修改成功' });
+    }
+  });
+});
 
 app.listen(3001, () => {
   console.log('success', function () {

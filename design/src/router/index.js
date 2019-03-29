@@ -20,6 +20,11 @@ import Aboutcompany from '@/views/about/Aboutcompany'
 import Aboutculture from '@/views/about/Aboutculture'
 import Aboutgoodness from '@/views/about/Aboutgoodness'
 import NewsMenu from '@/views/news/NewsMenu'
+import PerCenter from '@/views/my/PerCenter'
+import ReciveAdd from '@/views/my/ReciveAdd'
+import PerInfo from '@/views/my/PerInfo'
+import ChangePwd from '@/views/my/ChangePwd'
+import Allorders from '@/views/my/Allorders'
 
 Vue.use(Router)
 
@@ -124,7 +129,6 @@ export default new Router({
     },
     {
       path: '/my',
-      name: 'My',
       component: My,
       beforeEnter: (to, from, next) => {
         if (localStorage.getItem('uname')) {
@@ -135,7 +139,32 @@ export default new Router({
             path: '/login'
           })
         }
-      }
+      },
+      children: [{
+        path: '',
+        name: 'PerCenter',
+        component: PerCenter
+      },
+      {
+        path: 'reciveAdd',
+        name: 'ReciveAdd',
+        component: ReciveAdd
+      },
+      {
+        path: 'perInfo',
+        name: 'PerInfo',
+        component: PerInfo
+      },
+      {
+        path: 'changePwd',
+        name: 'ChangePwd',
+        component: ChangePwd
+      },
+      {
+        path: 'allorders',
+        name: 'Allorders',
+        component: Allorders
+      }]
     },
     {
       path: '/payment',

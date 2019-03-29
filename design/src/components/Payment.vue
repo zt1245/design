@@ -63,21 +63,21 @@ export default {
           }
         })
       } else {
-        var status = '未发货'
-        var orderNo = localStorage.getItem('order_no')
+        status = '未发货'
+        orderNo = localStorage.getItem('order_no')
         // 生成当前时间（订单开始时间）
-        var date = new Date()
-        var seperator1 = '-'
-        var seperator2 = ':'
-        var month = date.getMonth() + 1
-        var strDate = date.getDate()
+        date = new Date()
+        seperator1 = '-'
+        seperator2 = ':'
+        month = date.getMonth() + 1
+        strDate = date.getDate()
         if (month >= 1 && month <= 9) {
           month = '0' + month
         }
         if (strDate >= 0 && strDate <= 9) {
           strDate = '0' + strDate
         }
-        var paytime = date.getFullYear() + seperator1 + month + seperator1 + strDate + ' ' + date.getHours() + seperator2 + date.getMinutes() + seperator2 + date.getSeconds()
+        paytime = date.getFullYear() + seperator1 + month + seperator1 + strDate + ' ' + date.getHours() + seperator2 + date.getMinutes() + seperator2 + date.getSeconds()
         this.axios.post('http://localhost:3001/Status', {
           orderNo,
           status,

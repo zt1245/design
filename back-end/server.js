@@ -490,6 +490,44 @@ app.post('/Status', function (req, res) {
   });
 });
 
+// 查询所有订单的接口
+app.post('/allor', function (req, res) {
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  let uname = req.body.uname
+  connection.connect();
+  var sql = `SELECT * FROM orderList where user_name="${uname}"`;
+  connection.query(sql, function (err, result) {
+    console.log(err)
+    if (err) {
+      res.send({ code: -1, msg: '查询失败' });
+    } else {
+      var a = ""
+      var list = result
+      for (var i=0; i<result.length; i++) {
+        a += result[i].product_id + ',';
+      }
+      if (a.length>0) {
+        a = a.substr(0,a.length-1);
+      }
+      var arr = a.split(',');
+      console.log(a,arr,'str')
+      var sql1 = `SELECT * FROM product where id in (${arr})`
+      connection.query(sql1, function (err, result) {
+        if (err) {
+          res.send({code:-1,msg:'查询失败'+sql1})
+        } else {
+          res.send({code:2, msg:'查询成功',data:list,List:result})
+        }
+      })
+    }
+  });
+});
+
 app.listen(3001, () => {
   console.log('success', function () {
     console.log('服务器启动成功,且地址是', 'http://localhost:3001')

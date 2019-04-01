@@ -75,6 +75,9 @@ export default {
         font-size: 14px;
         margin-bottom: 14px;
       }
+      p:nth-child(3) {
+        line-height: 20px;
+      }
       div {
         padding-top: 15px;
         span {

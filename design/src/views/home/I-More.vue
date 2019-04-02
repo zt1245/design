@@ -2,24 +2,24 @@
   <div class="more">
     <ul class="container">
       <li>
-        <i class="iconfont icon-guozhigaojiaobei"></i>
-        <p>果汁</p>
-        <span>查看更多</span>
+        <i class="iconfont icon-kaochuan_huabanfuben"></i>
+        <p>蛋糕</p>
+        <span @click="go()">查看更多</span>
       </li>
       <li>
         <i class="iconfont icon-guozhigaojiaobei"></i>
         <p>果汁</p>
-        <span>查看更多</span>
+        <span @click="go1()">查看更多</span>
       </li>
       <li>
-        <i class="iconfont icon-guozhigaojiaobei"></i>
-        <p>果汁</p>
-        <span>查看更多</span>
+        <i class="iconfont icon-bingqilin"></i>
+        <p>冰淇淋</p>
+        <span @click="go2()">查看更多</span>
       </li>
       <li>
-        <i class="iconfont icon-guozhigaojiaobei"></i>
-        <p>果汁</p>
-        <span>查看更多</span>
+        <i class="iconfont icon-tiantianquan"></i>
+        <p>甜甜圈</p>
+        <span @click="go3()">查看更多</span>
       </li>
     </ul>
   </div>
@@ -31,6 +31,40 @@ export default {
   name: 'IMore',
   components: {
     ITitle
+  },
+  methods: {
+    go () {
+      this.$router.push({
+        name: 'Category',
+        params: {
+          type: 'cake'
+        }
+      })
+    },
+    go1 () {
+      this.$router.push({
+        name: 'Category',
+        params: {
+          type: 'drink'
+        }
+      })
+    },
+    go2 () {
+      this.$router.push({
+        name: 'Category',
+        params: {
+          type: 'ice'
+        }
+      })
+    },
+    go3 () {
+      this.$router.push({
+        name: 'Category',
+        params: {
+          type: 'sweet'
+        }
+      })
+    }
   }
 }
 </script>
@@ -59,6 +93,7 @@ export default {
         padding: 10px 20px;
         border: 1px solid rgba($color: #ffffff, $alpha: 0.8);
         border-radius: 2px;
+        cursor: pointer;
       }
       span:hover {
         border: 1px solid #cf4248;

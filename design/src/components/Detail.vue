@@ -31,7 +31,8 @@
 					<img :src="maynifier_img[actindex]" ref="bPic"/>
 				</div>
 			</div>
-			<div class="right">
+      <!-- 类型为cake的显示 -->
+			<div class="right" v-show="item.type === 'cake'">
 				<h3>{{ item.title }}</h3>
 				<ul class="detail_distribution">
 					<li>
@@ -101,6 +102,191 @@
 					</div>
 				</div>
 			</div>
+      <!-- 类型为果汁的显示 -->
+      <div class="right" v-show="item.type === 'drink'">
+				<h3>{{ item.title }}</h3>
+				<ul class="detail_distribution">
+					<li>
+						<i class="iconfont icon-tangguo sweetIcon"></i>
+						<span>参考甜度：</span>
+						<span>
+							<i class="iconfont icon-tangguo"
+                v-for="(sweetItem,sweetIndex) in sweet"
+                :key="sweetIndex"
+                :class="{ sweetIcon: sweetItem === '1' }"></i>
+						</span>
+					</li>
+				</ul>
+				<div class="pro_detial">
+          <p v-for="(item,index) in detailArr"
+            :key="index">{{ item }}</p>
+				</div>
+				<div class="outer_box">
+					<div class="detail_img">
+						<img src="../../static/images/drinkbox.jpg"/>
+						<div class="outer_right">
+              <ul>
+                <li>
+                  <i class="iconfont icon-chicunleixing"></i>
+                  {{ drinkArr[selNum] }}杯
+                </li>
+                <li>
+                  <i class="iconfont icon-ren"></i>
+                  适合一人饮用
+                </li>
+              </ul>
+              <p class="price">
+                ￥
+                <span>{{ unit_price[selNum] }}</span>
+                /{{ drinkArr[selNum] }}杯
+              </p>
+            </div>
+					</div>
+					<div class="cake_size">
+						<span>商品规格：</span>
+						<ul>
+							<li v-for="(drinkItem,drinkIndex) in drinkArr"
+                :key="drinkIndex"
+                :class="{ select: selNum === drinkIndex }"
+                @click="changeSize(drinkIndex)">
+								{{ drinkItem }}杯
+								<i class="iconfont"
+                  :class="{ 'icon-xuanzhong': selNum === drinkIndex }"></i>
+							</li>
+						</ul>
+					</div>
+					<div class="buy_button">
+						<span class="buy" @click="buyNow()">立即购买</span>
+						<span class="car" @click="addCar()">加入购物车</span>
+					</div>
+				</div>
+			</div>
+      <!-- 类型为冰淇淋的显示 -->
+      <div class="right" v-show="item.type === 'ice'">
+				<h3>{{ item.title }}</h3>
+				<ul class="detail_distribution">
+          <li>
+						<i class="iconfont icon-xuehua"></i>
+						<span>存储条件：-3°~-5℃冷藏食用口感最佳</span>
+					</li>
+					<li>
+						<i class="iconfont icon-tangguo sweetIcon"></i>
+						<span>参考甜度：</span>
+						<span>
+							<i class="iconfont icon-tangguo"
+                v-for="(sweetItem,sweetIndex) in sweet"
+                :key="sweetIndex"
+                :class="{ sweetIcon: sweetItem === '1' }"></i>
+						</span>
+					</li>
+				</ul>
+				<div class="pro_detial">
+          <p v-for="(item,index) in detailArr"
+            :key="index">{{ item }}</p>
+				</div>
+				<div class="outer_box">
+					<div class="detail_img">
+						<img src="../../static/images/icebox.jpg"/>
+						<div class="outer_right">
+              <ul>
+                <li>
+                  <i class="iconfont icon-chicunleixing"></i>
+                  {{ drinkArr[selNum] }}份
+                </li>
+                <li>
+                  <i class="iconfont icon-ren"></i>
+                  适合一人食用
+                </li>
+              </ul>
+              <p class="price">
+                ￥
+                <span>{{ unit_price[selNum] }}</span>
+                /{{ drinkArr[selNum] }}份
+              </p>
+            </div>
+					</div>
+					<div class="cake_size">
+						<span>商品规格：</span>
+						<ul>
+							<li v-for="(drinkItem,drinkIndex) in drinkArr"
+                :key="drinkIndex"
+                :class="{ select: selNum === drinkIndex }"
+                @click="changeSize(drinkIndex)">
+								{{ drinkItem }}份
+								<i class="iconfont"
+                  :class="{ 'icon-xuanzhong': selNum === drinkIndex }"></i>
+							</li>
+						</ul>
+					</div>
+					<div class="buy_button">
+						<span class="buy" @click="buyNow()">立即购买</span>
+						<span class="car" @click="addCar()">加入购物车</span>
+					</div>
+				</div>
+			</div>
+      <!-- 类型为甜甜圈的显示 -->
+      <div class="right" v-show="item.type === 'sweet'">
+				<h3>{{ item.title }}</h3>
+				<ul class="detail_distribution">
+          <li>
+						<i class="iconfont icon-xuehua"></i>
+						<span>存储条件：低温冷藏，食用前使用微波炉加热口感更佳</span>
+					</li>
+					<li>
+						<i class="iconfont icon-tangguo sweetIcon"></i>
+						<span>参考甜度：</span>
+						<span>
+							<i class="iconfont icon-tangguo"
+                v-for="(sweetItem,sweetIndex) in sweet"
+                :key="sweetIndex"
+                :class="{ sweetIcon: sweetItem === '1' }"></i>
+						</span>
+					</li>
+				</ul>
+				<div class="pro_detial">
+          <p v-for="(item,index) in detailArr"
+            :key="index">{{ item }}</p>
+				</div>
+				<div class="outer_box">
+					<div class="detail_img">
+						<img src="../../static/images/sweetbox.jpg"/>
+						<div class="outer_right">
+              <ul>
+                <li>
+                  <i class="iconfont icon-chicunleixing"></i>
+                  {{ specArr[selNum] }}个/份
+                </li>
+                <li>
+                  <i class="iconfont icon-ren"></i>
+                  适合一人食用
+                </li>
+              </ul>
+              <p class="price">
+                ￥
+                <span>{{ unit_price[selNum] }}</span>
+                /份
+              </p>
+            </div>
+					</div>
+					<div class="cake_size">
+						<span>商品规格：</span>
+						<ul>
+							<li v-for="(drinkItem,drinkIndex) in specArr"
+                :key="drinkIndex"
+                :class="{ select: selNum === drinkIndex }"
+                @click="changeSize(drinkIndex)">
+								{{ drinkItem }}个/份
+								<i class="iconfont"
+                  :class="{ 'icon-xuanzhong': selNum === drinkIndex }"></i>
+							</li>
+						</ul>
+					</div>
+					<div class="buy_button">
+						<span class="buy" @click="buyNow()">立即购买</span>
+						<span class="car" @click="addCar()">加入购物车</span>
+					</div>
+				</div>
+			</div>
 		</div>
     <!-- 详情图开始 -->
 		<div class="detail_photo container">
@@ -127,7 +313,8 @@ export default {
       sizeArr: ['13*13', '17*17', '23*23', '30*30'],
       suitEatArr: ['适合3-4人分享', '适合7-8人分享', '适合11-12人分享', '适合15-20人分享'],
       specArr: ['1', '2', '3', '5'],
-      setArr: ['10', '10', '15', '20']
+      setArr: ['10', '10', '15', '20'],
+      drinkArr: ['小', '中', '大']
     }
   },
   methods: {
@@ -236,7 +423,7 @@ export default {
   .content {
     margin-top: 20px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     border-bottom: 1px solid #D8D8D8;
     margin-bottom: 20px;
     padding-bottom: 20px;

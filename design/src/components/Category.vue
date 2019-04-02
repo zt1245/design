@@ -20,13 +20,12 @@
       <ul>
         <li v-for="(item,index) in proList"
           :key="index">
-          <img :src="item.pro_img">
+          <img :src="item.pro_img" @click="toDetail(item.id)">
           <p>{{ item.title }}</p>
-          <span>￥{{ item.unit_price.split(",")[0] }}/2.0磅</span>
-          <div class="label-entrance">
-            <i v-for="(tab,tabindex) in item.tab.split(',')"
-              :key="tabindex">{{ tab }} ></i>
-          </div>
+          <span v-show="item.type === 'cake'">￥{{ item.unit_price.split(",")[0] }}/2.0磅</span>
+          <span v-show="item.type === 'drink'">￥{{ item.unit_price.split(",")[0] }}/1杯</span>
+          <span v-show="item.type === 'ice'">￥{{ item.unit_price.split(",")[0] }}/1份</span>
+          <span v-show="item.type === 'sweet'">￥{{ item.unit_price.split(",")[0] }}/1个</span>
           <div class="car" @click="toDetail(item.id)">
             <i class="iconfont icon-xiangqing"></i>
             查看详情

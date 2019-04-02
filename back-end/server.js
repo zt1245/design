@@ -68,6 +68,7 @@ app.post('/register', function (req, res) {
   });
   var uname = req.body.uname;
   var password = req.body.password;
+  var phone = req.body.phone;
   connection.connect();
   var sql = `SELECT * FROM user where uname="${uname}"`;
   connection.query(sql, function (err, result) {
@@ -77,7 +78,7 @@ app.post('/register', function (req, res) {
       if (result.length > 0) {
         res.send({ code: 1, msg: '用户名已存在' });
       } else {
-        var sql1 = `insert into user (uname,password) VALUES("${uname}","${password}")`;
+        var sql1 = `insert into user (uname,password,phone) VALUES("${uname}","${password}","${phone}")`;
         connection.query(sql1, function (err, result) {
           if (err) {
             res.send({ code: -1, msg: '插入失败' });

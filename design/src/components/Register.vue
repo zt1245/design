@@ -5,9 +5,10 @@
 				<h2 class="active">用户注册</h2>
 			</div>
 			<div class="login_form">
-					<input type="text" ref="uname" placeholder="输入手机号码" />
+					<input type="text" ref="uname" placeholder="输入用户名" />
 					<input type="password" ref="password" placeholder="密码：请输入8-20位字符" />
 					<input type="password" ref="spwd" placeholder="确认密码" />
+          <input type="text" ref="tel" placeholder="输入手机号">
 					<i @click="Register()">注册</i>
 					<p>
             <span @click="goLogin()">已有账号，去登陆</span>
@@ -33,22 +34,36 @@ export default {
       })
     },
     Register () {
-      let uname = this.$refs.uname.value
-      let password = this.$refs.password.value
-      console.log(uname, password)
-      this.axios.post('http://localhost:3001/register', {
-        uname,
-        password
-      }).then((res) => {
-        console.log(res)
-        if (res.data.code === 2) {
-          this.$router.push({
-            path: '/login'
-          })
-        } else {
-          alert(res.data.msg)
-        }
-      })
+      if (this.$refs.uname.value === '') {
+        alert('请输入用户名')
+      } else if (this.$refs.password.value === '') {
+        alert('请输入密码')
+      } else if (this.$refs.spwd.value === '') {
+        alert('确认密码不能为空')
+      } else if (this.$refs.password.value !== this.$refs.spwd.value) {
+        alert('密码输入错误，请重试')
+      } else if (this.$refs.tel.value === '') {
+        alert('手机号不能为空')
+      } else if (this.$refs.uname.value !== '' && this.$refs.password.value !== '' && this.$refs.spwd.value !== '' && this.$refs.password.value === this.$refs.spwd.value && this.$refs.tel.value !== '') {
+        let uname = this.$refs.uname.value
+        let password = this.$refs.password.value
+        let phone = this.$refs.tel.value
+        console.log(uname, password)
+        this.axios.post('http://localhost:3001/register', {
+          uname,
+          password,
+          phone
+        }).then((res) => {
+          console.log(res)
+          if (res.data.code === 2) {
+            this.$router.push({
+              path: '/login'
+            })
+          } else {
+            alert(res.data.msg)
+          }
+        })
+      }
     }
   }
 }
@@ -76,7 +91,7 @@ export default {
       }
     }
     .login_form {
-      input:nth-child(1),input:nth-child(2),input:nth-child(3) {
+      input:nth-child(1),input:nth-child(2),input:nth-child(3),input:nth-child(4) {
         width: 238px;
         border: none;
         outline: none;

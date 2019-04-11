@@ -63,7 +63,7 @@ export default {
     return {
       title: '产品推荐',
       detail: 'Product recommendations',
-      sum: '他人的参考，仅供参考',
+      sum: '商家推荐',
       remList: [],
       specIndex: null,
       specArr: [1, 2, 3, 5],

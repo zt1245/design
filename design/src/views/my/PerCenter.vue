@@ -13,14 +13,14 @@
         <li>
           <img src="../../../static/images/pPay.png" alt="">
           <div>
-            <p>待支付的订单：<span>1</span></p>
+            <p>待支付的订单：<span>{{zLength}}</span></p>
             <p @click="goAll()">查看待支付的订单 ></p>
           </div>
         </li>
         <li>
           <img src="../../../static/images/shipped.png" alt="">
           <div>
-            <p>待收货的订单：<span>1</span></p>
+            <p>待收货的订单：<span>{{sLength}}</span></p>
             <p @click="goAll()">查看待收货的订单 ></p>
           </div>
         </li>
@@ -33,11 +33,36 @@
 export default {
   data () {
     return {
-      uname: ''
+      uname: '',
+      zLength: 0,
+      sLength: 0
     }
   },
   mounted () {
     this.uname = localStorage.getItem('uname')
+    let uname = this.uname
+    let status = '待付款'
+    this.axios.post('http://localhost:3001/orderStatus', {
+      uname,
+      status
+    }).then(res => {
+      if (res.data.code === 2) {
+        this.zLength = res.data.data.length
+      } else {
+        alert('查询失败，请重试')
+      }
+    })
+    status = '未发货'
+    this.axios.post('http://localhost:3001/orderStatus', {
+      uname,
+      status
+    }).then(res => {
+      if (res.data.code === 2) {
+        this.sLength = res.data.data.length
+      } else {
+        alert('查询失败，请重试')
+      }
+    })
   },
   methods: {
     goPerinfo () {

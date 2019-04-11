@@ -29,8 +29,9 @@
                 <p>{{ proitem.title }}</p>
               </li>
               <li class="btn-box">
-                <span v-show="item.status === '待付款'">立即支付</span>
-                <span>删除</span>
+                <span v-show="item.status === '待付款'"
+                  @click="goCheck(item.order_no)">立即支付</span>
+                <span @click="del(item.order_no)">删除</span>
               </li>
             </ul>
           </el-collapse-item>
@@ -64,8 +65,9 @@
                 <p>{{ proitem.title }}</p>
               </li>
               <li class="btn-box">
-                <span v-show="item.status === '待付款'">立即支付</span>
-                <span>删除</span>
+                <span v-show="item.status === '待付款'"
+                  @click="goCheck(item.order_no)">立即支付</span>
+                <span @click="del(item.order_no)">删除</span>
               </li>
             </ul>
           </el-collapse-item>
@@ -99,8 +101,9 @@
                 <p>{{ proitem.title }}</p>
               </li>
               <li class="btn-box">
-                <span v-show="item.status === '待付款'">立即支付</span>
-                <span>删除</span>
+                <span v-show="item.status === '待付款'"
+                  @click="goCheck(item.order_no)">立即支付</span>
+                <span @click="del(item.order_no)">删除</span>
               </li>
             </ul>
           </el-collapse-item>
@@ -134,8 +137,9 @@
                 <p>{{ proitem.title }}</p>
               </li>
               <li class="btn-box">
-                <span v-show="item.status === '待付款'">立即支付</span>
-                <span>删除</span>
+                <span v-show="item.status === '待付款'"
+                  @click="goCheck(item.order_no)">立即支付</span>
+                <span @click="del(item.order_no)">删除</span>
               </li>
             </ul>
           </el-collapse-item>
@@ -157,7 +161,25 @@ export default {
   },
   methods: {
     handleClick (tab, event) {},
-    handleChange (val) {}
+    handleChange (val) {},
+    goCheck (oindex) {
+      localStorage.setItem('order_no', oindex)
+      this.$router.push({
+        name: 'CarCheckout'
+      })
+    },
+    del (orderNo) {
+      this.axios.post('http://localhost:3001/delOrder', {
+        orderNo
+      }).then(res => {
+        if (res.data.code === 2) {
+          alert('删除成功')
+          window.location.reload()
+        } else {
+          alert('删除失败，请重试')
+        }
+      })
+    }
   },
   mounted () {
     let uname = localStorage.getItem('uname')

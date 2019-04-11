@@ -70,19 +70,6 @@ export const constantRoutes = [
         meta: { title: 'dashboard', icon: 'dashboard', noCache: true, affix: true }
       }
     ]
-  },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: 'guide', icon: 'guide', noCache: true }
-      }
-    ]
   }
 ]
 
@@ -94,18 +81,56 @@ export default new Router({
 
 export const asyncRoutes = [
   {
-    path: '/theme',
+    path: '/user',
     component: Layout,
     redirect: 'noredirect',
     children: [
       {
         path: 'index',
-        component: () => import('@/views/theme/index'),
-        name: 'Theme',
-        meta: { title: 'theme', icon: 'theme' }
+        component: () => import('@/views/user/index'),
+        name: 'User',
+        meta: { title: '用户管理', icon: 'people' }
       }
     ]
-  },  
-
+  },
+  {
+    path: '/product',
+    component: Layout,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/product/index'),
+        name: 'Product',
+        meta: { title: '商品管理', icon: 'shopping' }
+      }
+    ]
+  },
+  {
+    path: '/newList',
+    component: Layout,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/newList/index'),
+        name: 'NewList',
+        meta: { title: '新闻管理', icon: 'edit' }
+      }
+    ]
+  },
+  {
+    path: '/order',
+    component: Layout,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/order/index'),
+        name: 'Order',
+        meta: { title: '订单管理', icon: 'edit' }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]

@@ -112,7 +112,6 @@ export default {
       if (this.checkboxList.length === 0) {
         alert('未选择购买的商品，请选择')
       } else {
-        localStorage.setItem('idList', JSON.stringify(this.checkboxList))
         // 生成订单号
         var outTradeNo = ''
         for (var i = 0; i < 6; i++) {

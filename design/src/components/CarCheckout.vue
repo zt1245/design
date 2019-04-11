@@ -15,7 +15,7 @@
           <div class="left-info">
             <p>{{ addName }}</p>
             <p><i class="iconfont icon-shouji"></i>{{ addTel }}</p>
-            <p><i class="iconfont icon-dingwei"></i>{{ province }}{{ city }}{{ area }}{{ address }}</p>
+            <p><i class="iconfont icon-dingwei"></i>{{ addh }}{{ address }}</p>
           </div>
           <div class="right-button">
             <span @click="select()">切换地址（{{ addList.length }}）</span>
@@ -37,7 +37,7 @@
               @click="changeSelIndex(index)">
               <p>{{ item.name }}</p>
               <p><i class="iconfont icon-shouji"></i>{{ item.phone }}</p>
-              <p><i class="iconfont icon-dingwei"></i>{{ item.province }}{{ item.city }}{{ item.area }}{{ item.addr }}</p>
+              <p><i class="iconfont icon-dingwei"></i>{{ item.addr_ahead }}{{ item.addr }}</p>
             </li>
           </ul>
           <span class="use"
@@ -49,7 +49,10 @@
           <p>添加地址</p>
           <div class="area">
             <span class="inarea">所在地区：</span>
-            <area-select type='all' :placeholders="placeholders" :level='2' v-model="send_search_form.selected" :data="pcaa"></area-select>
+            <el-input
+              placeholder="江西省赣州市章贡区"
+              :disabled="true">
+            </el-input>
           </div>
           <div class="detail-address">
             <span>详细地址：</span>
@@ -106,12 +109,12 @@
               <td class="goods-cake">
                 <div>
                   <h4>{{ item.title }}</h4>
-                  <span class="goods-spec">规格：{{ item.spec }}.0</span>
+                  <span class="goods-spec">规格：{{ spec[index] }}.0</span>
                 </div>
               </td>
-              <td class="car-unit-price">￥{{ item.unit_price }}.00</td>
-              <td class="number-li">{{ item.quantity }}</td>
-              <td class="money">￥{{ parseInt(item.unit_price)*parseInt(item.quantity) }}.00</td>
+              <td class="car-unit-price">￥{{ unitP[index] }}.00</td>
+              <td class="number-li">{{ quanArr[index] }}</td>
+              <td class="money">￥{{ parseInt(unitP[index])*parseInt(quanArr[index]) }}.00</td>
             </tr>
           </tbody>
         </table>
@@ -134,7 +137,7 @@
             收货人：{{ addName }}
           </div>
           <p>手机号：{{ addTel }}</p>
-          <span>收货地址：{{ province }}{{ city }}{{ area }}{{ address }}</span>
+          <span>收货地址：{{ addh }}{{ address }}</span>
         </div>
         <input type="button" class="go-pay" name="go-pay" value="去支付" @click="toPay()">
         <input type="button" class="cancel" name="go-pay" value="取消订单" @click="cancelPay()">
@@ -164,12 +167,6 @@ export default {
       goodsList: [],
       // 收货人
       addName: '',
-      // 省
-      province: '',
-      // 市
-      city: '',
-      // 区
-      area: '',
       // 收货地址
       address: '',
       // 手机号
@@ -179,22 +176,13 @@ export default {
       // 收货地址list
       addList: [],
       pca: pca,
-      pcaa: pcaa,
-      placeholders: ['', '', ''],
-      send_search_form: {
-        orderCode: '',
-        itemName: '',
-        orderTime: [],
-        consigneeName: '',
-        state: '',
-        selected: []
-      },
       talPrice: '',
-      order_no: ''
+      order_no: '',
+      addh: '',
+      spec: [],
+      unitP: [],
+      quanArr: []
     }
-  },
-  component: {
-    AreaSelect: AreaSelect
   },
   methods: {
     changeadd () {
@@ -206,57 +194,33 @@ export default {
     },
     // 添加地址点击确定
     sure () {
-      this.addAddress = false
-      this.addr = true
-      // 获取省份的信息
-      for (const key in this.send_search_form.selected[0]) {
-        if (this.send_search_form.selected[0].hasOwnProperty(key)) {
-          const element = this.send_search_form.selected[0][key]
-          this.province = element
-        }
+      if (this.$refs.addr.value !== '' && this.$refs.name !== '' && this.$refs.tel.value !== '') {
+        this.addAddress = false
+        this.addr = true
+        let addr = this.$refs.addr.value
+        let name = this.$refs.name.value
+        let tel = this.$refs.tel.value
+        let add = '江西省赣州市章贡区'
+        let username = localStorage.getItem('uname')
+        this.axios.post('http://localhost:3001/addAddr', {
+          addr,
+          name,
+          tel,
+          username,
+          add
+        }).then((res) => {
+          if (res.data.code === 2) {
+            this.addName = name
+            this.addTel = tel
+            this.address = addr
+            alert('添加成功')
+          } else {
+            alert('添加失败，请重试!')
+          }
+        })
+      } else {
+        alert('请填写信息')
       }
-      this.addr = true
-      // 获取市的信息
-      for (const key in this.send_search_form.selected[1]) {
-        if (this.send_search_form.selected[1].hasOwnProperty(key)) {
-          const element = this.send_search_form.selected[1][key]
-          this.city = element
-        }
-      }
-      this.addr = true
-      // 获取区的信息
-      for (const key in this.send_search_form.selected[2]) {
-        if (this.send_search_form.selected[2].hasOwnProperty(key)) {
-          const element = this.send_search_form.selected[2][key]
-          this.area = element
-        }
-      }
-      let province = this.province
-      let city = this.city
-      let area = this.area
-      let addr = this.$refs.addr.value
-      let name = this.$refs.name.value
-      let tel = this.$refs.tel.value
-      let username = localStorage.getItem('uname')
-      this.axios.post('http://localhost:3001/addAddr', {
-        province,
-        city,
-        area,
-        addr,
-        name,
-        tel,
-        username
-      }).then((res) => {
-        if (res.data.code === 2) {
-          this.addName = name
-          this.addTel = tel
-          this.addarea = area
-          this.address = addr
-          alert('添加成功')
-        } else {
-          alert('添加失败，请重试!')
-        }
-      })
     },
     add () {
       this.addAddress = true
@@ -271,11 +235,9 @@ export default {
       this.selectAdd = false
       this.addName = this.addList[this.selIndex].name
       this.addTel = this.addList[this.selIndex].phone
-      this.province = this.addList[this.selIndex].province
-      this.city = this.addList[this.selIndex].city
       this.address = this.addList[this.selIndex].address
-      this.area = this.addList[this.selIndex].area
       this.add_id = this.addList[this.selIndex].id
+      this.addh = this.addList[this.selIndex].addr_ahead
     },
     // 总金额
     totalPrice () {
@@ -299,11 +261,9 @@ export default {
             this.addList = res.data.result
             this.addName = res.data.result[0].name
             this.addTel = res.data.result[0].phone
-            this.province = res.data.result[0].province
-            this.city = res.data.result[0].city
-            this.area = res.data.result[0].area
             this.address = res.data.result[0].addr
             this.add_id = res.data.result[0].id
+            this.addh = res.data.result[0].addr_ahead
           }
         } else {
           alert(res.data.msg)
@@ -407,12 +367,16 @@ export default {
     }
   },
   mounted () {
-    var proList = localStorage.getItem('idList')
+    var orderNo = localStorage.getItem('order_no')
+    console.log(orderNo)
     this.axios.post('http://localhost:3001/checkOrder', {
-      proList
+      orderNo
     }).then((res) => {
       if (res.data.code === 2) {
         this.goodsList = res.data.result
+        this.spec = res.data.result[0].spec.split(',')
+        this.unitP = res.data.result[0].unit_price.split(',')
+        this.quanArr = res.data.result[0].quantity.split(',')
         console.log(res)
       } else {
         alert(res.data.msg)
@@ -572,7 +536,7 @@ export default {
         border: 1px solid #dcdfe6;
         z-index: 1000;
         left: 50%;
-        top: 50%;
+        top: 40%;
         margin-left: -296px;
         margin-top: -152px;
         div {

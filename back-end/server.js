@@ -262,14 +262,27 @@ app.post('/checkOrder', function (req, res) {
     password: 'ZT1245com',
     database: 'design'
   });
-  let proList = JSON.parse(req.body.proList)
+  let order_no = req.body.orderNo
   connection.connect();
-  var sql = `SELECT t1.quantity,t1.spec,t1.unit_price,t2.title,t2.pro_img FROM (SELECT * FROM cart WHERE cart.id in (${proList}))as t1,product t2 WHERE t1.product_id = t2.id`;
+  var sql = `SELECT product_id FROM orderList WHERE order_no="${order_no}"`;
   connection.query(sql, function (err, result) {
+    console.log(err)
     if (err) {
       res.send({ code: -1, msg: '查询失败' });
     } else {
-      res.send({ code: 2, msg: '查询成功', result });
+      console.log(result)
+      var pro_List = result[0].product_id
+      console.log(pro_List)
+      var sql1 = `SELECT o.spec,o.unit_price,o.quantity,o.total_price,p.pro_img,p.title FROM orderList as o LEFT JOIN product p on p.id in (${pro_List}) WHERE o.order_no = "${order_no}"`
+      connection.query(sql1, function (err, result) {
+        console.log(err);
+        if (err) {
+          res.send({ code: -1, msg: '查询失败' })
+        } else {
+          console.log(result)
+          res.send({ code: 2, msg: '查询成功', result })
+        }
+      })
     }
   });
 });
@@ -327,7 +340,7 @@ app.post('/selAdd', function (req, res) {
   });
   let uname = req.body.uname
   connection.connect();
-  var sql = `SELECT * FROM address where user_id="${uname}"`;
+  var sql = `SELECT * FROM address where user_name="${uname}"`;
   connection.query(sql, function (err, result) {
     console.log(err)
     if (err) {
@@ -346,15 +359,13 @@ app.post('/addAddr', function (req, res) {
     password: 'ZT1245com',
     database: 'design'
   });
-  let area = req.body.area
   let addr = req.body.addr
   let name = req.body.name
   let tel = req.body.tel
   let username = req.body.username
-  let province = req.body.province
-  let city = req.body.city
+  let add_ahead = req.body.add
   connection.connect();
-  var sql = `insert into address (user_id,name,phone,area,addr,city,province) VALUES("${username}","${name}","${tel}","${area}","${addr}","${city}","${province}")`;
+  var sql = `insert into address (user_name,name,phone,addr,addr_ahead) VALUES("${username}","${name}","${tel}","${addr}","${add_ahead}")`;
   connection.query(sql, function (err, result) {
     console.log(err)
     if (err) {
@@ -491,6 +502,28 @@ app.post('/Status', function (req, res) {
   });
 });
 
+// 删除某个订单
+app.post('/delOrder', function (req, res) {
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  let order_no = req.body.orderNo
+  connection.connect();
+  var sql = `DELETE FROM orderList WHERE order_no="${order_no}"`;
+  connection.query(sql, function (err, result) {
+    console.log(err)
+    if (err) {
+      console.log(err)
+      res.send({ code: -1, msg: '删除失败' });
+    } else {
+      res.send({ code: 2, msg: '删除成功' });
+    }
+  });
+});
+
 // 查询所有订单的接口
 app.post('/allor', function (req, res) {
   var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
@@ -509,25 +542,165 @@ app.post('/allor', function (req, res) {
     } else {
       var a = ""
       var list = result
-      for (var i=0; i<result.length; i++) {
+      for (var i = 0; i < result.length; i++) {
         a += result[i].product_id + ',';
       }
-      if (a.length>0) {
-        a = a.substr(0,a.length-1);
+      if (a.length > 0) {
+        a = a.substr(0, a.length - 1);
       }
       var arr = a.split(',');
-      console.log(a,arr,'str')
+      console.log(a, arr, 'str')
       var sql1 = `SELECT * FROM product where id in (${arr})`
       connection.query(sql1, function (err, result) {
         if (err) {
-          res.send({code:-1,msg:'查询失败'+sql1})
+          res.send({ code: -1, msg: '查询失败' + sql1 })
         } else {
-          res.send({code:2, msg:'查询成功',data:list,List:result})
+          res.send({ code: 2, msg: '查询成功', data: list, List: result })
         }
       })
     }
   });
 });
+
+// 查询某个状态的订单接口
+app.post('/orderStatus', function (req, res) {
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  let status = req.body.status
+  let uname = req.body.uname
+  connection.connect();
+  var sql = `SELECT order_no  FROM orderList WHERE status="${status}" and user_name="${uname}"`;
+  connection.query(sql, function (err, result) {
+    console.log(err)
+    if (err) {
+      console.log(err)
+      res.send({ code: -1, msg: '删除失败' });
+    } else {
+      res.send({ code: 2, msg: '删除成功', data: result });
+    }
+  });
+});
+
+// 删除某个地址的信息
+app.post('/delAdd', function (req, res) {
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  let id = req.body.id
+  connection.connect();
+  var sql = `DELETE FROM address WHERE id="${id}"`;
+  connection.query(sql, function (err, result) {
+    if (err) {
+      console.log(err)
+      res.send({ code: -1, msg: '删除失败' });
+    } else {
+      res.send({ code: 2, msg: '删除成功', data: result });
+    }
+  });
+});
+
+// 查询用户信息的接口（后台管理系统）
+app.post('/userinfo', function (req, res) {
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  connection.connect();
+  var sql = `SELECT * FROM user`;
+  connection.query(sql, function (err, result) {
+    if (err) {
+      console.log(err)
+      res.send({ code: -1, msg: '查询失败' });
+    } else {
+      res.send({ code: 2, msg: '查询成功', data: result });
+    }
+  });
+});
+
+//图片管理
+app.post('/addImage', multer.single('file'),function (req, res) {
+  fs.readFile(req.file.path, function (err, data) {
+    if(err) {
+    }else {
+      var fileName = new Date().getTime() + '_' + req.file.originalname;
+      var des_file = path.resolve(__dirname, 'public/images', fileName);
+      fs.writeFile(des_file,data,function (err) {
+        if(err) {
+        }else {
+          res.send({
+            code:200,
+            data: fileName
+          })
+        }
+      })
+    }
+  })
+})
+
+// 查询商品的数据接口（分页查询）
+app.post('/paging', function (req, res) {
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  let pageSize = parseInt(req.body.pagesize)
+  let page = parseInt(req.body.currentPage);
+  let startPage = (page - 1) * pageSize
+  let endPage = pageSize
+  console.log(endPage, startPage, pageSize)
+  connection.connect();
+  async.parallel([
+    function (callback) {
+      var sql = `SELECT * FROM product limit ${startPage},${pageSize}`;
+      connection.query(sql, function (err, result) {
+        if (err) {
+          callback({ code: -1, msg: '查询数据库失败' })
+        } else {
+          callback(null, result)
+        }
+      })
+    },
+    function (callback) {
+      var sql1 = 'SELECT COUNT(*) as count FROM product';
+      console.log(sql1)
+      connection.query(sql1,function (err,result) {
+        if (err) {
+          callback({ code: -1, msg: '查询数据库失败' });
+        } else {
+          callback(null, result[0].count)
+        }
+      })
+    }
+  ],function(err,result){
+    if(err) {
+      res.send({code:-1,msg:'数据库查询失败'})
+    }else {
+      if (Math.ceil(result[1] / page) < pageSize) {
+        res.send({
+          code: -1,
+          message: '暂无更多数据'
+        })
+      } else {
+        res.send({
+          code: 2,
+          data: result[0],
+          count: result[1]
+        })
+      }
+    }
+  })
+})
 
 app.listen(3001, () => {
   console.log('success', function () {

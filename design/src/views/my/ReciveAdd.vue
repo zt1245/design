@@ -2,18 +2,43 @@
   <div class="reciveadd">
     <p>收货地址</p>
     <ul>
-      <li>
+      <li @click="add()">
         <i>+</i>
         <p>添加新地址</p>
       </li>
-      <li v-for="(item,index) in adList"
-        :key="index">
+      <li v-for="(item,index) in adList" :key="index">
         <p>{{ item.name }}</p>
         <p>{{ item.phone }}</p>
-        <p>{{ item.province }} {{ item.city }} {{ item.area }}{{ item.addr }}</p>
-        <div><span>修改</span><span>删除</span></div>
+        <p>{{ item.addr_ahead }}{{ item.addr }}</p>
+        <div>
+          <span @click="update(item.id)">修改</span>
+          <span @click="del(item.id)">删除</span>
+        </div>
       </li>
     </ul>
+    <div class="add-address" v-show="addAddress">
+      <p>添加地址</p>
+      <div class="area">
+        <span class="inarea">所在地区：</span>
+        <el-input placeholder="江西省赣州市章贡区" :disabled="true"></el-input>
+      </div>
+      <div class="detail-address">
+        <span>详细地址：</span>
+        <input type="text" placeholder="请填写街道，门牌号等" ref="addr">
+      </div>
+      <div class="conginee">
+        <span>收货人：</span>
+        <input type="text" placeholder="收货人姓名" ref="name">
+      </div>
+      <div class="telephone">
+        <span>手机号码：</span>
+        <input type="text" placeholder="收货人手机" ref="tel">
+      </div>
+      <div class="icon">
+        <i @click="cancel()">取消</i>
+        <i class="sure" @click="sure()">确定</i>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -21,7 +46,8 @@
 export default {
   data () {
     return {
-      adList: []
+      adList: [],
+      addAddress: false
     }
   },
   methods: {
@@ -29,11 +55,61 @@ export default {
       var uname = localStorage.getItem('uname')
       this.axios.post('http://localhost:3001/selAdd', {
         uname
-      }).then((res) => {
+      }).then(res => {
         if (res.data.code === 2) {
           this.adList = res.data.result
         } else {
           alert('查询失败，请稍后再试！')
+        }
+      })
+    },
+    add () {
+      this.addAddress = true
+    },
+    // 添加地址点击取消
+    cancel () {
+      this.addAddress = false
+    },
+    // 添加地址点击确定
+    sure () {
+      if (this.$refs.addr.value !== '' && this.$refs.name !== '' && this.$refs.tel.value !== '') {
+        this.addAddress = false
+        let addr = this.$refs.addr.value
+        let name = this.$refs.name.value
+        let tel = this.$refs.tel.value
+        let add = '江西省赣州市章贡区'
+        let username = localStorage.getItem('uname')
+        this.axios.post('http://localhost:3001/addAddr', {
+          addr,
+          name,
+          tel,
+          username,
+          add
+        }).then((res) => {
+          if (res.data.code === 2) {
+            alert('添加成功')
+            window.location.reload()
+          } else {
+            alert('添加失败，请重试!')
+          }
+        })
+      } else {
+        alert('请填写信息')
+      }
+    },
+    // 修改
+    update (id) {
+    },
+    // 删除
+    del (id) {
+      this.axios.post('http://localhost:3001/delAdd', {
+        id
+      }).then((res) => {
+        if (res.data.code === 2) {
+          alert('删除成功')
+          window.location.reload()
+        } else {
+          alert('删除失败，请重试!')
         }
       })
     }
@@ -50,7 +126,7 @@ export default {
   width: 100%;
   padding: 40px 80px 0 80px;
   p {
-    color: #262A2F;
+    color: #262a2f;
     font-size: 30px;
     text-align: left;
     margin-bottom: 64px;
@@ -61,17 +137,18 @@ export default {
     flex-wrap: wrap;
     li {
       width: 30%;
-      border: 1px solid #DCDCDC;
+      border: 1px solid #dcdcdc;
       margin-right: 16px;
       padding: 33px 13px 11px 21px;
       margin-bottom: 20px;
       p:nth-child(1) {
-        color: #3E3E3F;
+        color: #3e3e3f;
         font-size: 18px;
         margin-bottom: 35px;
       }
-      p:nth-child(2),p:nth-child(3) {
-        color: #7B7B7B;
+      p:nth-child(2),
+      p:nth-child(3) {
+        color: #7b7b7b;
         font-size: 14px;
         margin-bottom: 14px;
       }
@@ -81,7 +158,8 @@ export default {
       div {
         padding-top: 15px;
         span {
-          color: #F80000;
+          color: #f80000;
+          cursor: pointer;
         }
         span:nth-child(2) {
           margin-left: 50px;
@@ -93,7 +171,7 @@ export default {
       i {
         width: 42px;
         height: 42px;
-        background: #DCDCDC;
+        background: #dcdcdc;
         border-radius: 50%;
         display: block;
         font-size: 36px;
@@ -103,8 +181,75 @@ export default {
       }
       p {
         font-size: 14px;
-        color: #4A4A4A;
+        color: #4a4a4a;
         text-align: center;
+      }
+    }
+  }
+  .add-address {
+    padding: 28px 42px;
+    text-align: left;
+    font-size: 14px;
+    position: fixed;
+    background: #ffffff;
+    border: 1px solid #dcdfe6;
+    z-index: 1000;
+    left: 50%;
+    top: 40%;
+    margin-left: -296px;
+    margin-top: -152px;
+    div {
+      margin: 20px 0;
+    }
+    p {
+      color: #cacaca;
+      margin-bottom: 20px;
+    }
+    input::-webkit-input-placeholder {
+      color: #dcdfe6;
+    }
+    input {
+      padding-left: 10px;
+      border: none;
+      outline: none;
+      border: 1px solid #dcdfe6;
+      height: 40px;
+      border-radius: 5px;
+    }
+    .detail-address {
+      input {
+        width: 420px;
+      }
+    }
+    .conginee {
+      input {
+        width: 200px;
+        margin-left: 14px;
+      }
+    }
+    .telephone {
+      input {
+        width: 200px;
+      }
+    }
+    .icon {
+      padding-top: 30px;
+      text-align: right;
+      i {
+        width: 140px;
+        height: 42px;
+        display: inline-block;
+        border: 1px solid #e1e1e1;
+        color: #686868;
+        text-align: center;
+        line-height: 42px;
+        cursor: pointer;
+      }
+      .sure {
+        background: #cf4248;
+        border-color: #cf4248;
+        color: #ffffff;
+        margin-left: 20px;
       }
     }
   }

@@ -1,9 +1,6 @@
 <template>
   <div :style="{height:height+'px',zIndex:zIndex}">
-    <div
-      :class="className"
-      :style="{top:(isSticky ? stickyTop +'px' : ''),zIndex:zIndex,position:position,width:width,height:height+'px'}"
-    >
+    <div :class="className" :style="{top:stickyTop+'px',zIndex:zIndex,position:position,width:width,height:height+'px'}">
       <slot>
         <div>sticky</div>
       </slot>
@@ -59,27 +56,23 @@ export default {
       this.width = this.width + 'px'
       this.isSticky = true
     },
-    handleReset() {
+    reset() {
       if (!this.active) {
         return
       }
-      this.reset()
-    },
-    reset() {
       this.position = ''
       this.width = 'auto'
       this.active = false
       this.isSticky = false
     },
     handleScroll() {
-      const width = this.$el.getBoundingClientRect().width
-      this.width = width || 'auto'
+      this.width = this.$el.getBoundingClientRect().width
       const offsetTop = this.$el.getBoundingClientRect().top
       if (offsetTop < this.stickyTop) {
         this.sticky()
         return
       }
-      this.handleReset()
+      this.reset()
     },
     handleReize() {
       if (this.isSticky) {

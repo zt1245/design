@@ -1,15 +1,16 @@
 <template>
-  <div>
+  <div class="user">
     <el-table :data="tableData" border style="width: 100%">
-      <el-table-column fixed prop="id" label="编号" width="150" />
-      <el-table-column prop="uname" label="姓名" width="120" />
-      <el-table-column prop="phone" label="手机号" width="120" />
+      <el-table-column fixed prop="id" label="编号" width="150" align="center"/>
+      <el-table-column prop="uname" label="姓名" width="150"  align="center"/>
+      <el-table-column prop="phone" label="手机号"   align="center"/>
     </el-table>
   </div>
 </template>
 
 <script>
 export default {
+  name:'User',
   data() {
     return {
       tableData: []
@@ -32,3 +33,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+.user {
+  margin: 50px auto;
+  width: 600px;
+}
+</style>

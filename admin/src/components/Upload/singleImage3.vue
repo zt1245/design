@@ -7,16 +7,15 @@
       :on-success="handleImageSuccess"
       class="image-uploader"
       drag
-      action="https://httpbin.org/post"
-    >
-      <i class="el-icon-upload" />
+      action="https://httpbin.org/post">
+      <i class="el-icon-upload"/>
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
     </el-upload>
     <div class="image-preview image-app-preview">
       <div v-show="imageUrl.length>1" class="image-preview-wrapper">
         <img :src="imageUrl">
         <div class="image-preview-action">
-          <i class="el-icon-delete" @click="rmImage" />
+          <i class="el-icon-delete" @click="rmImage"/>
         </div>
       </div>
     </div>
@@ -24,7 +23,7 @@
       <div v-show="imageUrl.length>1" class="image-preview-wrapper">
         <img :src="imageUrl">
         <div class="image-preview-action">
-          <i class="el-icon-delete" @click="rmImage" />
+          <i class="el-icon-delete" @click="rmImage"/>
         </div>
       </div>
     </div>
@@ -32,7 +31,7 @@
 </template>
 
 <script>
-import { getToken } from '@/api/qiniu'
+import { getToken } from '@/utils/auth.js'
 
 export default {
   name: 'SingleImageUpload3',

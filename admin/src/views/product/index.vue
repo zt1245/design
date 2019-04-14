@@ -10,7 +10,7 @@
       </el-table-column>
       <el-table-column prop="title" label="商品名" width="120" />
       <el-table-column prop="detail" label="描述" width="200" />
-      <el-table-column prop="describe" label="详情" width="300" />
+      <el-table-column prop="des" label="详情" width="300" />
       <el-table-column prop="type" label="类型" width="60" />
       <el-table-column prop="sweet" label="甜度" width="80" />
       <el-table-column prop="label" label="标签" width="50" />
@@ -62,6 +62,7 @@
       class="demo-ruleForm"
       style="position:fixed;top:50px;left:30%;background:#fff;z-index:999;padding:20px 50px;border:1px solid #efefef;height:520px;overflow-y:auto;"
     >
+      <h2 class="aPro">新增商品<i class="el-icon-circle-close-outline" @click="close()"></i></h2>
       <el-form-item label="商品名字" prop="name">
         <el-input v-model="ruleForm.name" />
       </el-form-item>
@@ -102,19 +103,34 @@
           <i v-else class="el-icon-plus avatar-uploader-icon" />
         </el-upload>
       </el-form-item>
-      <el-form-item label="放大镜图片" prop="proImg">
+      <el-form-item label="放大镜图片" prop="mImg">
         <el-upload
-          class="avatar-uploader"
-          :action="httpApi+''+url"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-        >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon" />
+          class="upload-demo"
+          :action='httpApi+""+url'
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :file-list="fileList"
+          :on-success="handleSuccess"
+          list-type="picture">
+          <el-button size="small" type="primary">点击上传</el-button>
+          <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+        </el-upload>
+      </el-form-item>
+      <el-form-item label="详情图片" prop="dImg">
+        <el-upload
+          class="upload-demo"
+          :action='httpApi+""+url'
+          :on-preview="handleP"
+          :on-remove="handleR"
+          :file-list="dList"
+          :on-success="handleS"
+          list-type="picture">
+          <el-button size="small" type="primary">点击上传</el-button>
+          <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
         </el-upload>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">添加</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -123,12 +139,17 @@
 
 <script>
 export default {
+  name:"shoping",
   data() {
     return {
       imageUrl: '',
       httpApi: 'http://localhost:3001',
       url: '/addImage',
       tableData: [],
+      // 放大镜图片
+      fileList: [],
+      // 详情图片
+      dList: [],
       currentPage: 1,
       pagesize: 3,
       count: '',
@@ -140,23 +161,21 @@ export default {
         type: '',
         sweet: null,
         tab: '',
-        price: '',
-        proImg: ''
+        price: ''
       },
       rules: {
         name: [
           { required: true, message: '请输入商品名称', trigger: 'blur' },
-          { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+          { min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' }
         ],
-        detail: [
-          { required: true, message: '请输入商品描述', trigger: 'blur' }
-        ],
+        detail: [{ required: true, message: '请输入商品描述', trigger: 'blur' }],
         describe: [{ required: true, message: '请填写商品详情', trigger: 'blur' }],
         type: [{ required: true, message: '请选择商品所属类型', trigger: 'blur' }],
         sweet: [{ required: true, message: '请选择商品甜度', trigger: 'blur' }],
-        price: [{ required: true, message: '请填写价格', trigger: 'blur' }],
-        proImg: [{ required: true, message: '请选择图片', trigger: 'blur' }]
-      }
+        price: [{ required: true, message: '请填写价格', trigger: 'blur' }]
+      },
+      // 商品主图
+      pImg: ''
     }
   },
   mounted() {
@@ -175,6 +194,7 @@ export default {
           if (res.data.code === 2) {
             this.tableData = res.data.data
             this.count = res.data.count
+            console.log(res)
           } else {
             alert('查询失败，请稍后重试')
           }
@@ -188,9 +208,47 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert('submit!')
+          let form = this.ruleForm
+          let pImg = this.httpApi+'/images/'+this.pImg
+          let mList = this.fileList
+          let dList = this.dList
+          // 生成当前时间（订单开始时间）
+          var date = new Date()
+          var seperator1 = '-'
+          var seperator2 = ':'
+          var month = date.getMonth() + 1
+          var strDate = date.getDate()
+          if (month >= 1 && month <= 9) {
+            month = '0' + month
+          }
+          if (strDate >= 0 && strDate <= 9) {
+            strDate = '0' + strDate
+          }
+          var cancledate = date.getFullYear() + seperator1 + month + seperator1 + strDate + ' ' + date.getHours() + seperator2 + date.getMinutes() + seperator2 + date.getSeconds()
+          this.axios
+          .post('http://localhost:3001/save', {
+            form,
+            pImg,
+            mList,
+            dList,
+            cancledate
+          })
+          .then(res => {
+            if (res.data.code === 2) {
+              this.$message({
+                message: '添加成功',
+                type: 'success'
+              })
+              this.show = false
+            } else {
+              this.$message.error('添加失败，请重试')
+            }
+          })
         } else {
-          console.log('error submit!!')
+          this.$message({
+          message: '输入有误，请重试',
+          type: 'warning'
+        })
           return false
         }
       })
@@ -201,11 +259,39 @@ export default {
     addPro() {
       this.show = true
     },
+    // 商品主图
     handleAvatarSuccess(res, file) {
-      console.log(res)
       // 把 res.data 存放到数据库 前端图片用
       // http://localhost:3000/images/  1554716221102_190408171929.png
       this.imageUrl = URL.createObjectURL(file.raw)
+      this.pImg = res.data
+    },
+    // 商品放大镜图片
+    handleSuccess(res, file) {
+      var obj = {}
+      obj.name = file.name
+      obj.url = this.httpApi+'/images/'+ res.data
+      this.fileList.push(obj)
+    },
+    handleRemove(file, fileList) {
+      this.fileList = fileList
+    },
+    handlePreview(file) {
+    },
+    // 商品详情图片
+    handleS(res, file) {
+      var obj = {}
+      obj.name = file.name
+      obj.url = this.httpApi+'/images/'+ res.data
+      this.dList.push(obj)
+    },
+    handleR(file, dList) {
+      this.dList = dList
+    },
+    handleP(file) {
+    },
+    close () {
+      this.show = false
     }
   }
 }
@@ -246,6 +332,23 @@ export default {
     width: 178px;
     height: 178px;
     display: block;
+  }
+  .aPro {
+    font-size: 20px;
+    text-align: center;
+    margin: 5px 0 20px;
+    position: relative;
+    i {
+      position: absolute;
+      right: -30px;
+      font-size: 30px;
+      color: #ccc;
+      cursor: pointer;
+      top: -10px;
+    }
+    i:hover {
+      color: red;
+    }
   }
 }
 </style>

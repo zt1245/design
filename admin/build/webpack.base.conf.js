@@ -41,7 +41,7 @@ module.exports = {
   },
   module: {
     rules: [
-      ...(config.dev.useEslint ? [createLintingRule()] : []),
+      ...(config.dev.useEslint ? [] : []),
       {
         test: /\.vue$/,
         loader: 'vue-loader',
@@ -49,7 +49,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader?cacheDirectory',
+        loader: 'babel-loader',
         include: [
           resolve('src'),
           resolve('test'),

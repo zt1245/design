@@ -702,6 +702,52 @@ app.post('/paging', function (req, res) {
   })
 })
 
+//存进商品表格的数据
+app.post('/save', function (req, res) {
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  connection.connect();
+  let list = req.body.form
+  let pImg = req.body.pImg
+  let mList = JSON.stringify(req.body.mList)
+  let dList = JSON.stringify(req.body.dList)
+  let time = req.body.cancledate
+  let title = list.name
+  let detail = list.detail
+  let describe = list.describe
+  let unit_price = list.price
+  let type = list.type.split(' ')[0]
+  if (list.tab === '新品') {
+    var label = 1
+  } else if (list.tab === '热卖') {
+    var label = 0
+  }
+  if (list.sweet === 1) {
+    var sweet = '1,0,0,0,0'
+  } else if (list.sweet === 2) {
+    var sweet = '1,1,0,0,0'
+  } else if (list.sweet === 3) {
+    var sweet = '1,1,1,0,0'
+  } else if (list.sweet === 4) {
+    var sweet = '1,1,1,1,0'
+  } else if (list.sweet === 5) {
+    var sweet = '1,1,1,1,1'
+  }
+  var sql = `insert into product (title,detail,des,unit_price,sweet,type,label,maynifier_img,detail_img,pro_img,time) VALUES('${title}','${detail}','${describe}','${unit_price}','${sweet}','${type}','${label}','${mList}','${dList}','${pImg}','${time}')`;
+  connection.query(sql, function (err, result) {
+    if (err) {
+      console.log(err)
+      res.send({ code: -1, msg: '插入失败' });
+    } else {
+      res.send({ code: 2, msg: '插入成功'});
+    }
+  });
+});
+
 app.listen(3001, () => {
   console.log('success', function () {
     console.log('服务器启动成功,且地址是', 'http://localhost:3001')

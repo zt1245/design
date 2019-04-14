@@ -1,8 +1,8 @@
 <template>
   <div :class="{fullscreen:fullscreen}" class="tinymce-container editor-container">
-    <textarea :id="tinymceId" class="tinymce-textarea" />
+    <textarea :id="tinymceId" class="tinymce-textarea"/>
     <div class="editor-custom-btn-container">
-      <editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK" />
+      <editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK"/>
     </div>
   </div>
 </template>
@@ -50,14 +50,8 @@ export default {
       tinymceId: this.id,
       fullscreen: false,
       languageTypeList: {
-        'en': 'en',
         'zh': 'zh_CN'
       }
-    }
-  },
-  computed: {
-    language() {
-      return this.languageTypeList[this.$store.getters.language]
     }
   },
   watch: {
@@ -67,10 +61,6 @@ export default {
           window.tinymce.get(this.tinymceId).setContent(val || ''))
       }
     },
-    language() {
-      this.destroyTinymce()
-      this.$nextTick(() => this.initTinymce())
-    }
   },
   mounted() {
     this.initTinymce()
@@ -88,7 +78,7 @@ export default {
     initTinymce() {
       const _this = this
       window.tinymce.init({
-        language: this.language,
+        language: 'zh_CN',
         selector: `#${this.tinymceId}`,
         height: this.height,
         body_class: 'panel-body ',

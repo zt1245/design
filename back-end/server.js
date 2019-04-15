@@ -658,13 +658,13 @@ app.post('/paging', function (req, res) {
   let page = parseInt(req.body.currentPage);
   let startPage = (page - 1) * pageSize
   let endPage = pageSize
-  console.log(endPage, startPage, pageSize)
   connection.connect();
   async.parallel([
     function (callback) {
       var sql = `SELECT * FROM product limit ${startPage},${pageSize}`;
       connection.query(sql, function (err, result) {
         if (err) {
+          console.log(err)
           callback({ code: -1, msg: '查询数据库失败' })
         } else {
           callback(null, result)
@@ -673,9 +673,9 @@ app.post('/paging', function (req, res) {
     },
     function (callback) {
       var sql1 = 'SELECT COUNT(*) as count FROM product';
-      console.log(sql1)
       connection.query(sql1,function (err,result) {
         if (err) {
+          console.log(err)
           callback({ code: -1, msg: '查询数据库失败' });
         } else {
           callback(null, result[0].count)
@@ -684,6 +684,7 @@ app.post('/paging', function (req, res) {
     }
   ],function(err,result){
     if(err) {
+      console.log(err)
       res.send({code:-1,msg:'数据库查询失败'})
     }else {
       if (Math.ceil(result[1] / page) < pageSize) {

@@ -18,9 +18,9 @@
       <el-table-column prop="detail_img" label="详情图片" width="400">
         <template slot-scope="scope">
           <img
-            v-for="(item,index) in scope.row.detail_img.split(',')"
+            v-for="(item,index) in JSON.parse(scope.row.detail_img)"
             :key="index"
-            :src="item"
+            :src="item.url"
             width="50px"
             style="margin: 0 5px;"
           >
@@ -29,15 +29,15 @@
       <el-table-column prop="maynifier_img" label="放大镜图片" width="280">
         <template slot-scope="scope">
           <img
-            v-for="(mitem,mindex) in scope.row.maynifier_img.split(',')"
+            v-for="(mitem,mindex) in JSON.parse(scope.row.maynifier_img)"
             :key="mindex"
-            :src="mitem"
+            :src="mitem.url"
             width="50px"
             style="margin: 0 5px;"
           >
         </template>
       </el-table-column>
-      <el-table-column prop="time" label="上架时间" width="80" />
+      <el-table-column prop="time" label="上架时间" width="160" />
       <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
           <el-button size="small" type="text" @click="handleClick(scope.row)">编辑</el-button>
@@ -240,6 +240,7 @@ export default {
                 type: 'success'
               })
               this.show = false
+              this.list()
             } else {
               this.$message.error('添加失败，请重试')
             }
@@ -292,6 +293,17 @@ export default {
     },
     close () {
       this.show = false
+    },
+    handleClick (arr) {
+      console.log(arr)
+      this.ruleForm.name = arr.title
+      this.ruleForm.detail = arr.detail
+      this.ruleForm.describe = arr.des
+      this.ruleForm.price = arr.unit_price
+      this.imageUrl = arr.pro_img
+      this.fileList = JSON.parse(arr.maynifier_img)
+      this.dList = JSON.parse(arr.detail_img)
+      this.show = true
     }
   }
 }

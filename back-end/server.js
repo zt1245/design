@@ -726,6 +726,8 @@ app.post('/save', function (req, res) {
     var label = 1
   } else if (list.tab === '热卖') {
     var label = 0
+  } else {
+    var label = ''
   }
   if (list.sweet === 1) {
     var sweet = '1,0,0,0,0'
@@ -738,13 +740,120 @@ app.post('/save', function (req, res) {
   } else if (list.sweet === 5) {
     var sweet = '1,1,1,1,1'
   }
-  var sql = `insert into product (title,detail,des,unit_price,sweet,type,label,maynifier_img,detail_img,pro_img,time) VALUES('${title}','${detail}','${describe}','${unit_price}','${sweet}','${type}','${label}','${mList}','${dList}','${pImg}','${time}')`;
+  var sql = `insert into product (title,detail,des,unit_price,sweet,type,label,maynifier_img,detail_img,pro_img,time) VALUES("${title}","${detail}","${describe}","${unit_price}","${sweet}","${type}","${label}",'${mList}','${dList}',"${pImg}","${time}")`;
   connection.query(sql, function (err, result) {
     if (err) {
       console.log(err)
       res.send({ code: -1, msg: '插入失败' });
     } else {
       res.send({ code: 2, msg: '插入成功'});
+    }
+  });
+});
+
+// 删除商品
+app.post('/delPro', function (req, res) {
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  connection.connect();
+  let id = req.body.num;
+  var sql = `DELETE FROM product WHERE id='${id}'`;
+  connection.query(sql, function (err, result) {
+    if (err) {
+      console.log(err)
+      res.send({ code: -1, msg: '删除失败' });
+    } else {
+      res.send({ code: 2, msg: '删除成功'});
+    }
+  });
+});
+
+// 修改商品
+app.post('/upPro', function (req, res) {
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  connection.connect();
+  let list = req.body.form
+  let pImg = req.body.pImg
+  let mList = JSON.stringify(req.body.mList)
+  let dList = JSON.stringify(req.body.dList)
+  let time = req.body.cancledate
+  let title = list.name
+  let detail = list.detail
+  let describe = list.describe
+  let unit_price = list.price
+  let type = list.type.split(' ')[0]
+  let id = req.body.id
+  if (list.tab === '新品') {
+    var label = 1
+  } else if (list.tab === '热卖') {
+    var label = 0
+  } else {
+    var label = ''
+  }
+  if (list.sweet === 1) {
+    var sweet = '1,0,0,0,0'
+  } else if (list.sweet === 2) {
+    var sweet = '1,1,0,0,0'
+  } else if (list.sweet === 3) {
+    var sweet = '1,1,1,0,0'
+  } else if (list.sweet === 4) {
+    var sweet = '1,1,1,1,0'
+  } else if (list.sweet === 5) {
+    var sweet = '1,1,1,1,1'
+  }
+  var sql = `update product set title="${title}",detail="${detail}",des="${describe}",unit_price="${unit_price}",sweet="${sweet}",type="${type}",label="${label}",maynifier_img='${mList}',detail_img='${dList}',pro_img="${pImg}",time="${time}" where id="${id}"`;
+  connection.query(sql, function (err, result) {
+    if (err) {
+      console.log(err)
+      res.send({ code: -1, msg: '修改失败' });
+    } else {
+      res.send({ code: 2, msg: '修改成功'});
+    }
+  });
+});
+
+// 查询所有订单的接口（所有用户的）
+app.post('/allList', function (req, res) {
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  connection.connect();
+  var sql = `SELECT * FROM orderList`;
+  connection.query(sql, function (err, result) {
+    console.log(err)
+    if (err) {
+      res.send({ code: -1, msg: '查询失败' });
+    } else {
+      var a = ""
+      var list = result
+      for (var i = 0; i < result.length; i++) {
+        a += result[i].product_id + ',';
+      }
+      if (a.length > 0) {
+        a = a.substr(0, a.length - 1);
+      }
+      var arr = a.split(',');
+      console.log(a, arr, 'str')
+      var sql1 = `SELECT * FROM product where id in (${arr})`
+      connection.query(sql1, function (err, result) {
+        if (err) {
+          res.send({ code: -1, msg: '查询失败' + sql1 })
+        } else {
+          res.send({ code: 2, msg: '查询成功', data: list, List: result })
+        }
+      })
     }
   });
 });

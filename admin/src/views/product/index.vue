@@ -1,7 +1,7 @@
 <template>
   <div class="pro-add">
     <div class="add" @click="addPro()">新增商品</div>
-    <el-table :data="tableData" border style="width: 100%">
+    <el-table :data="tableData" border style="width: 100%" v-loading="loading">
       <el-table-column fixed prop="id" label="编号" width="50" />
       <el-table-column prop="pro_img" label="商品图片" width="120">
         <template slot-scope="scope">
@@ -41,7 +41,7 @@
       <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
           <el-button size="small" type="text" @click="handleClick(scope.row)">编辑</el-button>
-          <el-button size="small" type="text">删除</el-button>
+          <el-button size="small" type="text" @click="handle(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -62,7 +62,7 @@
       class="demo-ruleForm"
       style="position:fixed;top:50px;left:30%;background:#fff;z-index:999;padding:20px 50px;border:1px solid #efefef;height:520px;overflow-y:auto;"
     >
-      <h2 class="aPro">新增商品<i class="el-icon-circle-close-outline" @click="close()"></i></h2>
+      <h2 class="aPro">商品信息<i class="el-icon-circle-close-outline" @click="close()"></i></h2>
       <el-form-item label="商品名字" prop="name">
         <el-input v-model="ruleForm.name" />
       </el-form-item>
@@ -130,7 +130,8 @@
         </el-upload>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">添加</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')" v-show="addShow">添加</el-button>
+        <el-button type="primary" @click="updatePro('ruleForm')" v-show="addShow === false">修改</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -154,6 +155,9 @@ export default {
       pagesize: 3,
       count: '',
       show: false,
+      addShow: false,
+      selNum: '',
+      loading: true,
       ruleForm: {
         name: '',
         detail: '',
@@ -194,18 +198,19 @@ export default {
           if (res.data.code === 2) {
             this.tableData = res.data.data
             this.count = res.data.count
-            console.log(res)
+            this.loading = false
           } else {
             alert('查询失败，请稍后重试')
           }
         })
     },
     handleCurrentChange(currentPage) {
+      this.loading = true
       this.currentPage = currentPage
-      console.log(this.currentPage, this.pagesize)
       this.list()
     },
     submitForm(formName) {
+      this.loading = true
       this.$refs[formName].validate(valid => {
         if (valid) {
           let form = this.ruleForm
@@ -241,6 +246,11 @@ export default {
               })
               this.show = false
               this.list()
+              this.imageUrl = ''
+              this.fileList = []
+              this.dList = []
+              this.resetForm(formName)
+              this.loading = false
             } else {
               this.$message.error('添加失败，请重试')
             }
@@ -259,6 +269,7 @@ export default {
     },
     addPro() {
       this.show = true
+      this.addShow = true
     },
     // 商品主图
     handleAvatarSuccess(res, file) {
@@ -294,8 +305,11 @@ export default {
     close () {
       this.show = false
     },
+    // 编辑
     handleClick (arr) {
       console.log(arr)
+      this.selNum = arr.id
+      this.addShow = false
       this.ruleForm.name = arr.title
       this.ruleForm.detail = arr.detail
       this.ruleForm.describe = arr.des
@@ -304,6 +318,85 @@ export default {
       this.fileList = JSON.parse(arr.maynifier_img)
       this.dList = JSON.parse(arr.detail_img)
       this.show = true
+    },
+    // 确定修改
+    updatePro (formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          let form = this.ruleForm
+          let pImg = this.imageUrl
+          let mList = this.fileList
+          let dList = this.dList
+          let id = this.selNum
+          // 生成当前时间（订单开始时间）
+          var date = new Date()
+          var seperator1 = '-'
+          var seperator2 = ':'
+          var month = date.getMonth() + 1
+          var strDate = date.getDate()
+          if (month >= 1 && month <= 9) {
+            month = '0' + month
+          }
+          if (strDate >= 0 && strDate <= 9) {
+            strDate = '0' + strDate
+          }
+          var cancledate = date.getFullYear() + seperator1 + month + seperator1 + strDate + ' ' + date.getHours() + seperator2 + date.getMinutes() + seperator2 + date.getSeconds()
+          this.axios.post('http://localhost:3001/upPro', {
+            form,
+            pImg,
+            mList,
+            dList,
+            cancledate,
+            id
+          }).then(res => {
+            if (res.data.code === 2) {
+              this.$message({
+                message: '修改成功',
+                type: 'success'
+              })
+              this.show = false
+              this.list()
+            } else {
+              this.$message.error('修改失败，请重试')
+            }
+          })
+        } else {
+          this.$message({
+          message: '输入有误，请重试',
+          type: 'warning'
+        })
+          return false
+        }
+      })
+    },
+    // 删除
+    handle (arr) {
+      let num =arr.id
+      console.log(num)
+      this.$confirm('此操作将删除该商品, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.axios.post('http://localhost:3001/delPro', {
+          num
+        }).then(res => {
+          if (res.data.code === 2) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.list()
+          } else {
+            this.$message.error('删除失败，请重试')
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })       
+      })
     }
   }
 }

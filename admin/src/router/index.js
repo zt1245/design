@@ -70,6 +70,12 @@ export const asyncRouterMap = [
         component: () => import('@/views/platform/index'),
         meta: { title: '新闻发布', icon: 'table' }
       },
+      {
+        path: 'order',
+        name: 'order',
+        component: () => import('@/views/order/index'),
+        meta: { title: '订单管理', icon: 'form' }
+      },
     ]
   },
   { path: '*', redirect: '/404', hidden: true }

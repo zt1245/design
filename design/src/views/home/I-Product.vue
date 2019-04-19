@@ -1,7 +1,7 @@
 <template>
   <div class="product container">
     <ITitle :title="title" :detail="detail" :sum="sum"></ITitle>
-    <ul>
+    <ul v-loading="loading">
       <li v-for="(item,index) in NewPro"
         :key="index">
         <img :src="item.pro_img" alt="" @click="toDetail(item.id)">
@@ -9,12 +9,12 @@
         <p>{{ item.describe }}</p>
         <i class="line"></i>
         <div class="info">
-          <span class="spec">￥{{ item.unit_price.split(',')[0] }}/2.0磅</span>
+          <span class="spec">￥{{ item.unit_price.split(',')[0] }}.00/1.0磅</span>
           <span class="car" @click="showSpec(index)">加入购物车</span>
         </div>
         <div class="spec-detail"
           v-show="specIndex === index">
-          <p>￥{{ item.unit_price.split(',')[inum] }}/{{ specArr[inum] }}.0磅<i class="iconfont icon-cuo" @click="hideSpec()"></i></p>
+          <p>￥{{ item.unit_price.split(',')[inum] }}.00/{{ specArr[inum] }}.0磅<i class="iconfont icon-cuo" @click="hideSpec()"></i></p>
           <ul>
             <li v-for="(sItem,sIndex) in specArr"
               :key="sIndex"
@@ -47,7 +47,8 @@ export default {
       specIndex: null,
       inum: 0,
       specArr: [1, 2, 3, 5],
-      buynowArr: []
+      buynowArr: [],
+      loading: true
     }
   },
   methods: {
@@ -114,6 +115,7 @@ export default {
     }).then((res) => {
       if (res.data.code === 2) {
         this.NewPro = res.data.result.slice(-4)
+        this.loading = false
       } else {
         alert(res.data.msg)
       }

@@ -12,20 +12,19 @@
         </dd>
       </dl>
     </div>
-    <div class="pro-list container"
-      v-loading="loading"
-      element-loading-text="拼命加载中"
-      element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(0, 0, 0, 0.8)">
-      <ul>
+    <div class="pro-list container">
+      <ul v-loading="loading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0.8)">
         <li v-for="(item,index) in proList"
           :key="index">
           <img :src="item.pro_img" @click="toDetail(item.id)">
           <p>{{ item.title }}</p>
-          <span v-show="item.type === 'cake'">￥{{ item.unit_price.split(",")[0] }}/2.0磅</span>
-          <span v-show="item.type === 'drink'">￥{{ item.unit_price.split(",")[0] }}/1杯</span>
-          <span v-show="item.type === 'ice'">￥{{ item.unit_price.split(",")[0] }}/1份</span>
-          <span v-show="item.type === 'sweet'">￥{{ item.unit_price.split(",")[0] }}/1个</span>
+          <span v-show="item.type === 'cake'">￥{{ item.unit_price.split(",")[0] }}.00/1.0磅</span>
+          <span v-show="item.type === 'drink'">￥{{ item.unit_price.split(",")[0] }}.00/1杯</span>
+          <span v-show="item.type === 'ice'">￥{{ item.unit_price.split(",")[0] }}.00/1份</span>
+          <span v-show="item.type === 'sweet'">￥{{ item.unit_price.split(",")[0] }}.00/1个</span>
           <div class="car" @click="toDetail(item.id)">
             <i class="iconfont icon-xiangqing"></i>
             查看详情
@@ -70,18 +69,20 @@ export default {
     }).then((res) => {
       if (res.data.code === 2) {
         this.proList = res.data.result
+        this.loading = false
       } else {
         alert(res.data.msg)
       }
     })
-    this.loading = false
   },
   methods: {
     selection (index) {
+      this.loading = true
       if (index === 0) {
         this.axios.post('http://localhost:3001/all').then((res) => {
           if (res.data.code === 2) {
             this.proList = res.data.result
+            this.loading = false
           } else {
             alert(res.data.msg)
           }
@@ -101,6 +102,7 @@ export default {
         }).then((res) => {
           if (res.data.code === 2) {
             this.proList = res.data.result
+            this.loading = false
           } else {
             alert(res.data.msg)
           }

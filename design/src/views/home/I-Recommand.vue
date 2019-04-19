@@ -2,7 +2,7 @@
   <div class="recommad-bg">
     <div class="recommand container">
       <ITitle :title="title" :detail="detail" :sum="sum"></ITitle>
-      <ul>
+      <ul v-loading="loading">
         <li v-for="(item,index) in remList"
           :key="index">
           <div class="left">
@@ -17,9 +17,9 @@
               {{ des }}
               <br/>
             </p>
-            <p class="info">{{ item.describe }}</p>
+            <p class="info">{{ item.des }}</p>
             <div class="car_info">
-              <p class="pay">￥{{ item.unit_price.split(',')[0] }}/2.0磅</p>
+              <p class="pay">￥{{ item.unit_price.split(',')[0] }}.00/1.0磅</p>
               <p>尺寸: 13*13cm</p>
               <p>适合3-4人食用</p>
               <div class="sel">
@@ -31,7 +31,7 @@
               enter-active-class="animated bounceInLeft"
               leave-active-class="animated bounceOutRight">
               <div class="spec-detail" v-show="specIndex === index">
-                <p>￥{{ item.unit_price.split(',')[inum] }}/{{ specArr[inum] }}.0磅<i class="iconfont icon-cuo" @click="hideSpec()"></i></p>
+                <p>￥{{ item.unit_price.split(',')[inum] }}.00/{{ specArr[inum] }}.0磅<i class="iconfont icon-cuo" @click="hideSpec()"></i></p>
                 <ul>
                   <li v-for="(sItem,sIndex) in specArr"
                     :key="sIndex"
@@ -68,7 +68,8 @@ export default {
       specIndex: null,
       specArr: [1, 2, 3, 5],
       inum: 0,
-      buynowArr: []
+      buynowArr: [],
+      loading: true
     }
   },
   methods: {
@@ -135,6 +136,7 @@ export default {
     }).then((res) => {
       if (res.data.code === 2) {
         this.remList = res.data.result.slice(-4)
+        this.loading = false
       } else {
         alert(res.data.msg)
       }

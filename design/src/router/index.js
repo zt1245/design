@@ -22,7 +22,6 @@ import Aboutgoodness from '@/views/about/Aboutgoodness'
 import NewsMenu from '@/views/news/NewsMenu'
 import PerCenter from '@/views/my/PerCenter'
 import ReciveAdd from '@/views/my/ReciveAdd'
-import PerInfo from '@/views/my/PerInfo'
 import ChangePwd from '@/views/my/ChangePwd'
 import Allorders from '@/views/my/Allorders'
 
@@ -149,11 +148,6 @@ export default new Router({
         path: 'reciveAdd',
         name: 'ReciveAdd',
         component: ReciveAdd
-      },
-      {
-        path: 'perInfo',
-        name: 'PerInfo',
-        component: PerInfo
       },
       {
         path: 'changePwd',

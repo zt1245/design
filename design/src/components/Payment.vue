@@ -4,12 +4,12 @@
     <div class="info container">
       <i></i>
       <div class="msg">
-        <p>请您及时付款，订单号：132465465</p>
+        <p>请您及时付款，订单号：{{ orderNo }}</p>
         <p>收款方：i甜点有限公司</p>
       </div>
       <p class="price">
         订单金额：
-        <span>￥1010.00</span>
+        <span>￥{{ talPrice }}.00</span>
       </p>
     </div>
     <div class="alipay container">
@@ -94,7 +94,15 @@ export default {
       }
     }
   },
+  data () {
+    return {
+      orderNo: '',
+      talPrice: ''
+    }
+  },
   mounted () {
+    this.orderNo = localStorage.getItem('order_no')
+    this.talPrice = this.$route.params.talPrice
     setTimeout(() => {
       this.timeOver()
     }, 10000)

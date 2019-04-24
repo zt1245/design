@@ -101,10 +101,10 @@
       <div class="tbody_ul">
         <table class="car-detail">
           <tbody>
-            <tr v-for="(item,index) in goodsList"
+            <tr v-for="(item,index) in proImg"
               :key="index">
               <td class="goods-img">
-                <img :src="item.pro_img">
+                <img :src="item">
               </td>
               <td class="goods-cake">
                 <div>
@@ -128,7 +128,7 @@
       <div class="payment-info">
         <div class="total-amount">
           您总共需要支付
-          <span>￥{{ totalPrice() }}.00</span>
+          <span>￥{{ talPrice }}.00</span>
         </div>
         <div class="user-info-confirm">
           <span class="user-message">收货人信息：</span>
@@ -181,7 +181,9 @@ export default {
       addh: '',
       spec: [],
       unitP: [],
-      quanArr: []
+      quanArr: [],
+      proImg: [],
+      proTitle: []
     }
   },
   methods: {
@@ -238,15 +240,6 @@ export default {
       this.address = this.addList[this.selIndex].address
       this.add_id = this.addList[this.selIndex].id
       this.addh = this.addList[this.selIndex].addr_ahead
-    },
-    // 总金额
-    totalPrice () {
-      var totalPrice = 0
-      for (var i = 0; i < this.goodsList.length; i++) {
-        totalPrice += this.goodsList[i].unit_price * this.goodsList[i].quantity
-      }
-      this.talPrice = totalPrice
-      return totalPrice
     },
     addSel () {
       var uname = localStorage.getItem('uname')
@@ -312,7 +305,10 @@ export default {
       }).then((res) => {
         if (res.data.code === 2) {
           this.$router.push({
-            path: '/payment'
+            name: 'Payment',
+            params: {
+              talPrice: this.talPrice
+            }
           })
         } else {
           alert('操作失败，请重试')
@@ -368,7 +364,6 @@ export default {
   },
   mounted () {
     var orderNo = localStorage.getItem('order_no')
-    console.log(orderNo)
     this.axios.post('http://localhost:3001/checkOrder', {
       orderNo
     }).then((res) => {
@@ -377,7 +372,9 @@ export default {
         this.spec = res.data.result[0].spec.split(',')
         this.unitP = res.data.result[0].unit_price.split(',')
         this.quanArr = res.data.result[0].quantity.split(',')
-        console.log(res)
+        this.proImg = res.data.result[0].proImg.split(',')
+        this.proTitle = res.data.result[0].proTitle.split(',')
+        this.talPrice = res.data.result[0].total_price
       } else {
         alert(res.data.msg)
       }

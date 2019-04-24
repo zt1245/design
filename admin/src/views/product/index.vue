@@ -210,9 +210,9 @@ export default {
       this.list()
     },
     submitForm(formName) {
-      this.loading = true
       this.$refs[formName].validate(valid => {
         if (valid) {
+          this.loading = true
           let form = this.ruleForm
           let pImg = this.httpApi+'/images/'+this.pImg
           let mList = this.fileList

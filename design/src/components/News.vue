@@ -2,15 +2,8 @@
   <div class="news">
     <img src="http://localhost:8081/static/images/newban.png" class="ban">
     <div class="newsmenu">
-    <div class="new_nav">
-      <ul class="container">
-        <li v-for="(item,index) in newNav"
-          :key="index"
-          :class="{ navBar: barNum === index }">{{ item }}</li>
-      </ul>
+      <IMenu></IMenu>
     </div>
-    <IMenu></IMenu>
-  </div>
   </div>
 </template>
 
@@ -19,7 +12,6 @@ import IMenu from '@/views/news/I-Menu.vue'
 export default {
   data () {
     return {
-      newNav: ['全部资讯', '行业资讯', '公司资讯'],
       barNum: 0
     }
   },

@@ -122,6 +122,9 @@ export default {
         border: none;
         padding-right: 0;
       }
+      li:hover {
+        color: #F54F4F;
+      }
     }
   }
 }

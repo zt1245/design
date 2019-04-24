@@ -28,7 +28,7 @@
               v-for="(item,index) in carList"
               :key="index">
 							<td>
-                <input type="checkbox" class="sel" v-model="checkboxList" :value="item.id"/>
+                <input type="checkbox" class="sel" v-model="checkboxList" :value="item.product_id"/>
               </td>
 							<td class="goods_img">
 								<img :src="item.pro_img"/>
@@ -109,53 +109,75 @@ export default {
       })
     },
     goCheckout () {
-      if (this.checkboxList.length === 0) {
-        alert('未选择购买的商品，请选择')
-      } else {
-        // 生成订单号
-        var outTradeNo = ''
-        for (var i = 0; i < 6; i++) {
-          outTradeNo += Math.floor(Math.random() * 10)
-        }
-        outTradeNo = new Date().getTime() + outTradeNo
-        // 生成当前时间（订单开始时间）
-        var date = new Date()
-        var seperator1 = '-'
-        var seperator2 = ':'
-        var month = date.getMonth() + 1
-        var strDate = date.getDate()
-        if (month >= 1 && month <= 9) {
-          month = '0' + month
-        }
-        if (strDate >= 0 && strDate <= 9) {
-          strDate = '0' + strDate
-        }
-        var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate + ' ' + date.getHours() + seperator2 + date.getMinutes() + seperator2 + date.getSeconds()
-        // 订单状态
-        var status = '待付款'
-        // 总价格
-        let totalPrice = this.toprice
-        // 删除购物车里面已经选择的商品,勾选的商品添加到order订单中
-        let idList = this.checkboxList
-        // 当前用户
-        let uname = localStorage.getItem('uname')
-        this.axios.post('http://localhost:3001/IdList', {
-          idList,
-          outTradeNo,
-          currentdate,
-          status,
-          totalPrice,
-          uname
-        }).then((res) => {
-          if (res.data.code === 2) {
-            console.log('成功')
+      let idList = this.checkboxList
+      console.log(idList)
+      this.axios.post('http://localhost:3001/idselect', {
+        idList
+      }).then((res) => {
+        if (res.data.code === 2) {
+          console.log(res)
+          var titleStr = ''
+          var imgStr = ''
+          for (var i = 0; i < res.data.data.length; i++) {
+            titleStr += res.data.data[i].title + ','
+            imgStr += res.data.data[i].pro_img + ','
           }
-        })
-        localStorage.setItem('order_no', outTradeNo)
-        this.$router.push({
-          name: 'CarCheckout'
-        })
-      }
+          if (titleStr.length > 0) {
+            titleStr = titleStr.substr(0, titleStr.length - 1)
+          }
+          if (imgStr.length > 0) {
+            imgStr = imgStr.substr(0, imgStr.length - 1)
+          }
+          if (this.checkboxList.length === 0) {
+            alert('未选择购买的商品，请选择')
+          } else {
+            // 生成订单号
+            var outTradeNo = ''
+            for (let i = 0; i < 6; i++) {
+              outTradeNo += Math.floor(Math.random() * 10)
+            }
+            outTradeNo = new Date().getTime() + outTradeNo
+            // 生成当前时间（订单开始时间）
+            var date = new Date()
+            var seperator1 = '-'
+            var seperator2 = ':'
+            var month = date.getMonth() + 1
+            var strDate = date.getDate()
+            if (month >= 1 && month <= 9) {
+              month = '0' + month
+            }
+            if (strDate >= 0 && strDate <= 9) {
+              strDate = '0' + strDate
+            }
+            var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate + ' ' + date.getHours() + seperator2 + date.getMinutes() + seperator2 + date.getSeconds()
+            // 订单状态
+            var status = '待付款'
+            // 总价格
+            let totalPrice = this.toprice
+            // 当前用户
+            let uname = localStorage.getItem('uname')
+            this.axios.post('http://localhost:3001/IdList', {
+              idList,
+              outTradeNo,
+              currentdate,
+              status,
+              totalPrice,
+              uname,
+              titleStr,
+              imgStr
+            }).then((res) => {
+              if (res.data.code === 2) {
+                console.log('成功')
+              }
+            })
+            localStorage.setItem('order_no', outTradeNo)
+            window.location.reload()
+            this.$router.push({
+              name: 'CarCheckout'
+            })
+          }
+        }
+      })
     },
     toDetail (id) {
       this.$router.push({
@@ -211,6 +233,7 @@ export default {
       }).then((res) => {
         if (res.data.code === 2) {
           this.carList = res.data.result
+          console.log(res)
           if (this.carList.length === 0) {
             this.isPro = true
           } else {
@@ -226,7 +249,7 @@ export default {
       var totalPrice = 0
       for (var i = 0; i < this.carList.length; i++) {
         for (var j = 0; j < this.checkboxList.length; j++) {
-          if (this.carList[i].id === this.checkboxList[j]) {
+          if (this.carList[i].product_id === this.checkboxList[j]) {
             totalPrice += this.carList[i].quantity * this.carList[i].unit_price
           }
         }
@@ -238,16 +261,31 @@ export default {
     cut (num) {
       let idNum = num
       let username = localStorage.getItem('uname')
-      this.axios.post('http://localhost:3001/delete', {
-        idNum,
-        username
-      }).then((res) => {
-        if (res.data.code === 2) {
-          alert('删除成功')
-          window.location.reload()
-        } else {
-          alert('删除失败，请重试')
-        }
+      this.$confirm('此操作将删除该商品, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        this.axios.post('http://localhost:3001/delete', {
+          idNum,
+          username
+        }).then((res) => {
+          if (res.data.code === 2) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.selCarInfo()
+          } else {
+            alert('删除失败，请重试')
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
     },
     // 清空
@@ -257,8 +295,11 @@ export default {
         username
       }).then((res) => {
         if (res.data.code === 2) {
-          alert('清空成功')
-          window.location.reload()
+          this.$message({
+            type: 'success',
+            message: '成功清空!'
+          })
+          this.selCarInfo()
         } else {
           alert('清空失败，请重试')
         }

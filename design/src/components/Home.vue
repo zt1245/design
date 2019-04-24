@@ -1,9 +1,5 @@
 <template>
-  <div class="content"
-    v-loading="loading"
-    element-loading-text="拼命加载中"
-    element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(0, 0, 0, 0.8)">
+  <div class="content">
     <IBanner></IBanner>
     <IProduct></IProduct>
     <IRecommand></IRecommand>
@@ -24,11 +20,6 @@ import IConnect from '@/views/home/I-Connect.vue'
 import IOrder from '@/views/home/I-Order.vue'
 export default {
   name: 'Home',
-  data () {
-    return {
-      loading: true
-    }
-  },
   components: {
     IBanner,
     IProduct,
@@ -37,9 +28,6 @@ export default {
     IDessert,
     IConnect,
     IOrder
-  },
-  mounted () {
-    this.loading = false
   }
 }
 </script>

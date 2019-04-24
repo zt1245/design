@@ -17,7 +17,8 @@
       </li>
     </ul>
     <div class="add-address" v-show="addAddress">
-      <p>添加地址</p>
+      <p v-show="show === false">添加地址</p>
+      <p v-show="show">修改地址</p>
       <div class="area">
         <span class="inarea">所在地区：</span>
         <el-input placeholder="江西省赣州市章贡区" :disabled="true"></el-input>
@@ -36,7 +37,8 @@
       </div>
       <div class="icon">
         <i @click="cancel()">取消</i>
-        <i class="sure" @click="sure()">确定</i>
+        <i class="sure" @click="sure()" v-show="show === false">确定</i>
+        <i class="sure" @click="upd()" v-show="show">修改</i>
       </div>
     </div>
   </div>
@@ -47,7 +49,10 @@ export default {
   data () {
     return {
       adList: [],
-      addAddress: false
+      addAddress: false,
+      list: [],
+      show: false,
+      num: ''
     }
   },
   methods: {
@@ -58,13 +63,18 @@ export default {
       }).then(res => {
         if (res.data.code === 2) {
           this.adList = res.data.result
+          console.log(111)
         } else {
-          alert('查询失败，请稍后再试！')
+          this.$notify.error({
+            title: '错误',
+            message: '查询失败，请重试！'
+          })
         }
       })
     },
     add () {
       this.addAddress = true
+      this.show = false
     },
     // 添加地址点击取消
     cancel () {
@@ -87,18 +97,84 @@ export default {
           add
         }).then((res) => {
           if (res.data.code === 2) {
-            alert('添加成功')
-            window.location.reload()
+            this.$notify({
+              title: '成功',
+              message: '添加成功！',
+              type: 'success'
+            })
+            this.addSel()
           } else {
-            alert('添加失败，请重试!')
+            this.$notify.error({
+              title: '错误',
+              message: '添加失败，请重试！'
+            })
           }
         })
       } else {
-        alert('请填写信息')
+        this.$notify.error({
+          title: '错误',
+          message: '请正确填写信息'
+        })
       }
     },
-    // 修改
+    // 点击修改，查询
     update (id) {
+      this.addAddress = true
+      this.show = true
+      this.num = id
+      this.axios.post('http://localhost:3001/selectA', {
+        id
+      }).then((res) => {
+        if (res.data.code === 2) {
+          this.list = res.data.data[0]
+          this.$refs.addr.value = this.list.addr
+          this.$refs.name.value = this.list.name
+          this.$refs.tel.value = this.list.phone
+        } else {
+          this.$notify.error({
+            title: '错误',
+            message: '查询失败，请重试！'
+          })
+        }
+      })
+    },
+    // 修改
+    upd () {
+      if (this.$refs.addr.value !== '' && this.$refs.name !== '' && this.$refs.tel.value !== '') {
+        this.addAddress = false
+        let addr = this.$refs.addr.value
+        let name = this.$refs.name.value
+        let tel = this.$refs.tel.value
+        let add = '江西省赣州市章贡区'
+        console.log(tel)
+        let id = this.num
+        this.axios.post('http://localhost:3001/upaddress', {
+          addr,
+          name,
+          tel,
+          id,
+          add
+        }).then((res) => {
+          if (res.data.code === 2) {
+            this.$notify({
+              title: '成功',
+              message: '修改成功！',
+              type: 'success'
+            })
+            this.addSel()
+          } else {
+            this.$notify.error({
+              title: '错误',
+              message: '修改失败，请重试！'
+            })
+          }
+        })
+      } else {
+        this.$notify.error({
+          title: '错误',
+          message: '请正确填写信息'
+        })
+      }
     },
     // 删除
     del (id) {
@@ -106,10 +182,17 @@ export default {
         id
       }).then((res) => {
         if (res.data.code === 2) {
-          alert('删除成功')
-          window.location.reload()
+          this.$notify({
+            title: '成功',
+            message: '删除成功！',
+            type: 'success'
+          })
+          this.addSel()
         } else {
-          alert('删除失败，请重试!')
+          this.$notify.error({
+            title: '错误',
+            message: '删除失败，请重试！'
+          })
         }
       })
     }

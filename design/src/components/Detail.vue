@@ -1,5 +1,5 @@
 <template>
-  <div class="detail">
+  <div class="detail" v-loading="loading">
     <div class="content container"
       v-for="(item,index) in datailList"
       :key="index">
@@ -10,7 +10,7 @@
           @mouseout="hide()"
           ref="small"
           @mousemove="move()">
-					<img :src="maynifier_img[actindex]"/>
+					<img :src="maynifier_img[actindex].url"/>
 					<!--遮罩层-->
 					<div class="mask"
             v-show="isShow"
@@ -22,13 +22,13 @@
             v-for="(srcIndex,num) in maynifier_img"
             :key="num"
             @click="switchNum(num)">
-            <img :src="srcIndex"/>
+            <img :src="srcIndex.url"/>
           </li>
 				</ul>
 				<!--大图-->
 				<div class="cake_photo_b"
           v-show="isShow">
-					<img :src="maynifier_img[actindex]" ref="bPic"/>
+					<img :src="maynifier_img[actindex].url" ref="bPic"/>
 				</div>
 			</div>
       <!-- 类型为cake的显示 -->
@@ -78,8 +78,8 @@
               </ul>
               <p class="price">
                 ￥
-                <span>{{ unit_price[selNum] }}</span>
-                /{{ specArr[selNum] }}磅
+                <span>{{ unit_price[selNum] }}.00</span>
+                /{{ specArr[selNum] }}.0磅
               </p>
             </div>
 					</div>
@@ -137,7 +137,7 @@
               </ul>
               <p class="price">
                 ￥
-                <span>{{ unit_price[selNum] }}</span>
+                <span>{{ unit_price[selNum] }}.00</span>
                 /{{ drinkArr[selNum] }}杯
               </p>
             </div>
@@ -200,7 +200,7 @@
               </ul>
               <p class="price">
                 ￥
-                <span>{{ unit_price[selNum] }}</span>
+                <span>{{ unit_price[selNum] }}.00</span>
                 /{{ drinkArr[selNum] }}份
               </p>
             </div>
@@ -263,7 +263,7 @@
               </ul>
               <p class="price">
                 ￥
-                <span>{{ unit_price[selNum] }}</span>
+                <span>{{ unit_price[selNum] }}.00</span>
                 /份
               </p>
             </div>
@@ -292,7 +292,7 @@
 		<div class="detail_photo container">
 			<img v-for="(deImg,deIndex) in detail_img"
         :key="deIndex"
-        :src="deImg"/>
+        :src="deImg.url"/>
 		</div>
   </div>
 </template>
@@ -314,7 +314,8 @@ export default {
       suitEatArr: ['适合3-4人分享', '适合7-8人分享', '适合11-12人分享', '适合15-20人分享'],
       specArr: ['1', '2', '3', '5'],
       setArr: ['10', '10', '15', '20'],
-      drinkArr: ['小', '中', '大']
+      drinkArr: ['小', '中', '大'],
+      loading: true
     }
   },
   methods: {
@@ -405,10 +406,11 @@ export default {
       if (res.data.code === 2) {
         this.datailList = res.data.result
         this.detailArr = this.datailList[0].detail.split(',')
-        this.maynifier_img = this.datailList[0].maynifier_img.split(',')
+        this.maynifier_img = JSON.parse(this.datailList[0].maynifier_img)
         this.sweet = this.datailList[0].sweet.split(',')
         this.unit_price = this.datailList[0].unit_price.split(',')
-        this.detail_img = this.datailList[0].detail_img.split(',')
+        this.detail_img = JSON.parse(this.datailList[0].detail_img)
+        this.loading = false
       } else {
         alert(res.data.msg)
       }

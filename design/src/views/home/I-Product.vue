@@ -83,7 +83,7 @@ export default {
             path: '/car'
           })
         } else {
-          alert(res.data.msg)
+          this.$message.error('操作失误，请重试！')
         }
       })
     },
@@ -101,9 +101,12 @@ export default {
         spec
       }).then((res) => {
         if (res.data.code === 2) {
-          alert('成功添加至购物车！')
+          this.$message({
+            message: '成功添加至购物车！',
+            type: 'success'
+          })
         } else {
-          alert('添加至购物车失败，请重试')
+          this.$message.error('添加至购物车失败，请重试！')
         }
       })
     }
@@ -117,7 +120,7 @@ export default {
         this.NewPro = res.data.result.slice(-4)
         this.loading = false
       } else {
-        alert(res.data.msg)
+        this.$message.error('查询失败，请重试！')
       }
     })
   }

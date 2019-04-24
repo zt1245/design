@@ -3,147 +3,128 @@
     <p>我的订单</p>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="全部订单" name="first">
-        <el-collapse v-model="activeNames" @change="handleChange">
-          <el-collapse-item
-            v-for="(item,index) in orderList"
+        <ul class="o_ul">
+          <li v-for="(item,index) in orderList"
             :key="index"
-            :title="item.begin_time"
-            :name="index"
-          >
-            <p class="orderInfo">
-              <span>{{ item.status }}</span>|
-              <span>{{ item.user_name }}</span>|
-              <span>订单号：{{ item.order_no }}</span>
-              <span>
-                总金额：
-                <i>￥{{ item.total_price }}.00</i>
-              </span>
-            </p>
-            <ul class="pro-ul">
-              <li
-                v-for="(proitem,proindex) in proList"
-                :key="proindex"
-                v-show="proitem.id === parseInt(item.product_id.split(',')[0]) || proitem.id === parseInt(item.product_id.split(',')[1]) || proitem.id === parseInt(item.product_id.split(',')[2])"
-              >
-                <img :src="proitem.pro_img" alt>
-                <p>{{ proitem.title }}</p>
-              </li>
-              <li class="btn-box">
-                <span v-show="item.status === '待付款'"
-                  @click="goCheck(item.order_no)">立即支付</span>
-                <span @click="del(item.order_no)">删除</span>
+            class="o_li">
+            <p>订单号：{{ item.order_no }}<span>交易开始时间：{{ item.begin_time }}</span><span>订单状态：{{ item.status }}</span></p>
+            <ul class="p_ul">
+              <li v-for="(pitem,pindex) in item.proImg.split(',')"
+                :key="pindex">
+                <div class="box">
+                  <img :src="pitem" alt="">
+                  <div class="info">
+                    <p>{{ item.proTitle.split(',')[pindex] }}</p>
+                    <p>商品规格：{{ item.spec.split(',')[pindex] }}</p>
+                  </div>
+                  <p class="num">x{{ item.quantity.split(',')[pindex] }}</p>
+                  <p class="price">￥{{ item.unit_price.split(',')[pindex] }}.00</p>
+                </div>
               </li>
             </ul>
-          </el-collapse-item>
-        </el-collapse>
+            <p class="btn"><span @click="del(order_no)">删除</span><span v-show="item.status === '待付款'" @click="goCheck(item.order_no)">去支付</span></p>
+          </li>
+        </ul>
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="parseInt(count)"
+          :page-size="2"
+          @current-change="handleCurrentChange"
+        />
       </el-tab-pane>
       <el-tab-pane label="待支付" name="second">
-        <el-collapse v-model="activeNames" @change="handleChange">
-          <el-collapse-item
-            v-for="(item,index) in orderList"
+        <ul class="o_ul">
+          <li v-for="(item,index) in daList"
             :key="index"
-            :title="item.begin_time"
-            :name="index"
-            v-show="item.status === '待付款'"
-          >
-            <p class="orderInfo">
-              <span>{{ item.status }}</span>|
-              <span>{{ item.user_name }}</span>|
-              <span>订单号：{{ item.order_no }}</span>
-              <span>
-                总金额：
-                <i>￥{{ item.total_price }}.00</i>
-              </span>
-            </p>
-            <ul class="pro-ul">
-              <li
-                v-for="(proitem,proindex) in proList"
-                :key="proindex"
-                v-show="proitem.id === parseInt(item.product_id.split(',')[0]) || proitem.id === parseInt(item.product_id.split(',')[1]) || proitem.id === parseInt(item.product_id.split(',')[2])"
-              >
-                <img :src="proitem.pro_img" alt>
-                <p>{{ proitem.title }}</p>
-              </li>
-              <li class="btn-box">
-                <span v-show="item.status === '待付款'"
-                  @click="goCheck(item.order_no)">立即支付</span>
-                <span @click="del(item.order_no)">删除</span>
+            class="o_li">
+            <p>订单号：{{ item.order_no }}<span>交易开始时间：{{ item.begin_time }}</span><span>订单状态：{{ item.status }}</span></p>
+            <ul class="p_ul">
+              <li v-for="(pitem,pindex) in item.proImg.split(',')"
+                :key="pindex">
+                <div class="box">
+                  <img :src="pitem" alt="">
+                  <div class="info">
+                    <p>{{ item.proTitle.split(',')[pindex] }}</p>
+                    <p>商品规格：{{ item.spec.split(',')[pindex] }}</p>
+                  </div>
+                  <p class="num">x{{ item.quantity.split(',')[pindex] }}</p>
+                  <p class="price">￥{{ item.unit_price.split(',')[pindex] }}.00</p>
+                </div>
               </li>
             </ul>
-          </el-collapse-item>
-        </el-collapse>
+            <p class="btn"><span @click="del(order_no)">删除</span><span v-show="item.status === '待付款'" @click="goCheck(item.order_no)">去支付</span></p>
+          </li>
+        </ul>
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="parseInt(dcount)"
+          :page-size="2"
+          @current-change="dchange"
+        />
       </el-tab-pane>
       <el-tab-pane label="待发货" name="third">
-        <el-collapse v-model="activeNames" @change="handleChange">
-          <el-collapse-item
-            v-for="(item,index) in orderList"
+        <ul class="o_ul">
+          <li v-for="(item,index) in wList"
             :key="index"
-            :title="item.begin_time"
-            :name="index"
-            v-show="item.status === '未发货'"
-          >
-            <p class="orderInfo">
-              <span>{{ item.status }}</span>|
-              <span>{{ item.user_name }}</span>|
-              <span>订单号：{{ item.order_no }}</span>
-              <span>
-                总金额：
-                <i>￥{{ item.total_price }}.00</i>
-              </span>
-            </p>
-            <ul class="pro-ul">
-              <li
-                v-for="(proitem,proindex) in proList"
-                :key="proindex"
-                v-show="proitem.id === parseInt(item.product_id.split(',')[0]) || proitem.id === parseInt(item.product_id.split(',')[1]) || proitem.id === parseInt(item.product_id.split(',')[2])"
-              >
-                <img :src="proitem.pro_img" alt>
-                <p>{{ proitem.title }}</p>
-              </li>
-              <li class="btn-box">
-                <span v-show="item.status === '待付款'"
-                  @click="goCheck(item.order_no)">立即支付</span>
-                <span @click="del(item.order_no)">删除</span>
+            class="o_li">
+            <p>订单号：{{ item.order_no }}<span>交易开始时间：{{ item.begin_time }}</span><span>订单状态：{{ item.status }}</span></p>
+            <ul class="p_ul">
+              <li v-for="(pitem,pindex) in item.proImg.split(',')"
+                :key="pindex">
+                <div class="box">
+                  <img :src="pitem" alt="">
+                  <div class="info">
+                    <p>{{ item.proTitle.split(',')[pindex] }}</p>
+                    <p>商品规格：{{ item.spec.split(',')[pindex] }}</p>
+                  </div>
+                  <p class="num">x{{ item.quantity.split(',')[pindex] }}</p>
+                  <p class="price">￥{{ item.unit_price.split(',')[pindex] }}.00</p>
+                </div>
               </li>
             </ul>
-          </el-collapse-item>
-        </el-collapse>
+            <p class="btn"><span @click="del(order_no)">删除</span><span v-show="item.status === '待付款'" @click="goCheck(item.order_no)">去支付</span></p>
+          </li>
+        </ul>
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="parseInt(wcount)"
+          :page-size="2"
+          @current-change="wchange"
+        />
       </el-tab-pane>
       <el-tab-pane label="交易完成" name="four">
-        <el-collapse v-model="activeNames" @change="handleChange">
-          <el-collapse-item
-            v-for="(item,index) in orderList"
+        <ul class="o_ul">
+          <li v-for="(item,index) in jList"
             :key="index"
-            :title="item.begin_time"
-            :name="index"
-            v-show="item.status === '交易关闭'"
-          >
-            <p class="orderInfo">
-              <span>{{ item.status }}</span>|
-              <span>{{ item.user_name }}</span>|
-              <span>订单号：{{ item.order_no }}</span>
-              <span>
-                总金额：
-                <i>￥{{ item.total_price }}.00</i>
-              </span>
-            </p>
-            <ul class="pro-ul">
-              <li
-                v-for="(proitem,proindex) in proList"
-                :key="proindex"
-                v-show="proitem.id === parseInt(item.product_id.split(',')[0]) || proitem.id === parseInt(item.product_id.split(',')[1]) || proitem.id === parseInt(item.product_id.split(',')[2])"
-              >
-                <img :src="proitem.pro_img" alt>
-                <p>{{ proitem.title }}</p>
-              </li>
-              <li class="btn-box">
-                <span v-show="item.status === '待付款'"
-                  @click="goCheck(item.order_no)">立即支付</span>
-                <span @click="del(item.order_no)">删除</span>
+            class="o_li">
+            <p>订单号：{{ item.order_no }}<span>交易开始时间：{{ item.begin_time }}</span><span>订单状态：{{ item.status }}</span></p>
+            <ul class="p_ul">
+              <li v-for="(pitem,pindex) in item.proImg.split(',')"
+                :key="pindex">
+                <div class="box">
+                  <img :src="pitem" alt="">
+                  <div class="info">
+                    <p>{{ item.proTitle.split(',')[pindex] }}</p>
+                    <p>商品规格：{{ item.spec.split(',')[pindex] }}</p>
+                  </div>
+                  <p class="num">x{{ item.quantity.split(',')[pindex] }}</p>
+                  <p class="price">￥{{ item.unit_price.split(',')[pindex] }}.00</p>
+                </div>
               </li>
             </ul>
-          </el-collapse-item>
-        </el-collapse>
+            <p class="btn"><span @click="del(order_no)">删除</span><span v-show="item.status === '待付款'" @click="goCheck(item.order_no)">去支付</span></p>
+          </li>
+        </ul>
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="parseInt(jcount)"
+          :page-size="2"
+          @current-change="handleCurrentChange"
+        />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -156,10 +137,34 @@ export default {
       activeName: 'first',
       activeNames: ['1'],
       orderList: [],
-      proList: []
+      currentPage: 1,
+      pagesize: 2,
+      count: '',
+      daList: [],
+      dcount: '',
+      wcount: '',
+      wList: [],
+      jcount: '',
+      jList: []
     }
   },
   methods: {
+    handleCurrentChange (currentPage) {
+      this.currentPage = currentPage
+      this.list()
+    },
+    dchange (currentPage) {
+      this.currentPage = currentPage
+      this.dlist()
+    },
+    wchange (currentPage) {
+      this.currentPage = currentPage
+      this.wlist()
+    },
+    jchange (currentPage) {
+      this.currentPage = currentPage
+      this.jlist()
+    },
     handleClick (tab, event) {},
     handleChange (val) {},
     goCheck (oindex) {
@@ -174,26 +179,93 @@ export default {
       }).then(res => {
         if (res.data.code === 2) {
           alert('删除成功')
-          window.location.reload()
+          this.list()
         } else {
           alert('删除失败，请重试')
+        }
+      })
+    },
+    list () {
+      let uname = localStorage.getItem('uname')
+      const pagesize = this.pagesize
+      const currentPage = this.currentPage
+      this.axios.post('http://localhost:3001/allor', {
+        uname,
+        pagesize,
+        currentPage
+      }).then(res => {
+        if (res.data.code === 2) {
+          this.orderList = res.data.data
+          this.count = res.data.count
+        } else {
+          alert('查询失败，请重试')
+        }
+      })
+    },
+    dlist () {
+      let uname = localStorage.getItem('uname')
+      const pagesize = this.pagesize
+      const currentPage = this.currentPage
+      let status = '待付款'
+      this.axios.post('http://localhost:3001/statusorder', {
+        uname,
+        pagesize,
+        currentPage,
+        status
+      }).then(res => {
+        if (res.data.code === 2) {
+          console.log(res)
+          this.daList = res.data.data
+          this.dcount = res.data.count
+        } else {
+          alert('查询失败，请重试')
+        }
+      })
+    },
+    wlist () {
+      let uname = localStorage.getItem('uname')
+      const pagesize = this.pagesize
+      const currentPage = this.currentPage
+      let status = '未发货'
+      this.axios.post('http://localhost:3001/statusorder', {
+        uname,
+        pagesize,
+        currentPage,
+        status
+      }).then(res => {
+        if (res.data.code === 2) {
+          this.wList = res.data.data
+          this.wcount = res.data.count
+        } else {
+          alert('查询失败，请重试')
+        }
+      })
+    },
+    jlist () {
+      let uname = localStorage.getItem('uname')
+      const pagesize = this.pagesize
+      const currentPage = this.currentPage
+      let status = '交易关闭'
+      this.axios.post('http://localhost:3001/statusorder', {
+        uname,
+        pagesize,
+        currentPage,
+        status
+      }).then(res => {
+        if (res.data.code === 2) {
+          this.jList = res.data.data
+          this.jcount = res.data.count
+        } else {
+          alert('查询失败，请重试')
         }
       })
     }
   },
   mounted () {
-    let uname = localStorage.getItem('uname')
-    this.axios.post('http://localhost:3001/allor', {
-      uname
-    }).then(res => {
-      if (res.data.code === 2) {
-        console.log(res.data)
-        this.orderList = res.data.data
-        this.proList = res.data.List
-      } else {
-        alert('查询失败，请重试')
-      }
-    })
+    this.list()
+    this.dlist()
+    this.wlist()
+    this.jlist()
   }
 }
 </script>
@@ -203,67 +275,61 @@ export default {
   background: #ffffff;
   width: 100%;
   padding: 40px 80px 20px 80px;
-  p {
-    color: #262a2f;
-    font-size: 30px;
-    text-align: left;
-    margin-bottom: 30px;
-  }
-  .orderInfo {
-    font-size: 16px;
-    border-bottom: 1px solid #dedede;
-    padding-bottom: 20px;
-    span {
-      padding: 0 10px;
-    }
-    span:nth-child(4) {
-      margin-left: 100px;
-      i {
-        color: #f80000;
-        font-size: 24px;
-      }
-    }
-  }
-  .pro-ul {
-    position: relative;
+  box-sizing: border-box;
+  .p_ul {
     li {
-      display: flex;
+      margin: 10px 0;
+      .box {
+        display: flex;
+      }
       img {
         width: 100px;
         height: 100px;
+        margin-right: 20px;
       }
       p {
-        font-size: 16px;
-        color: #4a4a4a;
-        padding-left: 50px;
-        line-height: 100px;
+        font-size: 12px;
+        margin-bottom: 0;
+        padding-top: 20px;
+      }
+      .num {
+        font-size: 18px;
+        color: red;
+        padding-top: 30px;
+      }
+      .info {
+        width: 300px;
+      }
+      .price {
+        margin-left: 130px;
+        margin-top: 15px;
       }
     }
-    .btn-box {
-      flex-direction: column;
-      position: absolute;
-      top: 50%;
-      right: -40px;
-      transform: translate(-50%,0);
-      span {
-        width: 120px;
-        height: 28px;
-        border: 1px solid #B5B5B5;
-        text-align: center;
-        line-height: 28px;
-        font-size: 14px;
-        color: #4A4A4A;
-        display: block;
-        margin: 5px 0;
-        cursor: pointer;
-        transition: all 0.5s;
-      }
-      span:hover {
-        color: #ffffff;
-        border: 1px solid #f80000;
-        background: #f80000;
-        transition: all 0.5s;
-      }
+  }
+  p {
+    text-align: left;
+    font-size: 14px;
+    margin-bottom: 20px;
+    span {
+      display: inline-block;
+      margin: 0 35px;
+    }
+  }
+  .o_li {
+    border: 1px solid #eeeeee;
+    padding: 20px;
+    margin: 20px 5px;
+  }
+  .btn {
+    text-align: right;
+    span {
+      width: 50px;
+      height: 25px;
+      background: #cf4248;
+      color: #ffffff;
+      line-height: 25px;
+      text-align: center;
+      cursor: pointer;
     }
   }
 }

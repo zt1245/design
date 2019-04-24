@@ -5,7 +5,8 @@
       <div class="info">
         <p>用户&nbsp;&nbsp;{{ uname }}</p>
         <p>您好~</p>
-        <p @click="goPerinfo()">修改个人信息 ></p>
+        <p>手机号：{{ phone }}</p>
+        <p @click="changepwd()">修改密码</p>
       </div>
     </div>
     <div class="bottom">
@@ -35,7 +36,8 @@ export default {
     return {
       uname: '',
       zLength: 0,
-      sLength: 0
+      sLength: 0,
+      phone: ''
     }
   },
   mounted () {
@@ -63,16 +65,25 @@ export default {
         alert('查询失败，请重试')
       }
     })
+    this.axios.post('http://localhost:3001/selPhone', {
+      uname
+    }).then(res => {
+      if (res.data.code === 2) {
+        this.phone = res.data.data[0].phone
+      } else {
+        alert('查询失败，请重试')
+      }
+    })
   },
   methods: {
-    goPerinfo () {
-      this.$router.push({
-        path: '/my/perinfo'
-      })
-    },
     goAll () {
       this.$router.push({
         path: '/my/allorders'
+      })
+    },
+    changepwd () {
+      this.$router.push({
+        path: '/my/changepwd'
       })
     }
   }
@@ -102,9 +113,14 @@ export default {
         margin: 15px 0;
       }
       p:nth-child(3) {
+        color: #4A4A4A;
+        font-size: 14px;
+      }
+      p:nth-child(4) {
         color: #F80000;
         font-size: 14px;
         cursor: pointer;
+        margin: 15px 0;
       }
     }
   }

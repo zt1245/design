@@ -33,9 +33,6 @@
                   <span style="color: #4A4A4A;font-size: 18px;font-weight: 700;">账户管理</span>
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="/my/PerInfo">个人信息</el-menu-item>
-                </el-menu-item-group>
-                <el-menu-item-group>
                   <el-menu-item index="/my/ChangePwd">修改密码</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>

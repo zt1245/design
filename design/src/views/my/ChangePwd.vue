@@ -2,16 +2,18 @@
   <div class="changepwd">
     <p>修改密码</p>
     <div class="info">
-      <p>原密码
-        <input type="text">
-      </p>
-      <p>新密码
-        <input type="text">
-      </p>
-      <p>
-        <span>确认</span>
-        <span>取消</span>
-      </p>
+      <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm" :label-position="labelPosition">
+        <el-form-item label="密码" prop="pass">
+          <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="checkPass">
+          <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm2')">确定</el-button>
+          <el-button @click="resetForm('ruleForm2')">重置</el-button>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -19,7 +21,75 @@
 <script>
 export default {
   data () {
+    var validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.ruleForm2.checkPass !== '') {
+          this.$refs.ruleForm2.validateField('checkPass')
+        }
+        callback()
+      }
+    }
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.ruleForm2.pass) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
+      labelPosition: 'left',
+      ruleForm2: {
+        pass: '',
+        checkPass: ''
+      },
+      rules2: {
+        pass: [
+          { validator: validatePass, trigger: 'blur' }
+        ],
+        checkPass: [
+          { validator: validatePass2, trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  methods: {
+    submitForm (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let pwd = this.checkPasss
+          let uname = localStorage.getItem('uname')
+          this.axios.post('http://localhost:3001/uppwd', {
+            pwd,
+            uname
+          }).then(res => {
+            if (res.data.code === 2) {
+              this.$notify({
+                title: '成功',
+                message: '修改成功！',
+                type: 'success'
+              })
+            } else {
+              this.$notify.error({
+                title: '错误',
+                message: '修改失败，请重试'
+              })
+            }
+          })
+        } else {
+          this.$notify.error({
+            title: '错误',
+            message: 'error submit!!'
+          })
+          return false
+        }
+      })
+    },
+    resetForm (formName) {
+      this.$refs[formName].resetFields()
     }
   }
 }

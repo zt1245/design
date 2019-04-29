@@ -110,7 +110,17 @@ export default {
     },
     goCheckout () {
       let idList = this.checkboxList
-      console.log(idList)
+      // console.log(idList)
+      // this.axios.post('http://localhost:3001/selidList', {
+      //   idList
+      // }).then((res) => {
+      //   if (res.data.code === 2) {
+      //     console.log(res)
+      //     let dList = []
+      //     dList.push(res.data.data.product_id)
+      //     console.log(dList)
+      //   }
+      // })
       this.axios.post('http://localhost:3001/idselect', {
         idList
       }).then((res) => {

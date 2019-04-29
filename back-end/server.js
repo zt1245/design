@@ -1276,6 +1276,27 @@ app.post('/onenew', function (req, res) {
   });
 });
 
+// 查询idlist
+app.post('/selidList', function (req, res) {
+  var connection = mysql.createConnection({//连接数据库需要放在这里面来处理
+    host: 'rm-bp157xr7h34ogq9g4no.mysql.rds.aliyuncs.com',
+    user: 'root',
+    password: 'ZT1245com',
+    database: 'design'
+  });
+  let idList = req.body.idList
+  connection.connect();
+  var sql = `SELECT product_id FROM cart where id in (${idList})`;
+  connection.query(sql, function (err, result) {
+    if (err) {
+      console.log(err)
+      res.send({ code: -1, msg: '查询失败' });
+    } else {
+      res.send({ code: 2, msg: '查询成功', data: result });
+    }
+  });
+});
+
 app.listen(3001, () => {
   console.log('success', function () {
     console.log('服务器启动成功,且地址是', 'http://localhost:3001')
